@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Scientist | Merrakii+ Career Library</title>
+<meta name="description" content="The complete career path for Data Scientist — academic road, entrance exams, skills, and real decision points. Validated by a working professional.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    background-image:radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  #sitenav{
+    position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between;
+    padding:15px 30px; background:rgba(251,250,246,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--paper-line);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:18px; display:flex; align-items:center; gap:9px; color:var(--teal-deep); }
+  .nav-links{ display:flex; align-items:center; gap:18px; }
+  .nav-links a{ font-size:11.5px; font-weight:600; color:var(--muted); cursor:pointer; }
+  .nav-links a:hover{ color:var(--teal-deep); }
+  @media (max-width:900px){ .nav-links{ display:none; } }
+  .nav-cta{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; padding:10px 18px; border-radius:9px; font-size:12px; font-weight:700; border:none; cursor:pointer; }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+  .back-nav{ font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; }
+  .back-nav:hover{ color:var(--teal-deep); }
+
+  #wrap{ max-width:820px; margin:0 auto; padding:0 24px 80px; }
+
+  /* ============ HERO ============ */
+  #hero{ text-align:center; padding:50px 20px 26px; }
+  .crumb{ font-size:10.5px; font-weight:700; color:var(--muted); letter-spacing:.04em; }
+  .crumb b{ color:var(--teal-deep); }
+  .hero-ic{ font-size:44px; margin-top:14px; }
+  #hero h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(28px,4.4vw,42px); margin-top:12px; }
+  .hero-tag{ font-size:13px; color:var(--muted); margin-top:8px; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6; }
+  .validated-badge{ display:inline-flex; align-items:center; gap:7px; font-size:10.5px; font-weight:700; color:var(--gold-deep); background:var(--gold-light); border:1px solid #EAD9A8; padding:6px 14px; border-radius:20px; margin-top:16px; }
+
+  /* ============ CATEGORY NAV (10 categories) ============ */
+  .cat-nav{ display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:26px; }
+  .cat-pill{ font-size:10px; font-weight:700; color:var(--muted); background:var(--white); border:1px solid var(--paper-line); padding:6px 12px; border-radius:20px; cursor:pointer; }
+  .cat-pill:hover{ border-color:var(--teal); color:var(--teal-deep); }
+
+  /* ============ CATEGORY SECTIONS ============ */
+  .cat-section{ margin-top:36px; }
+  .cat-head{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .cat-num{ width:34px; height:34px; border-radius:10px; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:14px; flex-shrink:0; }
+  .cat-title{ font-family:var(--font-display); font-weight:700; font-size:18px; }
+  .cat-box{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:22px 24px; }
+  .cat-box p{ font-size:13px; line-height:1.75; color:var(--ink); }
+  .cat-box p + p{ margin-top:12px; }
+  .cat-list{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+  .cat-list li{ list-style:none; font-size:12.5px; line-height:1.6; display:flex; gap:9px; color:var(--ink); }
+  .cat-list li::before{ content:"—"; color:var(--paper-line); flex-shrink:0; }
+
+  .check-grid{ display:flex; flex-direction:column; gap:9px; margin-top:6px; }
+  .check-row{ display:flex; gap:10px; font-size:12.5px; line-height:1.55; }
+  .check-row .cx{ color:var(--teal); font-weight:700; flex-shrink:0; }
+
+  .tag-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .tag{ font-size:11.5px; font-weight:700; padding:7px 13px; border-radius:20px; background:var(--teal-light); color:var(--teal-deep); border:1px solid #CFEAE0; }
+
+  .cost-strip{ display:flex; gap:0; margin-top:6px; border:1px solid var(--paper-line); border-radius:12px; overflow:hidden; }
+  .cost-col{ flex:1; padding:14px 16px; border-right:1px solid var(--paper-line); }
+  .cost-col:last-child{ border-right:none; }
+  .cost-label{ font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); }
+  .cost-range{ font-family:var(--font-mono); font-weight:500; font-size:14px; color:var(--gold-deep); margin-top:5px; }
+  .cost-note{ font-size:10px; color:var(--muted); margin-top:4px; line-height:1.4; }
+
+  .decision-list{ display:flex; flex-direction:column; gap:9px; margin-top:6px; }
+  .decision-row{ display:flex; gap:12px; align-items:flex-start; background:var(--gold-light); border:1px solid #EAD9A8; border-radius:10px; padding:11px 14px; }
+  .decision-num{ font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--gold-deep); flex-shrink:0; }
+  .decision-txt{ font-size:12.5px; color:var(--ink); line-height:1.5; }
+
+  .expert-quote{ display:flex; gap:14px; align-items:flex-start; margin-top:6px; }
+  .eq-avatar{ width:40px; height:40px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:14px; flex-shrink:0; }
+  .eq-text{ font-size:12.5px; font-style:italic; line-height:1.65; }
+  .eq-who{ font-size:11px; font-weight:700; color:var(--teal-deep); margin-top:8px; }
+  .eq-role{ font-size:10px; color:var(--muted); }
+
+  /* ============ FINAL CTA ============ */
+  #finalcta{ margin-top:44px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; border-radius:18px; padding:30px 28px; text-align:center; }
+  #finalcta h2{ font-family:var(--font-display); font-weight:700; font-size:19px; }
+  #finalcta p{ font-size:12.5px; opacity:.85; margin-top:8px; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6; }
+  .final-btn{ margin-top:18px; background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; border-radius:12px; padding:14px 24px; font-weight:800; font-size:13.5px; cursor:pointer; box-shadow:0 10px 24px rgba(255,107,74,.3); }
+  .final-fine{ font-size:10.5px; opacity:.7; margin-top:12px; }
+
+  #footer{ margin-top:44px; text-align:center; padding:26px 20px; border-top:1px solid var(--paper-line); }
+  #footer .f-note{ font-size:10.5px; color:var(--muted); line-height:1.6; max-width:460px; margin:0 auto; }
+  .foot-cols{ display:flex; gap:50px; flex-wrap:wrap; }
+  .foot-col h4{ font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; opacity:.6; margin-bottom:12px; }
+  .foot-col a{ display:block; font-size:12.5px; opacity:.85; margin-bottom:9px; cursor:pointer; }
+  .foot-col a:hover{ opacity:1; }
+</style>
+</head>
+<body>
+
+  <nav id="sitenav">
+    <a href="01_home.html" class="brand"><span class="dot"></span>Merrakii+</a>
+    <div class="nav-links"><a href="02_career_library.html">← All Careers</a>
+      <a href="04_students_parents_info.html">Students &amp; Parents</a>
+      <a href="05_schools_info.html">Schools</a>
+      <a href="06_career_professionals_info.html">Professionals</a>
+      <a href="07_program_partners_info.html">Programs</a>
+      <a href="08_partner_counsellor_info.html">Counsellors</a>
+      <a href="10_contact.html">Contact</a>
+      <a href="11_login.html">Login</a></div>
+    <button class="nav-cta" onclick="window.location.href='01_home.html#discover'">Get My Free Career Map</button>
+  </nav>
+
+  <div id="wrap">
+
+    <div id="hero">
+      <div class="crumb">SCIENCE › <b>COMPUTER SCIENCE, AI &amp; DATA</b></div>
+      <div class="hero-ic">📊</div>
+      <h1>Data Scientist</h1>
+      <p class="hero-tag">Turning raw, messy data into decisions an organisation can actually act on — part statistician, part programmer, part storyteller.</p>
+      <div class="validated-badge">✓ Validated by Arnav Sethi, Product Manager · Technology &amp; Engineering</div>
+    </div>
+
+    <div class="cat-nav">
+      <span class="cat-pill" onclick="document.getElementById('c1').scrollIntoView({behavior:'smooth'})">Who This Fits</span>
+      <span class="cat-pill" onclick="document.getElementById('c2').scrollIntoView({behavior:'smooth'})">The Career</span>
+      <span class="cat-pill" onclick="document.getElementById('c3').scrollIntoView({behavior:'smooth'})">Academic Road</span>
+      <span class="cat-pill" onclick="document.getElementById('c4').scrollIntoView({behavior:'smooth'})">Exams</span>
+      <span class="cat-pill" onclick="document.getElementById('c5').scrollIntoView({behavior:'smooth'})">Institutions</span>
+      <span class="cat-pill" onclick="document.getElementById('c6').scrollIntoView({behavior:'smooth'})">Skills</span>
+      <span class="cat-pill" onclick="document.getElementById('c7').scrollIntoView({behavior:'smooth'})">Experience</span>
+      <span class="cat-pill" onclick="document.getElementById('c8').scrollIntoView({behavior:'smooth'})">Cost</span>
+      <span class="cat-pill" onclick="document.getElementById('c9').scrollIntoView({behavior:'smooth'})">Support</span>
+      <span class="cat-pill" onclick="document.getElementById('c10').scrollIntoView({behavior:'smooth'})">Key Decisions</span>
+    </div>
+
+    <!-- 1. WHO THE STUDENT IS -->
+    <div class="cat-section" id="c1">
+      <div class="cat-head"><div class="cat-num">1</div><div class="cat-title">Who This Fits</div></div>
+      <div class="cat-box">
+        <p>This path tends to suit students who are comfortable sitting with a problem that doesn't have an obvious answer yet — and who get genuine satisfaction from finding a pattern buried in something messy.</p>
+        <div class="check-grid">
+          <div class="check-row"><span class="cx">✓</span> You like Maths and are willing to get comfortable with statistics, not just calculus</div>
+          <div class="check-row"><span class="cx">✓</span> You're drawn to "why is this happening" more than "what happened"</div>
+          <div class="check-row"><span class="cx">✓</span> You can sit with ambiguity — real data is messy, and the first answer is rarely the right one</div>
+          <div class="check-row"><span class="cx">✓</span> You don't mind explaining a technical finding to someone non-technical</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. WHAT THE CAREER IS -->
+    <div class="cat-section" id="c2">
+      <div class="cat-head"><div class="cat-num">2</div><div class="cat-title">What the Career Is</div></div>
+      <div class="cat-box">
+        <p>A Data Scientist works with an organisation's data to answer questions that guide real decisions — which customers are likely to leave, which product feature is actually driving usage, what's likely to happen next quarter. The job sits between statistics, programming, and business — rarely purely one of the three.</p>
+        <p>Day-to-day work is less "building AI" and more: cleaning messy data, running statistical tests, building and validating models, and — often the hardest part — explaining what the finding actually means to people who don't work with data themselves.</p>
+        <div class="tag-row">
+          <span class="tag">Tech Companies</span>
+          <span class="tag">Finance &amp; Banking</span>
+          <span class="tag">E-commerce &amp; Retail</span>
+          <span class="tag">Healthcare Analytics</span>
+          <span class="tag">Consulting</span>
+          <span class="tag">Research Labs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. ACADEMIC ROAD -->
+    <div class="cat-section" id="c3">
+      <div class="cat-head"><div class="cat-num">3</div><div class="cat-title">The Academic Road</div></div>
+      <div class="cat-box">
+        <p>The Science stream is the standard route, with Mathematics as a near-essential subject — most degree programmes in this field require it at Class 12 level. Computer Science as a school subject helps but isn't mandatory; it can be picked up at the undergraduate level.</p>
+        <div class="cat-list">
+          <li>Class 11–12: Physics, Chemistry, Mathematics (PCM) — Computer Science as an elective is a strong plus</li>
+          <li>Undergraduate: B.Tech/B.E. in Computer Science, Data Science, or a related engineering discipline; a B.Sc. in Statistics or Mathematics is a valid alternate route</li>
+          <li>Postgraduate (optional, not mandatory): M.Tech, M.Sc. in Data Science, or an MBA with an analytics specialisation for those aiming at leadership roles later</li>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. EXAMINATION ROAD -->
+    <div class="cat-section" id="c4">
+      <div class="cat-head"><div class="cat-num">4</div><div class="cat-title">The Examination Road</div></div>
+      <div class="cat-box">
+        <p>Most students enter this field through the standard engineering entrance route, though a statistics-focused route through pure science entrance exams is equally valid and sometimes overlooked.</p>
+        <div class="cat-list">
+          <li>JEE Main / JEE Advanced — for B.Tech Computer Science routes at IITs, NITs, and top engineering colleges</li>
+          <li>State engineering entrance exams — for regional engineering colleges</li>
+          <li>CUET — for B.Sc. Statistics/Mathematics routes at central universities</li>
+          <li>Institution-specific entrance tests — several standalone data science programmes run their own admission tests</li>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. INSTITUTION ROAD -->
+    <div class="cat-section" id="c5">
+      <div class="cat-head"><div class="cat-num">5</div><div class="cat-title">The Institution Road</div></div>
+      <div class="cat-box">
+        <p>Institution choice here matters less for "prestige" and more for one practical thing: how much real project and internship exposure the programme actually builds in, since this field rewards demonstrated work far more than a transcript.</p>
+        <div class="cat-list">
+          <li><b>Government route:</b> IITs, NITs, and IIITs offering Computer Science or Data Science specialisations; central universities for Statistics/Mathematics</li>
+          <li><b>Private route:</b> Private engineering universities with dedicated Data Science or AI programmes, several now running industry-linked curricula</li>
+          <li><b>Standalone / specialised:</b> A small number of institutes run data-science-only undergraduate or postgraduate diplomas with strong industry partnerships</li>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. SKILL ROAD -->
+    <div class="cat-section" id="c6">
+      <div class="cat-head"><div class="cat-num">6</div><div class="cat-title">The Skill Road</div></div>
+      <div class="cat-box">
+        <p>Formal education builds the foundation; almost everyone in this field builds the applied skills on top of it separately, often starting in the last two years of school or the first year of college.</p>
+        <div class="tag-row">
+          <span class="tag">Python</span>
+          <span class="tag">Statistics &amp; Probability</span>
+          <span class="tag">SQL</span>
+          <span class="tag">Data Visualisation</span>
+          <span class="tag">Machine Learning Fundamentals</span>
+          <span class="tag">Communicating Findings Clearly</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. EXPERIENCE ROAD -->
+    <div class="cat-section" id="c7">
+      <div class="cat-head"><div class="cat-num">7</div><div class="cat-title">The Experience Road</div></div>
+      <div class="cat-box">
+        <p>In this field, a portfolio of real, explainable projects tends to matter more than the college name on a resume — it's one of the more merit-transparent tech careers for that reason.</p>
+        <div class="cat-list">
+          <li>Personal projects using public datasets, documented well enough that someone else could follow the reasoning</li>
+          <li>Data science competitions (Kaggle and similar) — useful for benchmarking yourself, not just for the badge</li>
+          <li>Internships in an analytics, data, or engineering team — even a short one changes how a resume reads</li>
+          <li>Research assistantship, if pursuing the postgraduate/research route</li>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. FINANCIAL ROAD (cost of education only — no salary) -->
+    <div class="cat-section" id="c8">
+      <div class="cat-head"><div class="cat-num">8</div><div class="cat-title">The Financial Road</div></div>
+      <div class="cat-box">
+        <p>This category covers what a family typically invests to get a student through this path — not what the career pays. That number is deliberately left out of the Library; it depends too much on role, city, and company to state honestly as one figure, and a personalised report gives a far more useful, specific answer.</p>
+        <div class="cost-strip">
+          <div class="cost-col"><div class="cost-label">Government Route</div><div class="cost-range">Lower</div><div class="cost-note">IITs/NITs — subsidised tuition, competitive entry</div></div>
+          <div class="cost-col"><div class="cost-label">Private Route</div><div class="cost-range">Higher</div><div class="cost-note">Wider range depending on institute tier</div></div>
+          <div class="cost-col"><div class="cost-label">Add-On Skill Courses</div><div class="cost-range">Optional</div><div class="cost-note">Many strong candidates build skills via free/low-cost resources instead</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. SUPPORT ROAD -->
+    <div class="cat-section" id="c9">
+      <div class="cat-head"><div class="cat-num">9</div><div class="cat-title">The Support Road</div></div>
+      <div class="cat-box">
+        <p>This career profile was reviewed by a working professional in the field, and the same network is available for a direct conversation once a student's direction firms up.</p>
+        <div class="expert-quote">
+          <div class="eq-avatar">AS</div>
+          <div>
+            <div class="eq-text">"The students who do well here aren't always the strongest coders — they're the ones who stay curious about a weird result instead of just accepting it."</div>
+            <div class="eq-who">Arnav Sethi</div>
+            <div class="eq-role">Product Manager · Merrakii+ Career Professional, Technology &amp; Engineering</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. DECISION ROAD -->
+    <div class="cat-section" id="c10">
+      <div class="cat-head"><div class="cat-num">10</div><div class="cat-title">Key Decisions Along This Path</div></div>
+      <div class="cat-box">
+        <p>These are the points where this path actually forks — the moments a personalised Merrakii+ journey is built to help you think through, not just inform you about.</p>
+        <div class="decision-list">
+          <div class="decision-row"><div class="decision-num">1</div><div class="decision-txt">Confirming Science with Mathematics as your Class 11 stream</div></div>
+          <div class="decision-row"><div class="decision-num">2</div><div class="decision-txt">Choosing between the engineering entrance route (JEE) and the statistics/CUET route</div></div>
+          <div class="decision-row"><div class="decision-num">3</div><div class="decision-txt">Picking your first specialisation focus — analytics, machine learning, or data engineering</div></div>
+          <div class="decision-row"><div class="decision-num">4</div><div class="decision-txt">Deciding whether a postgraduate degree is worth it for you, or whether applied experience serves you better</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="finalcta">
+      <h2>Want this mapped specifically to you?</h2>
+      <p>This page shows what's generally true about this path. Your personalised journey maps it against your own class, academic record, and family context — and updates as you actually move through it.</p>
+      <button class="final-btn" onclick="window.location.href='01_home.html#discover'">🗺️ Map This Career for Me →</button>
+      <div class="final-fine">Free to start · No signup required · Takes seconds</div>
+    </div>
+
+    <div id="footer">
+      <p class="f-note">This career profile is part of the Merrakii+ Career Library — reviewed by a working professional through our Career Professional network before publication. Merrakii+ · Decision Enabling Student Success System.</p>
+    </div>
+
+  </div>
+
+  <footer id="sitefoot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <div class="brand"><span class="dot"></span>Merrakii+</div>
+        <p class="foot-tag">Decision Enabling Student Success System — helping students move from Class 9 to Career Entry with real decisions, not just information.</p>
+        <div class="foot-contact">info@merrakii.co.in<br>merrakii.co.in<br>Gurugram, Haryana, India</div>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Platform</h4>
+          <a href="02_career_library.html">Career Library</a>
+          <a href="01_home.html#how-it-works">How it Works</a>
+          <a href="01_home.html#philosophy">Our Philosophy</a>
+        </div>
+        <div class="foot-col">
+          <h4>For You</h4>
+          <a href="04_students_parents_info.html">Students &amp; Parents</a>
+          <a href="05_schools_info.html">Schools</a>
+        </div>
+        <div class="foot-col">
+          <h4>Partners</h4>
+          <a href="06_career_professionals_info.html">Career Professionals</a>
+          <a href="07_program_partners_info.html">Program Partners</a>
+          <a href="08_partner_counsellor_info.html">Partner Counsellors</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="09_about.html">About Us</a>
+          <a href="10_contact.html">Contact</a>
+          <a href="11_login.html">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 Munjal Universal Consultancy Private Limited · Merrakii+</div>
+  </footer>
+</body>
+</html>

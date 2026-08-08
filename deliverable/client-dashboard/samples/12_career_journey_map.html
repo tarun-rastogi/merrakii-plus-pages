@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Career Journey Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56;
+    --teal-deep:#0A4E3E;
+    --teal-light:#E1F5EE;
+    --coral:#FF6B4A;
+    --coral-light:#FFE7DF;
+    --gold:#C89B3C;
+    --gold-light:#FBF1DC;
+    --ink:#142420;
+    --muted:#5C6B66;
+    --paper:#FBFAF6;
+    --paper-line:#E8E4D9;
+    --line:#DDE3DF;
+    --white:#ffffff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:var(--font-body);
+    background:var(--paper);
+    color:var(--ink);
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+
+  /* ---------- Top bar ---------- */
+  #topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px;
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal));
+    color:#fff;
+    box-shadow:0 3px 14px rgba(10,78,62,0.18);
+    position:relative;
+    z-index:20;
+  }
+  .brand{
+    font-family:var(--font-display); font-weight:800; font-size:20px; letter-spacing:.02em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .dot{ width:9px;height:9px;border-radius:50%;background:var(--coral); box-shadow:0 0 0 4px rgba(255,107,74,.28); }
+  .brand small{
+    display:block; font-family:var(--font-body); font-weight:500; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; opacity:.78; margin-top:1px;
+  }
+  #topbar .step-pill{ font-size:11px; font-weight:700; background:rgba(255,255,255,.16); padding:6px 13px; border-radius:20px; letter-spacing:.03em; }
+
+  /* ---------- Hero strip ---------- */
+  #hero{
+    padding:26px 28px 6px;
+    max-width:980px;
+  }
+  #hero h1{
+    font-family:var(--font-display); font-weight:700; font-size:26px; line-height:1.25; color:var(--ink);
+  }
+  #hero h1 span{ color:var(--teal); }
+  #hero p{
+    margin-top:8px; font-size:13.5px; color:var(--muted); max-width:640px; line-height:1.55;
+  }
+
+  /* ---------- Map wrapper ---------- */
+  #map-wrap{
+    padding:34px 8px 46px;
+    overflow-x:auto;
+    overflow-y:visible;
+    scrollbar-width:thin;
+  }
+  #map-inner{
+    position:relative;
+    width:1360px;
+    max-width:none;
+    margin:0 auto;
+    padding:0 40px;
+  }
+  @media (min-width:1460px){
+    #map-inner{ width:100%; max-width:1420px; }
+  }
+
+  svg#road{ width:100%; height:280px; display:block; overflow:visible; }
+
+  .road-path{ fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; }
+  .road-path-dash{ fill:none; stroke:var(--teal); stroke-width:2; stroke-dasharray:1 14; stroke-linecap:round; opacity:.55; }
+  .earn-path{ fill:none; stroke:var(--coral); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:1 11; }
+
+  .pin-here{ cursor:default; }
+  .pin-here text{ font-family:var(--font-display); font-weight:700; font-size:11px; fill:var(--teal-deep); }
+  .pin-pulse{ animation:pulse 2.2s ease-in-out infinite; transform-origin:center; }
+  @keyframes pulse{
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.55); opacity:0; }
+  }
+
+  .flag-group text{ font-family:var(--font-display); font-weight:700; font-size:11px; fill:var(--teal-deep); }
+
+  .earn-label{ font-family:var(--font-body); font-weight:700; font-size:9.5px; fill:var(--coral); letter-spacing:.06em; }
+
+  /* stage node */
+  .node{ cursor:pointer; }
+  .node circle.base{
+    fill:var(--white); stroke:var(--teal); stroke-width:3.5;
+    transition:transform .18s ease, filter .18s ease;
+  }
+  .node:hover circle.base{ transform:scale(1.08); filter:drop-shadow(0 4px 10px rgba(15,110,86,.35)); }
+  .node text.num{
+    font-family:var(--font-display); font-weight:700; font-size:15px; fill:var(--teal);
+    text-anchor:middle; dominant-baseline:central;
+  }
+  .node .node-label{
+    font-family:var(--font-body); font-weight:700; font-size:11px; fill:var(--ink); text-anchor:middle;
+  }
+  .node .node-sub{
+    font-family:var(--font-body); font-weight:500; font-size:9px; fill:var(--muted); text-anchor:middle;
+  }
+  .node.active circle.base{ fill:var(--teal); }
+  .node.active text.num{ fill:#fff; }
+
+  .node .spark{ opacity:0; transition:opacity .2s ease; }
+  .node:hover .spark{ opacity:1; }
+
+  /* mile marker chip above node hinting locked count */
+  .lockchip{
+    font-family:var(--font-body); font-weight:700; font-size:8.5px; fill:var(--gold);
+  }
+  .lockchip-bg{ fill:var(--gold-light); stroke:var(--gold); stroke-width:1; }
+
+  /* ---------- Legend ---------- */
+  #legend{
+    display:flex; gap:22px; align-items:center; padding:0 28px 8px; flex-wrap:wrap;
+  }
+  .leg-item{ display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted); font-weight:500; }
+  .leg-swatch{ width:22px; height:0; border-top:3px solid var(--teal); }
+  .leg-swatch.dash{ border-top:2px dashed var(--coral); }
+
+  /* ---------- Bottom nudge strip ---------- */
+  #nudge{
+    margin:6px 28px 40px;
+    max-width:760px;
+    background:var(--white);
+    border:1px solid var(--paper-line);
+    border-left:4px solid var(--coral);
+    border-radius:10px;
+    padding:14px 18px;
+    display:flex; align-items:center; gap:14px;
+  }
+  #nudge .ic{ font-size:20px; flex-shrink:0; }
+  #nudge .txt{ font-size:12.5px; color:var(--muted); line-height:1.5; }
+  #nudge .txt b{ color:var(--ink); }
+
+  /* ---------- Overlay + Drawer ---------- */
+  #overlay{
+    position:fixed; inset:0; background:rgba(10,26,20,0.42);
+    backdrop-filter:blur(1.5px);
+    opacity:0; pointer-events:none; transition:opacity .28s ease;
+    z-index:30;
+  }
+  #overlay.show{ opacity:1; pointer-events:auto; }
+
+  #drawer{
+    position:fixed; top:0; right:0; height:100%;
+    width:60%;
+    min-width:340px;
+    background:var(--white);
+    box-shadow:-14px 0 40px rgba(10,26,20,0.22);
+    transform:translateX(100%);
+    transition:transform .32s cubic-bezier(.2,.9,.25,1);
+    z-index:31;
+    display:flex; flex-direction:column;
+  }
+  #drawer.show{ transform:translateX(0); }
+
+  @media (max-width:860px){
+    #drawer{ width:100%; top:auto; bottom:0; height:86%; right:0; border-radius:18px 18px 0 0;
+      transform:translateY(100%); box-shadow:0 -14px 40px rgba(10,26,20,0.22); }
+    #drawer.show{ transform:translateY(0); }
+  }
+
+  #drawer-head{
+    padding:20px 26px 16px;
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal));
+    color:#fff;
+    flex-shrink:0;
+    position:relative;
+  }
+  #drawer-head .stage-eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; opacity:.78; }
+  #drawer-head h2{ font-family:var(--font-display); font-weight:700; font-size:22px; margin-top:4px; line-height:1.2; }
+  #drawer-head .stage-tag{ font-size:12px; opacity:.88; margin-top:6px; font-weight:500; }
+  #drawer-close{
+    position:absolute; top:16px; right:18px; width:30px; height:30px; border-radius:50%;
+    background:rgba(255,255,255,0.16); border:none; color:#fff; font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .15s;
+  }
+  #drawer-close:hover{ background:rgba(255,255,255,0.3); }
+
+  #drawer-body{ flex:1; overflow-y:auto; padding:22px 26px 28px; }
+
+  .unlock-track{
+    display:flex; align-items:center; gap:10px; margin-bottom:20px;
+  }
+  .unlock-track .bar{
+    flex:1; height:6px; border-radius:6px; background:var(--paper-line); overflow:hidden;
+  }
+  .unlock-track .bar > i{
+    display:block; height:100%; background:var(--coral); border-radius:6px;
+  }
+  .unlock-track .lbl{ font-size:10.5px; font-weight:700; color:var(--muted); white-space:nowrap; }
+
+  .open-card{
+    background:var(--teal-light);
+    border:1px solid #CFEAE0;
+    border-radius:12px;
+    padding:15px 17px;
+    margin-bottom:14px;
+  }
+  .open-card .oc-h{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:12.5px; color:var(--teal-deep); }
+  .open-card .oc-h .badge{
+    font-size:9px; font-weight:800; letter-spacing:.05em; background:var(--teal); color:#fff;
+    padding:2px 7px; border-radius:20px;
+  }
+  .open-card p{ margin-top:7px; font-size:12.5px; color:#204338; line-height:1.6; }
+
+  .section-label{
+    font-size:10.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+    margin:20px 0 10px;
+  }
+
+  .locked-card{
+    position:relative;
+    background:var(--white);
+    border:1px dashed #E3C57B;
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    overflow:hidden;
+  }
+  .locked-card .lc-title{
+    font-weight:700; font-size:12.5px; color:var(--ink); display:flex; align-items:center; gap:7px;
+  }
+  .locked-card .lc-title .lock-ic{ color:var(--gold); font-size:12px; }
+  .locked-card .lc-blur{
+    margin-top:8px; font-size:12px; color:#8b8b8b; filter:blur(3.5px); user-select:none; line-height:1.55;
+  }
+  .locked-card .lc-tag{
+    position:absolute; top:10px; right:12px; font-size:8.5px; font-weight:800; letter-spacing:.06em;
+    color:var(--gold); background:var(--gold-light); border:1px solid #EAD9A8; padding:2px 8px; border-radius:20px;
+  }
+
+  .stat-strip{
+    display:flex; gap:12px; margin:18px 0 6px; flex-wrap:wrap;
+  }
+  .stat-pill{
+    flex:1; min-width:140px;
+    background:var(--paper);
+    border:1px solid var(--paper-line);
+    border-left:3px solid var(--coral);
+    border-radius:10px;
+    padding:11px 13px;
+  }
+  .stat-pill .num{ font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--coral); }
+  .stat-pill .lbl{ font-size:10px; color:var(--muted); margin-top:2px; line-height:1.4; }
+
+  #drawer-foot{
+    padding:16px 26px 20px;
+    border-top:1px solid var(--paper-line);
+    background:var(--white);
+    flex-shrink:0;
+  }
+  .cta-main{
+    width:100%; padding:13px 18px; border:none; border-radius:12px; cursor:pointer;
+    background:linear-gradient(120deg,var(--coral),#ff8464);
+    color:#fff; font-family:var(--font-body); font-weight:800; font-size:13.5px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 8px 20px rgba(255,107,74,.32);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cta-main:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(255,107,74,.4); }
+  .cta-sub{ text-align:center; font-size:10.5px; color:var(--muted); margin-top:8px; }
+  .cta-sub b{ color:var(--teal-deep); }
+
+  /* scrollbars */
+  #drawer-body::-webkit-scrollbar, #map-wrap::-webkit-scrollbar{ height:8px; width:8px; }
+  #drawer-body::-webkit-scrollbar-thumb, #map-wrap::-webkit-scrollbar-thumb{ background:#d7d2c4; border-radius:8px; }
+
+  .sr-only{ position:absolute; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      Merrakii<small>Decision Enabling Student Success System</small>
+    </div>
+    <div class="step-pill">Step 2 of 5 — Preview Your Route</div>
+  </div>
+
+  <div id="hero">
+    <h1>Your route from <span>Class 9</span> to <span>Career Entry</span> — laid out like a map, not a lecture.</h1>
+    <p>Every stop below is a real decision point students face — some obvious, some easy to miss until it's too late. Tap a stop to see what's actually waiting there.</p>
+  </div>
+
+  <div id="legend">
+    <div class="leg-item"><span class="leg-swatch"></span> Main academic route</div>
+    <div class="leg-item"><span class="leg-swatch dash"></span> Earning-while-learning lane (opens at Class 12)</div>
+  </div>
+
+  <div id="map-wrap">
+    <div id="map-inner">
+      <svg id="road" viewBox="0 0 1300 280" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+  </div>
+
+  <div id="nudge">
+    <div class="ic">🔎</div>
+    <div class="txt"><b>This map is the same for every student in your class.</b> The moment you tap a stop, you'll see how much of it is actually generic — and how much only applies to <i>you</i>.</div>
+  </div>
+
+  <div id="overlay"></div>
+  <div id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div id="drawer-head">
+      <button id="drawer-close" aria-label="Close">✕</button>
+      <div class="stage-eyebrow" id="dh-eyebrow">STOP 1 OF 8</div>
+      <h2 id="drawer-title">Stage title</h2>
+      <div class="stage-tag" id="dh-tag">Class range</div>
+    </div>
+    <div id="drawer-body"></div>
+    <div id="drawer-foot">
+      <button class="cta-main" id="cta-btn">🔓 Unlock My Full Journey <span id="cta-arrow">→</span></button>
+      <div class="cta-sub">Takes <b>&lt;2 minutes</b> · Get the version built on <b>your</b> data, not the class average</div>
+    </div>
+  </div>
+
+<script>
+const STAGES = [
+  {
+    id:1, num:"9", label:"Class 9", sub:"Foundation Radar", cls:"Where you are now",
+    eyebrow:"STOP 1 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"What Class 9 quietly decides",
+      text:"Most students think Class 9 is just \"before the real thing starts.\" It isn't. The subject combinations, habits, and stream leanings that form here quietly shape which doors are still open in Class 11 — and which ones already started closing." },
+    locked:[
+      {title:"Your stream-fit signal", tag:"PERSONALIZED", text:"Based on your interests and academic pattern, here is the stream direction that fits you best right now, and why waiting until Class 10 to think about it costs you preparation time."},
+      {title:"The 3 habits worth building this year", tag:"ACTION PLAN", text:"A short, specific list of habits mapped to your target career — not generic study tips, but the ones that compound over the next four years."},
+      {title:"Early red flags for your target career", tag:"RISK CHECK", text:"Certain subject or performance gaps at this stage are hard to reverse later. Here's whether any apply to your current profile."}
+    ],
+    stats:[ {num:"4 yrs", lbl:"of runway you still have — most students realise this only in Class 11"}, {num:"1 of 4", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:2, num:"10", label:"Class 10", sub:"The Fork in the Road", cls:"Board year, stream choice",
+    eyebrow:"STOP 2 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"Why this is the year everything forks",
+      text:"Boards get all the attention, but the quieter decision — which stream, which subjects, which door you're implicitly closing — happens in the same twelve months. Most students choose it under pressure, in the last few weeks." },
+    locked:[
+      {title:"Your recommended stream pick", tag:"PERSONALIZED", text:"Given your target career and current strengths, here's the stream that keeps the most relevant doors open — and the one combination that would quietly work against you."},
+      {title:"Board score threshold for your target path", tag:"BENCHMARK", text:"The realistic score range this career path expects from students at your stage, so you know exactly what \"good enough\" looks like."},
+      {title:"Backup path if your first choice slips", tag:"SAFETY NET", text:"A concrete second route mapped for your profile, in case your board results land below plan."}
+    ],
+    stats:[ {num:"11th", lbl:"grade is when most students realise their Class 10 choice was rushed"}, {num:"1 of 5", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:3, num:"11", label:"Class 11", sub:"Specialization Sprint", cls:"Stream begins",
+    eyebrow:"STOP 3 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"The gap between \"in the stream\" and \"on the path\"",
+      text:"Being in the right stream isn't the same as being on the right path within it. Class 11 is where students either start narrowing toward their actual target career — or spend two years being generically \"good at the stream.\"" },
+    locked:[
+      {title:"Entrance exams to start tracking now", tag:"PERSONALIZED", text:"The specific exams tied to your target career that need prep starting this year, not next — with realistic lead time."},
+      {title:"Elective / optional subject fit", tag:"ACTION PLAN", text:"Which electives actually strengthen your target career profile versus which ones just fill a timetable slot."},
+      {title:"Your current gap-to-target snapshot", tag:"PROGRESS CHECK", text:"A live comparison of where your profile stands today against where it needs to be by end of Class 12."}
+    ],
+    stats:[ {num:"2 yrs", lbl:"left before entrance-exam pressure peaks"}, {num:"1 of 5", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:4, num:"12", label:"Class 12", sub:"The Launch Window", cls:"Boards + applications + earning lane opens",
+    eyebrow:"STOP 4 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"The year three timelines collide",
+      text:"Boards, entrance exams, and college applications all peak in the same window — and this is also the exact point where an \"earning while learning\" lane becomes realistic for the first time. Students who plan for all three rarely feel the crunch everyone else does." },
+    locked:[
+      {title:"Your application shortlist logic", tag:"PERSONALIZED", text:"Which institutions and courses are realistically in range for your profile today, sorted by fit — not just by name recognition."},
+      {title:"Earning-lane options that fit your target career", tag:"NEW UNLOCK", text:"Specific certifications, internships or part-time paths in the coral lane that actually build toward your career, instead of just adding pocket money."},
+      {title:"Application timeline, reverse-engineered from deadlines", tag:"ACTION PLAN", text:"A week-by-week countdown built backward from your real application deadlines, not a generic academic calendar."},
+      {title:"Financial planning checkpoint", tag:"RISK CHECK", text:"A first look at what the road ahead costs, and where support or scholarship routes might apply to your situation."}
+    ],
+    stats:[ {num:"3 clocks", lbl:"running at once this year — boards, entrance exams, applications"}, {num:"1 of 6", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:5, num:"UG", label:"Higher Ed.", sub:"Build Phase", cls:"Undergraduate years",
+    eyebrow:"STOP 5 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"Where a degree turns into a career — or doesn't",
+      text:"A degree alone rarely differentiates anyone anymore. What happens alongside it — the right projects, the right electives, the right early exposure — is what actually separates a resume that gets noticed from one that doesn't." },
+    locked:[
+      {title:"Skill stack for your target career", tag:"PERSONALIZED", text:"The specific technical and soft skills employers in your target field actually screen for, sequenced across your years."},
+      {title:"Internship windows to target", tag:"ACTION PLAN", text:"When and where to start applying for internships relevant to your path, timed against your academic calendar."},
+      {title:"Postgrad vs. direct-entry decision map", tag:"DECISION AID", text:"Whether your target career rewards further study or early field experience more — mapped to current industry patterns."}
+    ],
+    stats:[ {num:"60%", lbl:"of employability, industry surveys suggest, comes from outside the syllabus"}, {num:"1 of 5", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:6, num:"PG", label:"Post-Grad.", sub:"Depth & Distinction", cls:"Specialization, if required",
+    eyebrow:"STOP 6 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"Not every career needs this stop — but some can't skip it",
+      text:"Some target careers treat postgraduate study as optional polish. Others treat it as a hard gate. Knowing which kind yours is, well before you reach this stage, changes everything you do in the years before it." },
+    locked:[
+      {title:"Is postgrad mandatory for your target career?", tag:"PERSONALIZED", text:"A direct answer for your specific target career, plus the two or three specialization tracks that matter most within it."},
+      {title:"Institution shortlist by outcome, not ranking", tag:"BENCHMARK", text:"Programs filtered by actual placement and outcome data relevant to your target career, not general prestige."},
+      {title:"Funding & scholarship map", tag:"RISK CHECK", text:"Where the realistic funding routes are for this stage, matched to your financial context."}
+    ],
+    stats:[ {num:"2 tracks", lbl:"careers usually split into here — depth specialist or field generalist"}, {num:"1 of 4", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:7, num:"PC", label:"Pre-Career", sub:"Runway to Real World", cls:"Certifications, internships",
+    eyebrow:"STOP 7 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"The last stretch before the real test",
+      text:"This is the final runway — where certifications, live projects, and a few sharp interview cycles decide how fast the next stage actually starts. Most of it is invisible until you're already behind on it." },
+    locked:[
+      {title:"Certifications that move the needle", tag:"PERSONALIZED", text:"The 2-3 certifications actually valued in your target field right now, sorted by return on time invested."},
+      {title:"Interview readiness gap check", tag:"PROGRESS CHECK", text:"Where your current profile stands against typical hiring bars for your target role."},
+      {title:"Network entry points", tag:"ACTION PLAN", text:"Specific, realistic ways to start building industry contacts before you need them."}
+    ],
+    stats:[ {num:"90 days", lbl:"is the typical window between \"ready on paper\" and first offer, for well-prepared candidates"}, {num:"1 of 4", lbl:"decision windows for this stage shown here"} ]
+  },
+  {
+    id:8, num:"🏁", label:"Career Entry", sub:"Destination Reached", cls:"First role",
+    eyebrow:"STOP 8 OF 8",
+    open:{ badge:"VISIBLE TO EVERYONE", title:"Arrival isn't the finish line — it's the first checkpoint",
+      text:"Reaching Career Entry means the map you followed worked. What it doesn't show yet is the next map — the one for growth, transitions, and the decisions that start the moment you're in the role." },
+    locked:[
+      {title:"Your personalized entry-role shortlist", tag:"PERSONALIZED", text:"Roles and organizations that best match your finished profile, not just your degree title."},
+      {title:"First-90-days success plan", tag:"ACTION PLAN", text:"What separates a strong first impression from an average one, specific to your target industry."},
+      {title:"What the next map looks like", tag:"PREVIEW", text:"A glimpse of the growth-stage journey that begins right after this one — built the same way this one was."}
+    ],
+    stats:[ {num:"Stage 1", lbl:"of your next journey begins the day this one ends"}, {num:"1 of 3", lbl:"decision windows for this stage shown here"} ]
+  }
+];
+
+// ---------- Build the SVG road ----------
+const svg = document.getElementById('road');
+const NS = "http://www.w3.org/2000/svg";
+const n = STAGES.length;
+const padX = 70, padR = 70;
+const usableW = 1300 - padX - padR;
+const baseY = 150;
+const amp = 46; // wave amplitude
+
+function xFor(i){ return padX + (usableW * i / (n-1)); }
+function yFor(i){ return baseY + Math.sin(i*1.05) * amp * (i%2===0?1:-0.7); }
+
+const pts = STAGES.map((s,i)=>({x:xFor(i), y:yFor(i)}));
+
+function smoothPath(points){
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for(let i=0;i<points.length-1;i++){
+    const p0 = points[i], p1 = points[i+1];
+    const midX = (p0.x+p1.x)/2;
+    d += ` C ${midX} ${p0.y}, ${midX} ${p1.y}, ${p1.x} ${p1.y}`;
+  }
+  return d;
+}
+
+function el(tag, attrs){
+  const e = document.createElementNS(NS, tag);
+  for(const k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+// main road
+svg.appendChild(el('path', { d: smoothPath(pts), class:'road-path' }));
+svg.appendChild(el('path', { d: smoothPath(pts), class:'road-path-dash' }));
+
+// earning lane: from stage index 3 (Class 12) to last stage, offset below
+const earnStart = 3, earnEnd = n-1;
+const earnPts = [];
+for(let i=earnStart;i<=earnEnd;i++){
+  earnPts.push({ x: pts[i].x, y: pts[i].y + 46 });
+}
+svg.appendChild(el('path', { d: smoothPath(earnPts), class:'earn-path' }));
+const elabel = el('text', { class:'earn-label', x: (earnPts[0].x+earnPts[earnPts.length-1].x)/2 - 60, y: earnPts[Math.floor(earnPts.length/2)].y + 20 });
+elabel.textContent = "EARNING-WHILE-LEARNING LANE";
+svg.appendChild(elabel);
+
+// "You are here" pin at first node
+const hereG = el('g', { class:'pin-here' });
+hereG.appendChild(el('circle', { cx:pts[0].x, cy:pts[0].y - 34, r:5, fill:'#0F6E56', class:'pin-pulse' }));
+hereG.appendChild(el('circle', { cx:pts[0].x, cy:pts[0].y - 34, r:5, fill:'#0F6E56' }));
+const hereTxt = el('text', { x:pts[0].x, y:pts[0].y - 46, 'text-anchor':'middle' });
+hereTxt.textContent = "YOU ARE HERE";
+hereG.appendChild(hereTxt);
+svg.appendChild(hereG);
+
+// flag at last node
+const flagG = el('g', { class:'flag-group' });
+flagG.appendChild(el('path', { d:`M ${pts[n-1].x+16} ${pts[n-1].y-52} v 30 l 16 -6 l -16 -6 v 0`, fill:'#FF6B4A' }));
+flagG.appendChild(el('line', { x1:pts[n-1].x+16, y1:pts[n-1].y-52, x2:pts[n-1].x+16, y2:pts[n-1].y-18, stroke:'#0F6E56', 'stroke-width':2 }));
+const flagTxt = el('text', { x:pts[n-1].x, y:pts[n-1].y - 60, 'text-anchor':'middle' });
+flagTxt.textContent = "CAREER ENTRY";
+flagG.appendChild(flagTxt);
+svg.appendChild(flagG);
+
+// nodes
+STAGES.forEach((s,i)=>{
+  const p = pts[i];
+  const g = el('g', { class:'node', tabindex:'0', role:'button', 'aria-label':`View details for ${s.label}: ${s.sub}` });
+
+  // lock chip showing count of locked insights
+  const lockCount = s.locked.length;
+  const chipW = 30;
+  const chipG = el('g');
+  chipG.appendChild(el('rect', { x:p.x - chipW/2, y:p.y - 90, width:chipW, height:16, rx:8, class:'lockchip-bg' }));
+  const chipTxt = el('text', { x:p.x, y:p.y - 79, 'text-anchor':'middle', class:'lockchip' });
+  chipTxt.textContent = `🔒 ${lockCount}`;
+  chipG.appendChild(chipTxt);
+  g.appendChild(chipG);
+
+  g.appendChild(el('circle', { cx:p.x, cy:p.y, r:22, class:'base' }));
+  const numTxt = el('text', { x:p.x, y:p.y+1, class:'num' });
+  numTxt.textContent = s.num;
+  g.appendChild(numTxt);
+
+  const labelTxt = el('text', { x:p.x, y:p.y+40, class:'node-label' });
+  labelTxt.textContent = s.label;
+  g.appendChild(labelTxt);
+
+  const subTxt = el('text', { x:p.x, y:p.y+53, class:'node-sub' });
+  subTxt.textContent = s.sub;
+  g.appendChild(subTxt);
+
+  const openFn = ()=>openDrawer(i);
+  g.addEventListener('click', openFn);
+  g.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openFn(); } });
+
+  svg.appendChild(g);
+});
+
+// ---------- Drawer logic ----------
+const overlay = document.getElementById('overlay');
+const drawer = document.getElementById('drawer');
+const drawerBody = document.getElementById('drawer-body');
+const drawerTitle = document.getElementById('drawer-title');
+const dhEyebrow = document.getElementById('dh-eyebrow');
+const dhTag = document.getElementById('dh-tag');
+let lastFocused = null;
+
+function openDrawer(i){
+  const s = STAGES[i];
+  lastFocused = document.activeElement;
+  dhEyebrow.textContent = s.eyebrow;
+  drawerTitle.textContent = `${s.label} — ${s.sub}`;
+  dhTag.textContent = s.cls;
+
+  const totalInsights = 1 + s.locked.length;
+  const pct = Math.round((1/totalInsights)*100);
+
+  let html = `
+    <div class="unlock-track">
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="lbl">1 of ${totalInsights} insights unlocked</div>
+    </div>
+
+    <div class="open-card">
+      <div class="oc-h"><span class="badge">${s.open.badge}</span> ${s.open.title}</div>
+      <p>${s.open.text}</p>
+    </div>
+
+    <div class="stat-strip">
+      ${s.stats.map(st=>`<div class="stat-pill"><div class="num">${st.num}</div><div class="lbl">${st.lbl}</div></div>`).join('')}
+    </div>
+
+    <div class="section-label">Built specifically for a student like you</div>
+  `;
+
+  s.locked.forEach(l=>{
+    html += `
+      <div class="locked-card">
+        <span class="lc-tag">${l.tag}</span>
+        <div class="lc-title"><span class="lock-ic">🔒</span> ${l.title}</div>
+        <div class="lc-blur">${l.text}</div>
+      </div>
+    `;
+  });
+
+  drawerBody.innerHTML = html;
+
+  overlay.classList.add('show');
+  drawer.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('drawer-close').focus();
+}
+
+function closeDrawer(){
+  overlay.classList.remove('show');
+  drawer.classList.remove('show');
+  document.body.style.overflow = '';
+  if(lastFocused) lastFocused.focus();
+}
+
+document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('show')) closeDrawer(); });
+
+document.getElementById('cta-btn').addEventListener('click', ()=>{
+  // Placeholder action — wire this to the actual signup flow.
+  window.location.href = '13_signup_99.html';
+});
+</script>
+</body>
+</html>

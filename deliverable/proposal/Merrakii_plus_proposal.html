@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposal - Merrakii+ Decision Enabling Student Success System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00b4d8;
+      --blue: #4361ee;
+      --purple: #7c3aed;
+      --navy: #1c2340;
+      --gray: #888fa8;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #ffffff;
+      --table-head: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      --accent-soft: #eef2ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      font-size: 15px;
+    }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+      color: var(--navy);
+      background: linear-gradient(165deg, #f0f9fc 0%, #f1f5f9 45%, #eef2ff 100%);
+      line-height: 1.45;
+    }
+
+    .wrap-screen {
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 24px 64px;
+    }
+
+    .toolbar {
+      max-width: 1440px;
+      margin: 0 auto 16px;
+    }
+
+    .btn-print {
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(67, 97, 238, 0.35);
+    }
+
+    .btn-print:hover {
+      filter: brightness(1.06);
+    }
+
+    .btn-print:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .toolbar-hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 8px 2px 0;
+    }
+
+    .sheet {
+      max-width: 1440px;
+      margin: 0 auto;
+      background: var(--paper);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(67, 97, 238, 0.08);
+      box-shadow: 0 4px 32px rgba(28, 35, 64, 0.1);
+    }
+
+    .accent-bar {
+      height: 6px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue) 50%, var(--purple) 100%);
+    }
+
+    .sheet-inner {
+      padding: 36px 48px 48px;
+    }
+
+    header.doc-head {
+      margin-bottom: 22px;
+      padding-bottom: 0;
+      border-bottom: none;
+      text-align: left;
+    }
+
+    .letterhead {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 20px;
+      row-gap: 14px;
+      align-items: start;
+      margin-bottom: 22px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      width: 100%;
+    }
+
+    .letterhead-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .letterhead-col--left {
+      grid-column: 1;
+      grid-row: 1;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .letterhead-col--right {
+      grid-column: 2;
+      grid-row: 1;
+      align-items: flex-end;
+      text-align: right;
+      margin-top: 50px;
+    }
+
+    .letterhead-doc-row {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      text-align: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .letterhead-logo {
+      display: block;
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      object-fit: contain;
+      object-position: center;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .letterhead-col--left .letterhead-logo {
+      object-position: left center;
+    }
+
+    .letterhead-col--right .letterhead-logo {
+      object-position: right center;
+    }
+
+    .letterhead-logo.letterhead-logo--maple {
+      width: 150px;
+      height: 150px;
+    }
+
+    .letterhead-text {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .letterhead-text strong {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .letterhead-text a {
+      color: var(--blue);
+      word-break: break-word;
+    }
+
+    .letterhead-text a.letterhead-email {
+      word-break: normal;
+      white-space: nowrap;
+    }
+
+    .letterhead-col--left .letterhead-text {
+      margin-top: -50px;
+    }
+
+    .letterhead-doc-title {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      color: #000000;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .letterhead {
+        grid-template-columns: 1fr;
+      }
+      .letterhead-col--left,
+      .letterhead-col--right {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .letterhead-col--right {
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 16px;
+      }
+      .letterhead-col--right .letterhead-logo {
+        object-position: left center;
+      }
+      .letterhead-doc-row {
+        padding-top: 14px;
+      }
+      .letterhead-doc-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.05em;
+      }
+      .sheet-inner {
+        padding: 28px 22px 36px;
+      }
+    }
+
+    .quote-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      margin-top: 18px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .quote-meta-left {
+      text-align: left;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .quote-meta-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .quote-meta-label {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .quote-meta-value {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.45;
+    }
+
+    .quote-project-block {
+      text-align: left;
+      margin-bottom: 8px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .quote-project-block .quote-meta-value {
+      font-weight: 500;
+    }
+
+    @media (max-width: 520px) {
+      .quote-meta-row {
+        flex-direction: column;
+      }
+
+      .quote-meta-right {
+        align-self: flex-end;
+        max-width: 100%;
+      }
+    }
+
+    h2 {
+      margin: 22px 0 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      border-left: 4px solid var(--blue);
+      padding-left: 10px;
+    }
+
+    h3 {
+      margin: 16px 0 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    p {
+      margin: 0 0 10px;
+      text-align: justify;
+      text-wrap: pretty;
+      hyphens: auto;
+      font-size: 14px;
+    }
+
+    ul {
+      margin: 8px 0 12px;
+      padding-left: 1.2rem;
+      font-size: 14px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      text-align: justify;
+      text-wrap: pretty;
+      hyphens: auto;
+    }
+
+    li::marker {
+      color: var(--blue);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 12px 0 16px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+
+    td {
+      text-align: justify;
+      text-wrap: pretty;
+      hyphens: auto;
+    }
+
+    th {
+      background: var(--table-head);
+      font-weight: 600;
+      color: var(--navy);
+      text-align: left;
+      border-bottom: 2px solid var(--line);
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafbfc;
+    }
+
+    .amount {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      text-align: end;
+      font-weight: 600;
+      color: var(--blue);
+    }
+
+    .totals {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+
+    .note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    @page {
+      size: A4;
+      margin: 14mm;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .wrap-screen {
+        padding: 0;
+        max-width: none;
+      }
+
+      .sheet {
+        margin: 0;
+        box-shadow: none;
+        border-radius: 0;
+        max-width: none;
+        border: none;
+      }
+
+      .sheet-inner {
+        padding: 0;
+      }
+
+      header.doc-head {
+        break-after: avoid;
+      }
+
+      .letterhead {
+        break-inside: avoid;
+      }
+
+      h2 {
+        break-after: avoid;
+      }
+
+      h3 {
+        break-after: avoid;
+      }
+
+      table {
+        break-inside: avoid;
+      }
+
+      tr {
+        break-inside: avoid;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .letterhead-logo {
+        width: 50px;
+        height: 50px;
+      }
+
+      .letterhead-logo.letterhead-logo--maple {
+        width: 150px;
+        height: 150px;
+      }
+    }
+
+    footer.doc-foot {
+      margin-top: 28px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--gray);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap-screen">
+    <div class="toolbar no-print">
+      <button type="button" class="btn-print" onclick="window.print()">Download PDF</button>
+      <p class="toolbar-hint">Click the button above, then choose "Save as PDF" in the print dialog. This creates a text-based PDF (not a screenshot), so you can select and copy text from the saved file.</p>
+    </div>
+
+    <article class="sheet" id="proposal">
+      <div class="accent-bar"></div>
+      <div class="sheet-inner">
+      <header class="doc-head">
+        <div class="letterhead">
+          <div class="letterhead-col letterhead-col--left">
+            <img
+              class="letterhead-logo letterhead-logo--maple"
+              src="images/maple-ai-logo.jpg"
+              alt="Maple AI Technologies"
+              width="150"
+              height="150"
+              decoding="async"
+            />
+            <div class="letterhead-text">
+              <strong>Tarun Rastogi</strong><br />
+              <a class="letterhead-email" href="mailto:tarunrastogi@mapleaitechnologies.com">tarunrastogi@mapleaitechnologies.com</a><br />
+              <a href="https://mapleaitechnologies.com">mapleaitechnologies.com</a><br />
+              <a href="tel:+919619060302">+91 9619060302</a>
+            </div>
+          </div>
+          <div class="letterhead-col letterhead-col--right">
+            <img
+              class="letterhead-logo"
+              src="images/merrakii-logo.png"
+              alt="Merrakii"
+              width="50"
+              height="50"
+              decoding="async"
+            />
+            <div class="letterhead-text">
+              <strong>Merrakii Education</strong><br />
+              Munjal Universal Consultancy<br />
+              T-14, 3rd Floor, Rasvilas Salcon, Saket, South Delhi,<br />
+              New Delhi, India 110017
+            </div>
+          </div>
+          <div class="letterhead-doc-row">
+            <p class="letterhead-doc-title">Proposal</p>
+          </div>
+        </div>
+        <div class="quote-meta-row">
+          <div class="quote-meta-left">
+            <p class="quote-meta-label">Proposal No.</p>
+            <p class="quote-meta-value">MAT_PRP_2026_001</p>
+          </div>
+          <div class="quote-meta-right">
+            <p class="quote-meta-label">Proposal Date</p>
+            <p class="quote-meta-value">7 July 2026</p>
+          </div>
+        </div>
+        <div class="quote-project-block">
+          <p class="quote-meta-label">Project</p>
+          <p class="quote-meta-value">Merrakii+ Decision Enabling Student Success System (DESSS), web platform development</p>
+        </div>
+      </header>
+
+      <section>
+        <h2>1. Executive summary</h2>
+        <p>
+          This proposal from <strong>Maple AI Technologies</strong> covers the complete design and development of the
+          <strong>Merrakii+ Decision Enabling Student Success System</strong>, as described in the Product Requirement
+          Document version 1.0 shared by the Merrakii+ team in July 2026.
+        </p>
+        <p>
+          Merrakii+ is a career guidance platform that works with students of Class 9 to Class 12 and with their
+          families at the same time. The heart of the platform is the <strong>Career Journey Map</strong>. A student
+          enters their class, career goal, academic performance, interests, and family background, and the platform
+          creates a personal, visual roadmap from today to career entry. Trained counsellors, working career
+          professionals, and a network of partner counsellors then guide the student and the family along that map,
+          stage by stage, until a real, documented career decision is made.
+        </p>
+        <p>
+          The platform serves nine different types of users, offers a library of validated career journeys, a
+          catalogue of 32 guidance services, separate dashboards for each type of user, and built-in intelligence
+          that personalises every student's journey. The total professional fee for the web platform is
+          <strong>Rupees fifteen lakh (INR 15,00,000)</strong>, delivered over <strong>nine weeks</strong> across five
+          clear milestones, with payment linked to the completion of each milestone.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Navigation pages to be developed</h2>
+        <p>
+          The public website is the front door of the platform. It will be fast, mobile friendly, and easy to read
+          for students and parents alike. The following pages will be developed.
+        </p>
+        <table aria-label="Navigation pages">
+          <thead>
+            <tr>
+              <th scope="col">Page</th>
+              <th scope="col">What the visitor sees on it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Home</strong></td><td>A welcoming introduction, a smart search bar where visitors can ask career questions in plain language, the five stage journey explained simply, previews of career journeys, cards for each audience, and testimonials.</td></tr>
+            <tr><td><strong>Career Journeys</strong></td><td>The full library of career journeys with filters for stream, difficulty level, and career field.</td></tr>
+            <tr><td><strong>Journey Detail</strong></td><td>One complete career journey: the path from the student's current class to career entry, colleges, exams, scholarships, costs, expected salary, and the professional who verified it.</td></tr>
+            <tr><td><strong>Services</strong></td><td>The catalogue of 32 guidance services organised by the five stages, with the purpose, duration, cost, and outcome of each service.</td></tr>
+            <tr><td><strong>For Students</strong></td><td>A page written for students that explains what they get and how the journey works.</td></tr>
+            <tr><td><strong>For Parents</strong></td><td>A page written for parents that explains their role, their own login, and the financial map.</td></tr>
+            <tr><td><strong>For Schools</strong></td><td>A page for principals and school owners that explains the school partnership and the pilot programme.</td></tr>
+            <tr><td><strong>Career Professionals</strong></td><td>A page inviting working professionals to join the network and explaining what is expected of them.</td></tr>
+            <tr><td><strong>Partner Counsellors</strong></td><td>A page inviting community members to train, get certified, and deliver guidance in their own neighbourhoods.</td></tr>
+            <tr><td><strong>About</strong></td><td>The Merrakii+ story, philosophy, and the 2030 vision.</td></tr>
+            <tr><td><strong>Contact</strong></td><td>A single inquiry form that automatically routes each message to the right team based on who is writing.</td></tr>
+            <tr><td><strong>Sign in and Create Profile</strong></td><td>Simple, secure entry points for every type of user, including free student registration with an optional linked parent account.</td></tr>
+            <tr><td><strong>Student Dashboard</strong></td><td>The signed-in home for students, centred on the personal Career Journey Map, progress header, financial map, and service tracker.</td></tr>
+            <tr><td><strong>Parent Dashboard</strong></td><td>The signed-in home for parents, showing the linked child's journey progress, session history, financial map, and recorded decisions.</td></tr>
+            <tr><td><strong>Counsellor Dashboard</strong></td><td>The signed-in workspace for in-house and partner counsellors: caseload, student detail, sessions, and the decision log. Built mobile first for field use.</td></tr>
+            <tr><td><strong>Career Professional Portal</strong></td><td>The signed-in workspace for verified professionals: profile, journey validation queue, session confirmation, and feedback.</td></tr>
+            <tr><td><strong>School, Partner, Operations, and Leadership areas</strong></td><td>Signed-in workspaces for school cohort reporting, business partner programme management, internal CRM and lead handling, and leadership analytics. These complete the nine persona model described in the requirement document.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>3. Features for the student</h2>
+        <p>
+          The student is at the centre of the platform. A student who creates a free profile receives the following.
+        </p>
+        <ul>
+          <li><strong>A personal Career Journey Map.</strong> The student's own visual roadmap from their current class to career entry, showing every stage, every milestone, and every service along the way, in the style of a route on a map.</li>
+          <li><strong>Self-discovery assessments.</strong> Structured assessments that help the student understand their own interests, personality, and strengths before any career direction is chosen.</li>
+          <li><strong>The full career journey library.</strong> Complete, professionally verified information for each career: the academic path, entrance exams, colleges, skills, total cost through government and private routes, scholarships, and realistic salary expectations.</li>
+          <li><strong>Sessions with real professionals.</strong> Structured 45 minute conversations with a verified professional who actually works in the career the student is exploring.</li>
+          <li><strong>A progress tracker.</strong> A clear view of how far the student has come, what percentage of the journey is complete, what the next milestone is, and when the next session is scheduled.</li>
+          <li><strong>Alternative routes.</strong> If the primary route does not work out, the map already shows route B and route C, so no setback becomes a dead end.</li>
+          <li><strong>A fast track for late joiners.</strong> A student who joins in Class 11 or Class 12 completes a compressed discovery session and is placed at exactly the right point on the map.</li>
+          <li><strong>A documented decision.</strong> The journey leads to a real career decision that the student, the parents, and the counsellor confirm together, recorded on the platform.</li>
+          <li><strong>Enrolled student benefits.</strong> Students who enrol additionally receive their assigned counsellor, all 32 services, a document vault, full session history, and the parent dashboard for their family.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. Personas supported</h2>
+        <p>
+          The platform is built for nine types of users. Each one signs in to their own space and sees only what is
+          relevant and permitted for them.
+        </p>
+        <table aria-label="Personas supported">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Persona</th>
+              <th scope="col">Who they are</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><strong>Student</strong></td><td>A school student of Class 9 to Class 12 exploring careers and working through the five stage journey.</td></tr>
+            <tr><td>2</td><td><strong>Parent</strong></td><td>The student's parent or guardian, with their own login linked to the child's profile.</td></tr>
+            <tr><td>3</td><td><strong>School and Principal</strong></td><td>A partner school running the programme for its student cohorts.</td></tr>
+            <tr><td>4</td><td><strong>Counsellor</strong></td><td>A trained in-house Merrakii+ counsellor managing a caseload of students.</td></tr>
+            <tr><td>5</td><td><strong>Partner Counsellor</strong></td><td>A certified community member delivering the programme at the family doorstep, working mainly from a phone.</td></tr>
+            <tr><td>6</td><td><strong>Career Professional</strong></td><td>A verified working professional who meets students and validates journey content in their field.</td></tr>
+            <tr><td>7</td><td><strong>Business Partner</strong></td><td>A course or programme provider whose offerings appear inside relevant journeys, with commission tracking.</td></tr>
+            <tr><td>8</td><td><strong>Operations Team</strong></td><td>The internal Merrakii+ team managing content, leads, follow-ups, and platform administration.</td></tr>
+            <tr><td>9</td><td><strong>Leadership</strong></td><td>The founder and senior leadership, tracking decisions enabled and the health of the whole programme.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>5. Dashboards, pages, and features for each persona</h2>
+        <p>
+          Every persona gets a dedicated dashboard, a set of pages, and features designed for their daily work. The
+          table below sets this out persona by persona.
+        </p>
+        <table aria-label="Dashboard, navigation, and features per persona">
+          <thead>
+            <tr>
+              <th scope="col">Persona</th>
+              <th scope="col">Dashboard</th>
+              <th scope="col">Pages available</th>
+              <th scope="col">Key features</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Student</strong></td>
+              <td>Student Dashboard with the personal Career Journey Map at its centre.</td>
+              <td>All public pages, My Journey Map, Journey Library, Services, My Sessions, My Documents, My Profile.</td>
+              <td>Personal roadmap, assessments, progress tracker, service booking, professional sessions, document vault, decision record.</td>
+            </tr>
+            <tr>
+              <td><strong>Parent</strong></td>
+              <td>Parent Dashboard showing the child's journey at a glance.</td>
+              <td>All public pages, Child's Journey Progress, Financial Map, Session History, Decisions.</td>
+              <td>Live view of the child's progress, full cost comparison of government and private routes, parent session notes, family confirmation of every decision.</td>
+            </tr>
+            <tr>
+              <td><strong>School and Principal</strong></td>
+              <td>School Dashboard with cohort-level summaries.</td>
+              <td>Student Cohort Overview, Session Calendar, Outcomes Report, Parent Satisfaction Summary.</td>
+              <td>Enrolment overview, aggregate progress without exposing private student detail, pilot outcome reporting ready for the school board.</td>
+            </tr>
+            <tr>
+              <td><strong>Counsellor</strong></td>
+              <td>Counsellor Dashboard listing the full caseload with each student's stage and milestone.</td>
+              <td>Caseload, Student Detail, Session Scheduler, Journey Library, Decision Log.</td>
+              <td>Session scheduling with structured note templates, parent session coordination, per-student score adjustment, service status tracking, decision recording.</td>
+            </tr>
+            <tr>
+              <td><strong>Partner Counsellor</strong></td>
+              <td>The same Counsellor Dashboard, designed mobile first so it works fully on a phone in the field.</td>
+              <td>Caseload, Student Detail, Journey Content, Family Session Tools, Earnings.</td>
+              <td>Everything a counsellor has, plus tracking of decisions enabled and income earned per family served.</td>
+            </tr>
+            <tr>
+              <td><strong>Career Professional</strong></td>
+              <td>Professional Portal with sessions and validation work in one place.</td>
+              <td>My Profile, Journey Validation Queue, My Sessions, Session Feedback.</td>
+              <td>Availability management, student profile preview before each session, journey content review and approval, the Verified Professional badge.</td>
+            </tr>
+            <tr>
+              <td><strong>Business Partner</strong></td>
+              <td>Partner Dashboard for programmes and earnings.</td>
+              <td>My Programme Listings, Enrolments, Commission Tracker, Inquiries.</td>
+              <td>Listing management inside relevant journeys, enrolment tracking, transparent commission statements.</td>
+            </tr>
+            <tr>
+              <td><strong>Operations Team</strong></td>
+              <td>Operations Dashboard with the lead and student lifecycle pipeline.</td>
+              <td>Lead Pipeline, Student Lifecycle, School and Partner Pipeline, Communication Log, Tasks, Content Management.</td>
+              <td>Lead capture from inquiry to enrolment, WhatsApp, email, and call history per contact, task assignment and follow-ups, journey and service content publishing.</td>
+            </tr>
+            <tr>
+              <td><strong>Leadership</strong></td>
+              <td>Leadership Dashboard with the numbers that matter most.</td>
+              <td>Decisions Enabled Counter, Student Progress Analytics, Counsellor Performance, Network Health.</td>
+              <td>Real time count of decisions enabled by counsellor, school, geography, and career field, stage completion rates, dropout analysis, and programme-wide health in one view.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>6. AI integration features</h2>
+        <p>
+          Intelligence is built into the platform where it genuinely helps the student and the family. Each feature
+          below has a clear, practical purpose.
+        </p>
+        <ul>
+          <li><strong>Personalised journey generation.</strong> The platform takes the student's class, career goal, academic performance, interests, and family income range and generates a career roadmap tailored to that exact student, including the correct starting milestone for late joiners.</li>
+          <li><strong>Plain language career search.</strong> The search bar on the home page understands everyday questions such as "how do I become a doctor" or "careers for someone who loves drawing" and returns the right journeys.</li>
+          <li><strong>Journey matching after discovery.</strong> Once a student completes the discovery assessments, the platform suggests the three to five career journeys that best fit their profile, so counselling time is spent on the strongest options.</li>
+          <li><strong>Smart related suggestions.</strong> Every journey page suggests adjacent careers, so a student exploring medicine also discovers allied fields they may never have considered.</li>
+          <li><strong>Session preparation summaries.</strong> Before each session, the counsellor receives a short, automatically prepared summary of the student's progress, recent notes, and suggested talking points, saving preparation time across a large caseload.</li>
+          <li><strong>Early warning signals.</strong> The platform watches for students who are slowing down or disengaging and flags them to their counsellor before a small drift becomes a dropout.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>7. Third party integrations</h2>
+        <p>
+          The platform will connect with established external services rather than rebuilding them. The following
+          integrations are included in this proposal.
+        </p>
+        <table aria-label="Third party integrations">
+          <thead>
+            <tr>
+              <th scope="col">Integration</th>
+              <th scope="col">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Payment gateway (Razorpay)</strong></td><td>Collecting enrolment fees and paid service charges, and supporting commission settlement records for business partners.</td></tr>
+            <tr><td><strong>WhatsApp Business API</strong></td><td>Session reminders, milestone updates, and inquiry follow-ups on the channel Indian families actually use, with the full message history visible in the operations dashboard.</td></tr>
+            <tr><td><strong>Email service</strong></td><td>Account creation, session confirmations, progress summaries for parents, and inquiry routing.</td></tr>
+            <tr><td><strong>SMS one time passwords</strong></td><td>Secure sign in and phone number verification for users who prefer mobile-first access.</td></tr>
+            <tr><td><strong>Video meeting service (Google Meet)</strong></td><td>Online counselling sessions and career professional interactions, with meeting links created automatically when a session is booked.</td></tr>
+            <tr><td><strong>Calendar integration</strong></td><td>Session invitations that land directly in the calendars of counsellors, professionals, students, and parents.</td></tr>
+            <tr><td><strong>Analytics (Google Analytics)</strong></td><td>Understanding how visitors use the public website so content keeps improving.</td></tr>
+            <tr><td><strong>Uptime and error monitoring</strong></td><td>Round the clock monitoring of platform health, so problems are found and fixed before users report them.</td></tr>
+            <tr><td><strong>Cloud hosting and content delivery</strong></td><td>Fast, reliable hosting that keeps pages loading in under three seconds even on 4G mobile connections.</td></tr>
+          </tbody>
+        </table>
+        <p class="note">
+          Usage charges billed by the third party providers themselves, such as per message WhatsApp fees or payment
+          gateway transaction charges, are payable directly by the client and are not part of the professional fee in
+          this proposal.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. Comparison with the earlier Merrakii application</h2>
+        <p>
+          Maple AI Technologies earlier built the <strong>Merrakii digital academic marketplace</strong>. That was a
+          deliberately minimal, small scale application: a focused website where a visitor could browse institutes and
+          services, submit an application, and make a payment. It served two types of users, needed a small number of
+          pages, and involved light engineering.
+        </p>
+        <p>
+          The <strong>Merrakii+ Decision Enabling Student Success System</strong> is a different class of product
+          altogether. It is a full platform with nine types of users, more than twenty five distinct pages and
+          screens, eight signed-in workspaces (one shared by in-house and partner counsellors), a personalisation
+          engine, a services pipeline, session and decision workflows, and nine third party integrations. It
+          requires substantially heavier development across the database, the business logic, the security model, and
+          the user interface. The comparison below puts the two side by side.
+        </p>
+        <table aria-label="Comparison between the previous and the new application">
+          <thead>
+            <tr>
+              <th scope="col">Dimension</th>
+              <th scope="col">Digital Academic Marketplace (previous)</th>
+              <th scope="col">Merrakii+ DESSS (this proposal)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Nature of product</strong></td><td>A minimal marketplace website for browsing, applying, and paying.</td><td>A complete guidance platform that manages a multi-year relationship between students, families, counsellors, professionals, schools, and partners.</td></tr>
+            <tr><td><strong>Types of users</strong></td><td>2 (visitor or applicant, and admin).</td><td>9 distinct personas, each with its own permissions and workspace.</td></tr>
+            <tr><td><strong>Pages and screens</strong></td><td>Around 8 simple pages.</td><td>More than 25 pages and screens across the public site and seven signed-in areas.</td></tr>
+            <tr><td><strong>Dashboards</strong></td><td>1 basic admin view.</td><td>8 signed-in workspaces for student, parent, school, counsellor (shared with partner counsellor), professional, business partner, operations, and leadership.</td></tr>
+            <tr><td><strong>Core engine</strong></td><td>A catalogue with an application form.</td><td>A journey engine that generates personal roadmaps, tracks 32 services through a status pipeline, manages sessions, and records confirmed decisions.</td></tr>
+            <tr><td><strong>Intelligence</strong></td><td>None.</td><td>Six intelligent features, including personalised journey generation, plain language search, journey matching, and early warning signals.</td></tr>
+            <tr><td><strong>Third party integrations</strong></td><td>Payment gateway only.</td><td>Nine integrations covering payments, WhatsApp, email, SMS, video meetings, calendars, analytics, monitoring, and hosting.</td></tr>
+            <tr><td><strong>Data model</strong></td><td>A handful of simple records.</td><td>A rich, connected model covering users, profiles, journeys, milestones, services, sessions, decisions, validations, leads, and commissions.</td></tr>
+            <tr><td><strong>Security and access control</strong></td><td>Basic sign in.</td><td>Role based access enforced at every level, protection of minors' data, parent linked accounts, and an audit ready decision log.</td></tr>
+            <tr><td><strong>Engineering effort</strong></td><td>Light. A small, contained build.</td><td>Substantially heavier. A platform build with many interacting workflows, personalisation, and enterprise grade quality targets.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>9. Milestones and payment schedule</h2>
+        <p>
+          The programme runs for <strong>nine weeks</strong> across five milestones. Each milestone ends with a
+          concrete, reviewable outcome, and the payment for that milestone becomes due only when the milestone is
+          completed and accepted. The total professional fee for web development is
+          <strong>Rupees fifteen lakh (INR 15,00,000)</strong>.
+        </p>
+        <table aria-label="Milestones, deliverables, duration, and payments">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Milestone</th>
+              <th scope="col">What is delivered</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Payment (INR)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><strong>Discovery</strong></td>
+              <td>Working sessions with the Merrakii+ team; a written and agreed scope covering all personas, pages, features, and integrations; the delivery plan and risk register.</td>
+              <td>1 week</td>
+              <td class="amount">₹1,50,000</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><strong>Design</strong></td>
+              <td>The complete visual design of the platform: every page and dashboard designed for desktop and mobile, the journey map visual language, and a clickable preview the team can review and approve before any code is written.</td>
+              <td>3 weeks</td>
+              <td class="amount">₹3,00,000</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>Development</strong></td>
+              <td>The full platform built to the approved designs: public website, all nine persona areas, the journey engine, the services pipeline, session and decision workflows, intelligent features, and all nine integrations, verified by our internal quality checks.</td>
+              <td>3 weeks</td>
+              <td class="amount">₹6,00,000</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><strong>User acceptance testing (UAT)</strong></td>
+              <td>A stable test environment for the Merrakii+ team to try every flow themselves; a guided test plan; fixes for every issue found; and formal sign off that the platform is ready for launch.</td>
+              <td>1 week</td>
+              <td class="amount">₹2,25,000</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><strong>Go live</strong></td>
+              <td>Production launch on the final domain; security and performance checks passed; monitoring switched on; training and handover for the operations team; and close support during the first days of live operation.</td>
+              <td>1 week</td>
+              <td class="amount">₹2,25,000</td>
+            </tr>
+            <tr class="totals">
+              <td colspan="3">Total</td>
+              <td>9 weeks</td>
+              <td class="amount">₹15,00,000</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          All amounts are professional fees in Indian Rupees and exclusive of applicable taxes. Each invoice is raised
+          on completion of its milestone.
+        </p>
+      </section>
+
+      <section>
+        <h2>10. Compliance</h2>
+        <p>
+          The platform serves school students, most of whom are minors, so compliance is treated as a core
+          requirement and not an afterthought. The following commitments are built into the delivery.
+        </p>
+        <ul>
+          <li><strong>Protection of personal data.</strong> The platform will be built in line with India's Digital Personal Data Protection Act, 2023. Personal data is collected only with clear consent, used only for the stated purpose, and never sold or shared with third parties beyond the integrations listed in this proposal.</li>
+          <li><strong>Care for minors' data.</strong> Student accounts are designed with the linked parent account in mind, so a parent or guardian stays informed and involved. Data belonging to minors receives the strictest handling on the platform.</li>
+          <li><strong>Role based access at every level.</strong> Every user sees only what their role permits. A counsellor sees only their own caseload, a school sees only aggregate cohort numbers, and a professional sees only the students booked with them.</li>
+          <li><strong>Secure engineering practices.</strong> All traffic is encrypted, passwords are stored using strong one way hashing, and payment details are handled entirely by the payment gateway and never stored on the platform.</li>
+          <li><strong>Security review before launch.</strong> A structured security audit is completed before go live, covering authentication, access control, and data handling, in line with the success criteria in the requirement document.</li>
+          <li><strong>Accessibility.</strong> All public pages are built to meet the WCAG 2.1 AA accessibility standard, so the platform is usable by people with disabilities.</li>
+          <li><strong>Performance and availability.</strong> Pages are engineered to load within three seconds on a 4G mobile connection, the platform works fully on screens as small as 320 pixels wide, and availability of 99.5 percent during business hours is the operating target, with monitoring and a downtime log in place.</li>
+          <li><strong>Auditability.</strong> Every decision recorded on the platform carries the confirmation of the student, the parent, and the counsellor, creating a clean, reviewable trail for the programme's most important metric.</li>
+        </ul>
+      </section>
+
+      <footer class="doc-foot">
+        Maple AI Technologies · tarunrastogi@mapleaitechnologies.com · +91 9619060302
+      </footer>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

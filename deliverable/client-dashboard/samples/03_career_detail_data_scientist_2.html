@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Scientist | Merrakii+ Career Journey</title>
+<meta name="description" content="The complete career journey for Data Scientist — does it sound like you, everything you'll actually need paced to your current class, your doubts answered honestly, proof it's possible, and your next step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    background-image:radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  /* ============ NAV ============ */
+  #sitenav{ position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between; padding:15px 30px; background:rgba(251,250,246,.94); backdrop-filter:blur(8px); border-bottom:1px solid var(--paper-line); }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:18px; display:flex; align-items:center; gap:9px; color:var(--teal-deep); }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+  .nav-links{ display:flex; align-items:center; gap:18px; }
+  .nav-links a{ font-size:11.5px; font-weight:600; color:var(--muted); cursor:pointer; }
+  .nav-links a:hover{ color:var(--teal-deep); }
+  @media (max-width:900px){ .nav-links{ display:none; } }
+  .nav-cta{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; padding:10px 18px; border-radius:9px; font-size:12px; font-weight:700; border:none; cursor:pointer; }
+
+  #wrap{ max-width:860px; margin:0 auto; padding:0 24px 80px; }
+
+  /* ============ HERO ============ */
+  #hero{ text-align:center; padding:46px 20px 22px; }
+  .crumb{ font-size:10.5px; font-weight:700; color:var(--muted); letter-spacing:.04em; }
+  .crumb b{ color:var(--teal-deep); }
+  .hero-ic{ font-size:42px; margin-top:12px; }
+  #hero h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(28px,4.4vw,42px); margin-top:10px; }
+  .hero-hook{ font-size:14.5px; color:var(--ink); margin-top:10px; max-width:540px; margin-left:auto; margin-right:auto; line-height:1.6; font-weight:600; }
+  .hero-tag{ font-size:12px; color:var(--muted); margin-top:6px; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6; }
+  .validated-badge{ display:inline-flex; align-items:center; gap:7px; font-size:10.5px; font-weight:700; color:var(--gold-deep); background:var(--gold-light); border:1px solid #EAD9A8; padding:6px 14px; border-radius:20px; margin-top:14px; }
+
+  /* ============ ARC NAV ============ */
+  .arc-nav{ display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-top:26px; }
+  .arc-pill{ font-size:10px; font-weight:700; color:var(--muted); background:var(--white); border:1px solid var(--paper-line); padding:7px 13px; border-radius:20px; cursor:pointer; display:flex; align-items:center; gap:5px; }
+  .arc-pill b{ color:var(--coral); font-family:var(--font-mono); }
+  .arc-pill:hover{ border-color:var(--teal); color:var(--teal-deep); }
+
+  /* ============ ARC STAGE SHELL ============ */
+  .arc-stage{ margin-top:52px; }
+  .arc-stage-head{ text-align:center; margin-bottom:22px; }
+  .arc-stage-eyebrow{ font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--coral); }
+  .arc-stage-title{ font-family:var(--font-display); font-weight:700; font-size:24px; margin-top:8px; }
+  .arc-stage-sub{ font-size:12.5px; color:var(--muted); margin-top:6px; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.55; }
+
+  .cat-section{ margin-top:30px; }
+  .cat-head{ display:flex; align-items:center; gap:11px; margin-bottom:14px; }
+  .cat-num{ width:30px; height:30px; border-radius:9px; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:12.5px; flex-shrink:0; }
+  .cat-title{ font-family:var(--font-display); font-weight:700; font-size:16.5px; }
+  .cat-box{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:20px 22px; }
+  .cat-box p{ font-size:12.5px; line-height:1.72; color:var(--ink); }
+  .cat-box p + p{ margin-top:11px; }
+  .cat-list{ margin-top:12px; display:flex; flex-direction:column; gap:9px; }
+  .cat-list li{ list-style:none; font-size:12px; line-height:1.58; display:flex; gap:9px; color:var(--ink); }
+  .cat-list li::before{ content:"—"; color:var(--paper-line); flex-shrink:0; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .tag{ font-size:11px; font-weight:700; padding:6px 12px; border-radius:20px; background:var(--teal-light); color:var(--teal-deep); border:1px solid #CFEAE0; }
+
+  /* ============ STAGE 1: RECOGNITION CARDS ============ */
+  .rec-grid{ display:flex; flex-direction:column; gap:10px; }
+  .rec-card{ display:flex; align-items:flex-start; gap:13px; background:var(--white); border:1.5px solid var(--paper-line); border-radius:14px; padding:15px 17px; cursor:pointer; transition:all .15s; }
+  .rec-card:hover{ border-color:var(--teal); }
+  .rec-card.checked{ background:var(--teal-light); border-color:var(--teal); }
+  .rec-box{ width:20px; height:20px; border-radius:6px; border:1.5px solid var(--paper-line); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--teal-deep); background:var(--white); }
+  .rec-card.checked .rec-box{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .rec-txt{ font-size:13px; line-height:1.55; color:var(--ink); }
+  .rec-note{ text-align:center; font-size:11.5px; color:var(--muted); margin-top:16px; font-style:italic; }
+
+  /* ============ DAY IN THE LIFE TIMELINE ============ */
+  .timeline{ position:relative; padding-left:26px; }
+  .timeline::before{ content:""; position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:var(--paper-line); }
+  .tl-item{ position:relative; padding-bottom:20px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-dot{ position:absolute; left:-26px; top:2px; width:14px; height:14px; border-radius:50%; background:var(--teal); border:3px solid var(--teal-light); }
+  .tl-time{ font-family:var(--font-mono); font-size:11px; color:var(--teal-deep); font-weight:500; }
+  .tl-text{ font-size:12.5px; color:var(--ink); line-height:1.6; margin-top:3px; }
+
+  /* ============ BRANCH CARDS ============ */
+  .branch-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  @media (max-width:700px){ .branch-grid{ grid-template-columns:1fr; } }
+  .branch-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px; }
+  .branch-ic{ font-size:20px; }
+  .branch-title{ font-family:var(--font-display); font-weight:700; font-size:13px; margin-top:8px; }
+  .branch-desc{ font-size:11px; color:var(--muted); margin-top:5px; line-height:1.5; }
+
+  /* ============ CLASS SELECTOR ============ */
+  .stage-select-card{ background:var(--teal-deep); border-radius:18px; padding:22px 24px; text-align:center; color:#fff; }
+  .stage-select-title{ font-family:var(--font-display); font-weight:700; font-size:16px; }
+  .stage-select-sub{ font-size:11.5px; opacity:.82; margin-top:6px; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.5; }
+  .stage-pills{ display:flex; gap:7px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+  .stage-pill{ font-size:11px; font-weight:700; padding:9px 14px; border-radius:20px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.24); color:#fff; cursor:pointer; transition:all .15s; }
+  .stage-pill:hover{ background:rgba(255,255,255,.2); }
+  .stage-pill.active{ background:#fff; color:var(--teal-deep); }
+
+  /* ============ REQUIREMENT MAP ============ */
+  .req-group{ margin-top:26px; }
+  .req-group-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:12px; }
+  .req-group-label{ font-family:var(--font-display); font-weight:700; font-size:15px; }
+  .req-group-label.now{ color:var(--coral); }
+  .req-group-sub{ font-size:10.5px; color:var(--muted); }
+  .req-grid{ display:flex; flex-direction:column; gap:8px; }
+  .req-card{ display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 15px; }
+  .req-group.now .req-card{ border-color:var(--coral); border-width:1.5px; }
+  .req-cluster-tag{ font-size:8.5px; font-weight:800; color:var(--muted); background:var(--paper); border:1px solid var(--paper-line); padding:4px 8px; border-radius:6px; flex-shrink:0; white-space:nowrap; min-width:76px; text-align:center; }
+  .req-main{ flex:1; min-width:0; }
+  .req-name{ font-size:12.5px; font-weight:700; color:var(--ink); }
+  .req-desc{ font-size:10.5px; color:var(--muted); margin-top:2px; line-height:1.4; }
+  .req-action{ flex-shrink:0; display:flex; align-items:center; gap:7px; }
+  .req-paid{ font-size:8.5px; font-weight:800; color:var(--gold-deep); background:var(--gold-light); border:1px solid #EAD9A8; padding:3px 8px; border-radius:20px; }
+  .req-btn{ font-size:10.5px; font-weight:700; color:var(--teal-deep); background:var(--teal-light); border:1px solid #CFEAE0; padding:7px 12px; border-radius:8px; cursor:pointer; white-space:nowrap; }
+  .req-btn.paid{ color:var(--gold-deep); background:var(--gold-light); border-color:#EAD9A8; }
+  @media (max-width:600px){ .req-card{ flex-wrap:wrap; } .req-cluster-tag{ order:1; } .req-main{ order:2; width:100%; } .req-action{ order:3; width:100%; justify-content:space-between; } }
+
+  .req-note{ text-align:center; font-size:11px; color:var(--muted); margin-top:18px; font-style:italic; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6; }
+
+  /* ============ MYTH VS REALITY ============ */
+  .myth-grid{ display:flex; flex-direction:column; gap:12px; }
+  .myth-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; overflow:hidden; }
+  .myth-row{ display:flex; align-items:flex-start; gap:11px; padding:13px 16px; }
+  .myth-row.myth{ background:#FDF4F1; }
+  .myth-row.reality{ background:var(--teal-light); }
+  .myth-label{ font-size:9.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; flex-shrink:0; width:58px; padding-top:1px; }
+  .myth-row.myth .myth-label{ color:#B5502E; }
+  .myth-row.reality .myth-label{ color:var(--teal-deep); }
+  .myth-txt{ font-size:12.5px; line-height:1.55; }
+  .myth-row.myth .myth-txt{ color:#7a3c26; text-decoration:line-through; text-decoration-color:#d9a894; text-decoration-thickness:1.5px; }
+  .myth-row.reality .myth-txt{ color:#123c30; font-weight:600; }
+
+  /* ============ DOUBTS ============ */
+  .doubt-item{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; margin-bottom:10px; }
+  .doubt-q{ font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--coral); }
+  .doubt-a{ font-size:12.5px; color:var(--ink); line-height:1.65; margin-top:7px; }
+
+  /* ============ RELATIVES SCRIPT ============ */
+  .script-card{ background:var(--gold-light); border:1px solid #EAD9A8; border-radius:16px; padding:22px 24px; position:relative; }
+  .script-quote-mark{ font-family:var(--font-display); font-size:44px; color:#EAD9A8; position:absolute; top:6px; left:16px; line-height:1; }
+  .script-text{ font-size:13px; line-height:1.75; color:#5c4718; font-style:italic; position:relative; padding-left:8px; }
+  .script-label{ font-size:10.5px; font-weight:700; color:var(--gold-deep); margin-top:12px; text-transform:uppercase; letter-spacing:.03em; }
+
+  /* ============ COMPARE TABLE ============ */
+  .compare-table{ width:100%; border-collapse:collapse; background:var(--white); border-radius:14px; overflow:hidden; border:1px solid var(--paper-line); }
+  .compare-table th{ background:var(--teal-deep); color:#fff; font-size:11px; font-weight:700; text-align:left; padding:11px 14px; }
+  .compare-table td{ font-size:11.5px; padding:12px 14px; border-top:1px solid var(--paper-line); line-height:1.5; }
+  .compare-table tr td:first-child{ font-weight:700; font-family:var(--font-display); font-size:12px; white-space:nowrap; }
+  .compare-table tr:first-child td{ background:var(--teal-light); }
+
+  /* ============ REAL VOICES ============ */
+  .voice-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:22px 24px; display:flex; gap:16px; align-items:flex-start; }
+  .voice-avatar{ width:44px; height:44px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:15px; flex-shrink:0; }
+  .voice-text{ font-size:12.5px; font-style:italic; line-height:1.68; color:var(--ink); }
+  .voice-who{ font-size:11.5px; font-weight:700; color:var(--teal-deep); margin-top:9px; }
+  .voice-role{ font-size:10.5px; color:var(--muted); }
+
+  /* ============ EFFORTS & REWARDS ============ */
+  .er-table{ width:100%; border-collapse:collapse; background:var(--white); border-radius:14px; overflow:hidden; border:1px solid var(--paper-line); }
+  .er-table th{ background:var(--teal-deep); color:#fff; font-size:10.5px; font-weight:700; text-align:left; padding:11px 13px; }
+  .er-table td{ font-size:11px; padding:12px 13px; border-top:1px solid var(--paper-line); line-height:1.55; vertical-align:top; }
+  .er-table tr td:first-child{ font-weight:700; font-family:var(--font-display); font-size:11.5px; white-space:nowrap; color:var(--teal-deep); }
+  .er-label{ font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); display:block; margin-bottom:2px; }
+  .er-callout{ background:var(--gold-light); border:1px solid #EAD9A8; border-radius:12px; padding:15px 18px; margin-top:14px; font-size:12px; color:#5c4718; line-height:1.6; }
+  .er-source{ text-align:center; font-size:9.5px; color:var(--muted); margin-top:10px; }
+
+  /* ============ NEXT STEP BANNER ============ */
+  .next-step{ background:linear-gradient(120deg,var(--coral),#ff8464); border-radius:18px; padding:26px 28px; color:#fff; }
+  .next-step-eyebrow{ font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; opacity:.85; }
+  .next-step-title{ font-family:var(--font-display); font-weight:700; font-size:18px; margin-top:8px; }
+  .next-step-desc{ font-size:12.5px; margin-top:8px; line-height:1.6; opacity:.95; }
+
+  .decision-list{ display:flex; flex-direction:column; gap:9px; }
+  .decision-row{ display:flex; gap:12px; align-items:flex-start; background:var(--gold-light); border:1px solid #EAD9A8; border-radius:10px; padding:11px 14px; }
+  .decision-num{ font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--gold-deep); flex-shrink:0; }
+  .decision-txt{ font-size:12.5px; color:var(--ink); line-height:1.5; }
+
+  .nearby-card{ display:flex; align-items:center; justify-content:space-between; gap:14px; background:var(--white); border:1px dashed var(--paper-line); border-radius:14px; padding:16px 20px; margin-top:14px; }
+  .nearby-txt{ font-size:12px; color:var(--muted); line-height:1.5; }
+  .nearby-txt b{ color:var(--ink); display:block; font-family:var(--font-display); font-size:13px; margin-bottom:2px; }
+  .nearby-btn{ flex-shrink:0; background:var(--paper); border:1px solid var(--paper-line); color:var(--teal-deep); font-weight:700; font-size:11.5px; padding:9px 15px; border-radius:9px; cursor:pointer; white-space:nowrap; }
+
+  /* ============ FINAL CTA ============ */
+  #finalcta{ margin-top:44px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; border-radius:18px; padding:30px 28px; text-align:center; }
+  #finalcta h2{ font-family:var(--font-display); font-weight:700; font-size:19px; }
+  #finalcta p{ font-size:12.5px; opacity:.85; margin-top:8px; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6; }
+  .final-btn{ margin-top:18px; background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; border-radius:12px; padding:14px 24px; font-weight:800; font-size:13.5px; cursor:pointer; box-shadow:0 10px 24px rgba(255,107,74,.3); }
+  .final-fine{ font-size:10.5px; opacity:.7; margin-top:12px; }
+
+  #footer{ margin-top:44px; text-align:center; padding:26px 20px; border-top:1px solid var(--paper-line); }
+  #footer .f-note{ font-size:10.5px; color:var(--muted); line-height:1.6; max-width:460px; margin:0 auto; }
+</style>
+</head>
+<body>
+
+  <nav id="sitenav">
+    <a href="01_home.html" class="brand"><span class="dot"></span>Merrakii+</a>
+    <div class="nav-links"><a href="02_career_library.html">← All Careers</a>
+      <a href="04_students_parents_info.html">Students &amp; Parents</a>
+      <a href="05_schools_info.html">Schools</a>
+      <a href="06_career_professionals_info.html">Professionals</a>
+      <a href="07_program_partners_info.html">Programs</a>
+      <a href="08_partner_counsellor_info.html">Counsellors</a>
+      <a href="10_contact.html">Contact</a>
+      <a href="11_login.html">Login</a></div>
+    <button class="nav-cta" onclick="window.location.href='01_home.html#discover'">Get My Free Career Map</button>
+  </nav>
+
+  <div id="wrap">
+
+    <div id="hero">
+      <div class="crumb">SCIENCE › <b>COMPUTER SCIENCE, AI &amp; DATA</b></div>
+      <div class="hero-ic">📊</div>
+      <h1>Data Scientist</h1>
+      <p class="hero-hook">You already ask the questions. This is the career where asking them properly is the whole job.</p>
+      <p class="hero-tag">Turning raw, messy data into decisions an organisation can actually act on.</p>
+      <div class="validated-badge">✓ Validated by Arnav Sethi, Product Manager · Technology &amp; Engineering</div>
+    </div>
+
+    <div class="arc-nav">
+      <span class="arc-pill" onclick="document.getElementById('arc1').scrollIntoView({behavior:'smooth'})"><b>1</b> Is This You?</span>
+      <span class="arc-pill" onclick="document.getElementById('arc2').scrollIntoView({behavior:'smooth'})"><b>2</b> Your Complete Path</span>
+      <span class="arc-pill" onclick="document.getElementById('arc3').scrollIntoView({behavior:'smooth'})"><b>3</b> Your Doubts, Answered</span>
+      <span class="arc-pill" onclick="document.getElementById('arc4').scrollIntoView({behavior:'smooth'})"><b>4</b> Proof &amp; Payoff</span>
+      <span class="arc-pill" onclick="document.getElementById('arc5').scrollIntoView({behavior:'smooth'})"><b>5</b> Your Next Step</span>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STAGE 1 — RECOGNITION                                         -->
+    <!-- ============================================================ -->
+    <div class="arc-stage" id="arc1">
+      <div class="arc-stage-head">
+        <div class="arc-stage-eyebrow">Stage 1 of 5</div>
+        <div class="arc-stage-title">Does This Sound Like You?</div>
+        <div class="arc-stage-sub">Not a personality test — just notice how many of these feel familiar.</div>
+      </div>
+      <div class="rec-grid">
+        <div class="rec-card" onclick="this.classList.toggle('checked')"><div class="rec-box">✓</div><div class="rec-txt">You're the one who notices when a graph's axes don't start at zero — and it bothers you more than it should.</div></div>
+        <div class="rec-card" onclick="this.classList.toggle('checked')"><div class="rec-box">✓</div><div class="rec-txt">You've re-watched a cricket match's win-probability chart more closely than the actual match.</div></div>
+        <div class="rec-card" onclick="this.classList.toggle('checked')"><div class="rec-box">✓</div><div class="rec-txt">When an argument breaks out about "which option is actually cheaper," you're already doing the maths in your head.</div></div>
+        <div class="rec-card" onclick="this.classList.toggle('checked')"><div class="rec-box">✓</div><div class="rec-txt">You'd rather find out <i>why</i> something happened than just know <i>that</i> it happened.</div></div>
+        <div class="rec-card" onclick="this.classList.toggle('checked')"><div class="rec-box">✓</div><div class="rec-txt">You've organised a group project's WhatsApp chaos into an actual spreadsheet — uninvited.</div></div>
+        <div class="rec-card" onclick="this.classList.toggle('checked')"><div class="rec-box">✓</div><div class="rec-txt">Coding intimidates you a little — but "coding is just giving very precise instructions" doesn't.</div></div>
+      </div>
+      <p class="rec-note">If two or three of these felt like you, keep going.</p>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STAGE 2 — SUBSTANCE + COMPLETE REQUIREMENT MAP                -->
+    <!-- ============================================================ -->
+    <div class="arc-stage" id="arc2">
+      <div class="arc-stage-head">
+        <div class="arc-stage-eyebrow">Stage 2 of 5</div>
+        <div class="arc-stage-title">Your Complete Path</div>
+        <div class="arc-stage-sub">What this career actually is, and everything real it takes to get there — paced to where you are right now.</div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">A</div><div class="cat-title">A Day in the Life</div></div>
+        <div class="cat-box">
+          <p style="margin-bottom:14px; color:var(--muted); font-size:11.5px;">A composite of how working data scientists at product companies describe a typical day — not any one person's exact schedule.</p>
+          <div class="timeline">
+            <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">7:45 AM</div><div class="tl-text">Coffee, then the first real task of the day: checking overnight dashboard alerts. Did anything break while you slept?</div></div>
+            <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">9:30 AM</div><div class="tl-text">Standup. You explain yesterday's churn-prediction findings to a product manager who wants the one-sentence version, not the methodology.</div></div>
+            <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">11:00 AM</div><div class="tl-text">Deep work: cleaning a genuinely messy customer dataset. Half the timestamps are in the wrong timezone. This is most of the job, not a side task.</div></div>
+            <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">2:30 PM</div><div class="tl-text">Testing three different approaches to the same problem, quietly hoping the boring one wins because it's easier to explain later.</div></div>
+            <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">4:00 PM</div><div class="tl-text">Presenting a finding to non-technical stakeholders. Nobody warns you in college that this is half the job.</div></div>
+            <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">5:30 PM</div><div class="tl-text">Documentation. Unglamorous — and the entire reason next month's version of you doesn't resent this month's version of you.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">B</div><div class="cat-title">Where This Path Could Take You</div></div>
+        <div class="branch-grid">
+          <div class="branch-card"><div class="branch-ic">📈</div><div class="branch-title">Analytics &amp; Insights</div><div class="branch-desc">Closer to the business side — translating data into decisions leadership actually acts on.</div></div>
+          <div class="branch-card"><div class="branch-ic">⚙️</div><div class="branch-title">Machine Learning Engineering</div><div class="branch-desc">Closer to software engineering — building systems that use data automatically, at scale.</div></div>
+          <div class="branch-card"><div class="branch-ic">🔬</div><div class="branch-title">Research &amp; Applied Science</div><div class="branch-desc">Closer to R&amp;D — going deep on one hard, narrow problem over a long time.</div></div>
+        </div>
+        <p style="font-size:11.5px; color:var(--muted); margin-top:10px; text-align:center;">Most people don't choose a branch until 2–3 years in. Picking Data Scientist now doesn't lock you into one of these.</p>
+      </div>
+
+      <!-- ============ COMPLETE REQUIREMENT MAP ============ -->
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">C</div><div class="cat-title">Everything This Path Actually Takes</div></div>
+        <p style="font-size:12px; color:var(--muted); line-height:1.6; margin-bottom:16px;">Academics &amp; entrance exams below have to happen in a fixed order, on a fixed timeline. Everything else — skills, experience, money, support — is flexible, and gets shown to you in the right order for <i>your</i> starting point, not a generic one.</p>
+
+        <div class="stage-select-card">
+          <div class="stage-select-title">📍 Where are you right now?</div>
+          <div class="stage-select-sub">The same complete path, re-paced around your actual starting point. Nothing here changes — just what shows up first.</div>
+          <div class="stage-pills" id="stagePills">
+            <button class="stage-pill" data-stage="0">Class 9</button>
+            <button class="stage-pill" data-stage="1">Class 10</button>
+            <button class="stage-pill active" data-stage="2">Class 11</button>
+            <button class="stage-pill" data-stage="3">Class 12</button>
+            <button class="stage-pill" data-stage="4">UG Year 1–2</button>
+            <button class="stage-pill" data-stage="5">UG Year 3–4</button>
+          </div>
+        </div>
+
+        <div id="reqMapOutput"></div>
+        <p class="req-note">This is a representative set of what the full path includes — the real, complete map runs to 60–80 specific items across every category. Gold "PAID" tags mark anything with a real cost, whether that's a Merrakii+ service or an external partner; everything without one is genuinely free.</p>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">D</div><div class="cat-title">Professional Bodies</div></div>
+        <div class="cat-box">
+          <p>Unlike Medicine or Law, this field has no single licensing body — anyone can call themselves a data scientist. What carries real weight instead is association with recognised professional bodies and demonstrated, verifiable project work.</p>
+          <div class="tag-row">
+            <span class="tag">ACM (Association for Computing Machinery)</span>
+            <span class="tag">IEEE Computer Society</span>
+            <span class="tag">NASSCOM (India)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STAGE 3 — CONFRONT THE DOUBT                                  -->
+    <!-- ============================================================ -->
+    <div class="arc-stage" id="arc3">
+      <div class="arc-stage-head">
+        <div class="arc-stage-eyebrow">Stage 3 of 5</div>
+        <div class="arc-stage-title">Your Doubts, Answered</div>
+        <div class="arc-stage-sub">The honest version — including the parts that are genuinely hard.</div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">E</div><div class="cat-title">Myth vs. Reality</div></div>
+        <div class="myth-grid">
+          <div class="myth-card">
+            <div class="myth-row myth"><div class="myth-label">Myth</div><div class="myth-txt">You need to be a maths genius.</div></div>
+            <div class="myth-row reality"><div class="myth-label">Reality</div><div class="myth-txt">You need to be comfortable with statistics at a working level — closer to careful and patient than gifted.</div></div>
+          </div>
+          <div class="myth-card">
+            <div class="myth-row myth"><div class="myth-label">Myth</div><div class="myth-txt">It's building AI models, all day, every day.</div></div>
+            <div class="myth-row reality"><div class="myth-label">Reality</div><div class="myth-txt">Most days are roughly 70% cleaning and understanding data, 30% modelling. See Stage 2's Day in the Life.</div></div>
+          </div>
+          <div class="myth-card">
+            <div class="myth-row myth"><div class="myth-label">Myth</div><div class="myth-txt">Only IIT or top-college graduates get hired.</div></div>
+            <div class="myth-row reality"><div class="myth-label">Reality</div><div class="myth-txt">A strong portfolio of real projects often matters more than the college name — one of the more merit-transparent tech fields for that reason.</div></div>
+          </div>
+          <div class="myth-card">
+            <div class="myth-row myth"><div class="myth-label">Myth</div><div class="myth-txt">AI tools will make this career obsolete soon.</div></div>
+            <div class="myth-row reality"><div class="myth-label">Reality</div><div class="myth-txt">Tools automate the mechanical parts. Deciding what question to even ask — and whether an answer can be trusted — still needs a person.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">F</div><div class="cat-title">Common Doubts, Addressed Honestly</div></div>
+        <div class="doubt-item"><div class="doubt-q">"What if I'm not naturally 'good with computers'?"</div><div class="doubt-a">Most working data scientists weren't naturally good with computers at 16 either. Comfort with this is built through use, not something you either have or don't.</div></div>
+        <div class="doubt-item"><div class="doubt-q">"What if I pick this and hate coding once I actually try it?"</div><div class="doubt-a">Exactly why Stage 2's path starts with a short free course before anything else — try it early and cheaply, not three years in.</div></div>
+        <div class="doubt-item"><div class="doubt-q">"What if this career looks completely different by the time I graduate?"</div><div class="doubt-a">Honestly — the tools probably will change. The underlying skill, asking good questions of data and knowing when to trust an answer, won't. That's the part worth actually building.</div></div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">G</div><div class="cat-title">Reality Check — What's Actually Hard</div></div>
+        <div class="cat-box">
+          <div class="cat-list">
+            <li>The gap between tidy tutorial data and real, messy company data is bigger than most courses prepare you for</li>
+            <li>Explaining a technical finding to someone who doesn't want the technical version is its own skill — some people find it more draining than the analysis itself</li>
+            <li>The field moves quickly; staying current has a real, ongoing time cost that doesn't stop once you land the job</li>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">H</div><div class="cat-title">What to Tell Relatives Who Ask</div></div>
+        <div class="script-card">
+          <div class="script-quote-mark">"</div>
+          <div class="script-text">It's like being a translator between numbers and decisions. Companies have huge amounts of information and need someone to figure out what it's actually telling them. It's a real, growing field with strong demand — similar in spirit to engineering, but focused on information instead of machines.</div>
+          <div class="script-label">Something you can actually say at a family gathering</div>
+        </div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">I</div><div class="cat-title">Compare This With...</div></div>
+        <table class="compare-table">
+          <tr><td>Career</td><td>Core Focus</td><td>Best Fit For</td></tr>
+          <tr><td>Data Scientist</td><td>What does the data mean, and what should we do about it</td><td>Curious about "why," comfortable with ambiguity</td></tr>
+          <tr><td>Software Developer</td><td>Building the systems and products themselves</td><td>Enjoys building end-to-end, likes clear specs</td></tr>
+          <tr><td>Data Analyst</td><td>Answering specific business questions with existing data</td><td>Enjoys structure, likes clear, bounded questions</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STAGE 4 — PROOF & PAYOFF                                      -->
+    <!-- ============================================================ -->
+    <div class="arc-stage" id="arc4">
+      <div class="arc-stage-head">
+        <div class="arc-stage-eyebrow">Stage 4 of 5</div>
+        <div class="arc-stage-title">Proof &amp; Payoff</div>
+        <div class="arc-stage-sub">Someone who actually works in the field, and an honest look at what you put in versus what you get back.</div>
+      </div>
+
+      <div class="cat-section">
+        <div class="voice-card">
+          <div class="voice-avatar">AS</div>
+          <div>
+            <div class="voice-text">"The students who do well here aren't always the strongest coders — they're the ones who stay curious about a weird result instead of just accepting it. That's a trait you can notice in yourself well before you've written a line of code."</div>
+            <div class="voice-who">Arnav Sethi</div>
+            <div class="voice-role">Product Manager · Merrakii+ Career Professional, Technology &amp; Engineering</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">J</div><div class="cat-title">What You Put In, What You Get Back</div></div>
+        <table class="er-table">
+          <tr><th>Horizon</th><th>Effort</th><th>Reward</th></tr>
+          <tr>
+            <td>Short-term<br><span style="font-weight:400; color:var(--muted); font-size:9.5px;">Class 9–12</span></td>
+            <td><span class="er-label">Mainly</span>Time on Maths, entrance prep alongside boards, family backing before any payoff is visible</td>
+            <td><span class="er-label">Mainly</span>Not financial yet — clarity, reduced anxiety, one small "I can actually do this" proof point</td>
+          </tr>
+          <tr>
+            <td>Medium-term<br><span style="font-weight:400; color:var(--muted); font-size:9.5px;">UG + first 3–5 yrs</span></td>
+            <td><span class="er-label">Mainly</span>Steepest skill-building of the whole journey, biggest fee outlay, internship-seeking effort</td>
+            <td><span class="er-label">Mainly</span>First real income (₹4–10 LPA typical range), a real job title, the branch choice opens up</td>
+          </tr>
+          <tr>
+            <td>Long-term<br><span style="font-weight:400; color:var(--muted); font-size:9.5px;">5–10+ yrs in</span></td>
+            <td><span class="er-label">Mainly</span>Ongoing learning cost that never fully stops, deliberate specialisation choices</td>
+            <td><span class="er-label">Mainly</span>Mature earning trajectory (₹22–40 LPA+ common, higher at product/FAANG-type firms), a real ceiling: technical authority, leadership, or founder/consultant paths</td>
+          </tr>
+        </table>
+        <div class="er-callout">💡 The single biggest factor separating a ₹6 LPA offer from a ₹20 LPA offer at the same experience level isn't talent — it's the type of company hiring. Product and tech-first companies typically pay two to three times what services firms pay for the same skill. A strong self-built portfolio matters more here than almost any other field, because it's what gets you noticed by the companies that pay differently.</div>
+        <div class="er-source">Figures are rounded, sourced ranges (AmbitionBox, Glassdoor India, Naukri — 2026), not guarantees. Individual outcomes vary by city, company, and specialisation.</div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">K</div><div class="cat-title">The Support Road</div></div>
+        <div class="cat-box">
+          <p>This career profile was reviewed by a working professional in the field, and the same network is available for a direct conversation once your direction firms up — you don't have to figure this out alone from a page.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- STAGE 5 — CLOSE                                               -->
+    <!-- ============================================================ -->
+    <div class="arc-stage" id="arc5">
+      <div class="arc-stage-head">
+        <div class="arc-stage-eyebrow">Stage 5 of 5</div>
+        <div class="arc-stage-title">Your Next Step</div>
+        <div class="arc-stage-sub">Not a 10-step plan. Just the next right move.</div>
+      </div>
+
+      <div class="cat-section">
+        <div class="next-step">
+          <div class="next-step-eyebrow">This week, not this year</div>
+          <div class="next-step-title">Try the thing before you commit to the thing</div>
+          <div class="next-step-desc">Pick one free, short intro-to-Python resource and spend 30 minutes on it. Don't plan anything bigger yet — just notice how it actually feels to do the work, not just read about it. That's more useful than another article right now.</div>
+        </div>
+      </div>
+
+      <div class="cat-section">
+        <div class="cat-head"><div class="cat-num">L</div><div class="cat-title">Key Decisions Along This Path</div></div>
+        <div class="decision-list">
+          <div class="decision-row"><div class="decision-num">1</div><div class="decision-txt">Confirming Science with Mathematics as your Class 11 stream</div></div>
+          <div class="decision-row"><div class="decision-num">2</div><div class="decision-txt">Trying a short free course before you commit — see Stage 3's doubt about hating coding</div></div>
+          <div class="decision-row"><div class="decision-num">3</div><div class="decision-txt">Choosing between the engineering entrance route (JEE) and the statistics/CUET route</div></div>
+          <div class="decision-row"><div class="decision-num">4</div><div class="decision-txt">Choosing your undergraduate degree route — several valid options, not one "correct" answer</div></div>
+          <div class="decision-row"><div class="decision-num">5</div><div class="decision-txt">Picking a first specialisation focus — Analytics, ML Engineering, or Research — usually 2–3 years in, not now</div></div>
+        </div>
+
+        <div class="nearby-card">
+          <div class="nearby-txt"><b>Not quite the right fit?</b>Data Analyst and Software Developer are close cousins to this path — worth a look in the full Library.</div>
+          <button class="nearby-btn" onclick="window.location.href='02_career_library.html'">Browse the Library →</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="finalcta">
+      <h2>Ready to see your own version of this?</h2>
+      <p>This page shows what's generally true about this path. Your personalised journey maps it against your own class, academic record, and family context — and updates as you actually move through it.</p>
+      <button class="final-btn" onclick="alert('This would open the free career map tool, pre-filled with Data Scientist.')">🗺️ Map This Career for Me →</button>
+      <div class="final-fine">Free to start · No signup required · Takes seconds</div>
+    </div>
+
+    <div id="footer">
+      <p class="f-note">This career profile is part of the Merrakii+ Career Library — reviewed by a working professional through our Career Professional network before publication. Merrakii+ · Decision Enabling Student Success System.</p>
+    </div>
+
+  </div>
+
+<script>
+  // ============ Complete Requirement Map — data ============
+  // stage: 0=Class9 1=Class10 2=Class11 3=Class12 4=UG Yr1-2 5=UG Yr3-4 6=Career Entry
+  // paid: true -> gold PAID tag + partner-style CTA. false -> free CTA.
+  const REQ_ITEMS = [
+    { stage:0, cluster:"Skills", name:"Try Scratch or beginner Python", desc:"Exploratory only — no commitment", paid:false, cta:"Try free resource →" },
+    { stage:0, cluster:"Internal Journey", name:"Self-recognition check-in", desc:"The Stage 1 \"Does this sound like you\" exercise above", paid:false, cta:"Revisit Stage 1 ↑" },
+    { stage:0, cluster:"Family", name:"First conversation about direction", desc:"Low-stakes, exploratory framing with family", paid:false, cta:"Guidance note →" },
+
+    { stage:1, cluster:"Academic", name:"Confirm Science + Mathematics stream", desc:"The single non-negotiable fork in this path", paid:false, cta:"Talk to a Counsellor →" },
+    { stage:1, cluster:"Support", name:"Stream-choice conversation", desc:"A structured session, not a solo decision", paid:false, cta:"Talk to a Counsellor →" },
+
+    { stage:2, cluster:"Academic", name:"Choose Computer Science as Class 11 elective", desc:"Strongly recommended, not mandatory", paid:false, cta:"Guidance note →" },
+    { stage:2, cluster:"Skills", name:"Basic programming logic (Python)", desc:"First 2–3 months, self-paced", paid:false, cta:"Try free resource →" },
+    { stage:2, cluster:"Assessment", name:"Try a short free course before committing", desc:"The real test for the \"what if I hate coding\" doubt", paid:false, cta:"Try free resource →" },
+    { stage:2, cluster:"Field Earning", name:"Tutor a younger student", desc:"Small, optional income while still exploring", paid:false, cta:"Guidance note →" },
+    { stage:2, cluster:"Peer", name:"Join a school or online coding club", desc:"Lateral support, not top-down mentorship", paid:false, cta:"Guidance note →" },
+
+    { stage:3, cluster:"Entrance Exam", name:"JEE Main/Advanced or CUET preparation", desc:"Coaching programme, structured prep", paid:true, cta:"Explore programme" },
+    { stage:3, cluster:"Assessment", name:"Entrance Exam Mock Test Series", desc:"Full-length timed practice", paid:true, cta:"Explore programme" },
+    { stage:3, cluster:"Skills", name:"SQL fundamentals", desc:"The other genuinely non-negotiable technical skill", paid:false, cta:"Try free resource →" },
+    { stage:3, cluster:"Degree", name:"Choose your undergraduate route", desc:"7 valid paths — B.Tech CS, Data Science, BCA, B.Sc. Stats, and more", paid:false, cta:"Talk to a Counsellor →" },
+    { stage:3, cluster:"Documentation", name:"Build your first portfolio piece", desc:"Useful groundwork for applications and interviews", paid:false, cta:"Guidance note →" },
+    { stage:3, cluster:"Scholarships", name:"Research merit scholarships", desc:"Matched to your shortlisted colleges", paid:false, cta:"Talk to a Counsellor →" },
+
+    { stage:4, cluster:"Skills", name:"Linear Algebra &amp; Statistics coursework", desc:"Core to understanding how models actually work", paid:false, cta:"Part of degree" },
+    { stage:4, cluster:"Skills", name:"Pandas &amp; NumPy", desc:"The standard Python data-handling toolkit", paid:false, cta:"Try free resource →" },
+    { stage:4, cluster:"Practical", name:"Establish a Git/GitHub habit", desc:"Expected in any real team environment", paid:false, cta:"Try free resource →" },
+    { stage:4, cluster:"Experience", name:"First internship attempt", desc:"Even small or unpaid — changes how a resume reads", paid:true, cta:"Explore programme" },
+    { stage:4, cluster:"Certification", name:"First certification (Data Analytics track)", desc:"A recognised, industry-issued credential", paid:true, cta:"Explore programme" },
+    { stage:4, cluster:"Loans", name:"Education loan advisory", desc:"Understand real options before committing", paid:true, cta:"Explore programme" },
+    { stage:4, cluster:"Support", name:"Talk to a Career Professional", desc:"Free network session, not a sales conversation", paid:false, cta:"Talk to a Professional →" },
+    { stage:4, cluster:"Soft Skills", name:"Practice presenting your project work", desc:"Class projects and study groups are the low-stakes place to start", paid:false, cta:"Guidance note →" },
+
+    { stage:5, cluster:"Branch", name:"Choose Analytics, ML Engineering, or Research", desc:"The real specialisation fork — see Stage 2, Section B", paid:false, cta:"Talk to a Professional →" },
+    { stage:5, cluster:"Skills", name:"Deep learning frameworks", desc:"Branch-dependent — most relevant for ML Engineering/Research", paid:false, cta:"Try free resource →" },
+    { stage:5, cluster:"Certification", name:"Cloud platform certification", desc:"AWS / Azure / GCP — increasingly expected even at junior level", paid:true, cta:"Explore programme" },
+    { stage:5, cluster:"Experience", name:"A serious, resume-worthy internship", desc:"The goal internship, not just any internship", paid:true, cta:"Explore programme" },
+    { stage:5, cluster:"Support", name:"Book a Premium Session with a Career Professional", desc:"Focused 1-on-1 portfolio and career review", paid:true, cta:"Book session" },
+    { stage:5, cluster:"Documentation", name:"Resume &amp; portfolio review", desc:"Direct feedback before you start applying", paid:false, cta:"Talk to a Professional →" },
+    { stage:5, cluster:"Pivot &amp; Exit", name:"Understand what transfers if you change direction", desc:"Reduces the fear that this choice is irreversible", paid:false, cta:"Guidance note →" },
+
+    { stage:6, cluster:"Reward", name:"First salaried role", desc:"Typical entry range ₹4–10 LPA — see Stage 4's full breakdown", paid:false, cta:"See Stage 4 ↑" },
+    { stage:6, cluster:"Certification", name:"Role-specific certification, as needed", desc:"Added only when a real role actually calls for it", paid:true, cta:"Explore programme" },
+    { stage:6, cluster:"Resilience", name:"Navigating the real messy-data gap", desc:"The adjustment from coursework to real company data", paid:false, cta:"Guidance note →" },
+  ];
+
+  const STAGE_LABELS = ["Class 9","Class 10","Class 11","Class 12","UG Year 1–2","UG Year 3–4","Career Entry"];
+
+  function renderReqMap(currentStage){
+    const groups = { now: [], next: [], then: [], later: [] };
+    REQ_ITEMS.forEach(item=>{
+      const diff = item.stage - currentStage;
+      if(diff < 0) return; // already past — don't show
+      if(diff === 0) groups.now.push(item);
+      else if(diff === 1) groups.next.push(item);
+      else if(diff <= 3) groups.then.push(item);
+      else groups.later.push(item);
+    });
+
+    function renderCard(item){
+      const btnClass = item.paid ? 'req-btn paid' : 'req-btn';
+      const paidTag = item.paid ? '<span class="req-paid">PAID</span>' : '';
+      return `
+        <div class="req-card">
+          <span class="req-cluster-tag">${item.cluster}</span>
+          <div class="req-main"><div class="req-name">${item.name}</div><div class="req-desc">${item.desc}</div></div>
+          <div class="req-action">${paidTag}<button class="${btnClass}" onclick="alert('This would open: ${item.name.replace(/'/g,"\\'")}')">${item.cta}</button></div>
+        </div>
+      `;
+    }
+    function renderGroup(key, label, sub, isNow){
+      const items = groups[key];
+      if(!items.length) return '';
+      return `
+        <div class="req-group ${isNow?'now':''}">
+          <div class="req-group-head"><span class="req-group-label ${isNow?'now':''}">${label}</span><span class="req-group-sub">${sub}</span></div>
+          <div class="req-grid">${items.map(renderCard).join('')}</div>
+        </div>
+      `;
+    }
+
+    document.getElementById('reqMapOutput').innerHTML =
+      renderGroup('now', 'Right Now', `· ${STAGE_LABELS[currentStage]}`, true) +
+      renderGroup('next', 'Next Up', '', false) +
+      renderGroup('then', 'Coming Soon', '', false) +
+      renderGroup('later', 'Further Down the Road', '', false);
+  }
+
+  document.getElementById('stagePills').addEventListener('click', e=>{
+    const pill = e.target.closest('.stage-pill'); if(!pill) return;
+    document.querySelectorAll('.stage-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    renderReqMap(parseInt(pill.dataset.stage));
+  });
+
+  renderReqMap(2); // default: Class 11
+</script>
+</body>
+</html>

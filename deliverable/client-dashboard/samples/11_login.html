@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Log In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    display:flex; flex-direction:column; min-height:100%;
+    background-image:radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  #topbar{ padding:16px 28px; }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:19px; display:flex; align-items:center; gap:9px; color:var(--teal-deep); width:fit-content; }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+
+  #stage{ flex:1; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .card{ width:100%; max-width:400px; background:var(--white); border:1px solid var(--paper-line); border-radius:20px; padding:34px 30px; box-shadow:0 18px 46px rgba(10,26,20,.08); }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation:rise .25s ease; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:none; } }
+
+  .card-title{ font-family:var(--font-display); font-weight:700; font-size:21px; text-align:center; }
+  .card-sub{ font-size:12.5px; color:var(--muted); text-align:center; margin-top:6px; line-height:1.5; }
+
+  .f-field{ margin-top:20px; }
+  .f-field label{ font-size:11.5px; font-weight:700; display:block; margin-bottom:6px; }
+  .f-field input{ width:100%; padding:12px 14px; border:1px solid var(--paper-line); border-radius:10px; font-family:inherit; font-size:13.5px; outline:none; }
+  .f-field input:focus{ border-color:var(--teal); }
+
+  .f-forgot{ text-align:right; font-size:11px; font-weight:600; color:var(--teal); margin-top:8px; cursor:pointer; }
+
+  .f-submit{ width:100%; margin-top:22px; background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; border-radius:12px; padding:14px; font-weight:800; font-size:13.5px; cursor:pointer; box-shadow:0 10px 24px rgba(255,107,74,.3); }
+
+  .f-signup{ text-align:center; font-size:12px; color:var(--muted); margin-top:20px; }
+  .f-signup a{ color:var(--teal); font-weight:700; cursor:pointer; }
+
+  .role-list{ margin-top:22px; display:flex; flex-direction:column; gap:10px; }
+  .role-item{ display:flex; align-items:center; gap:14px; padding:15px 16px; border:1.5px solid var(--paper-line); border-radius:13px; cursor:pointer; transition:all .15s; }
+  .role-item:hover{ border-color:var(--teal); background:var(--teal-light); }
+  .role-ic{ font-size:22px; flex-shrink:0; }
+  .role-name{ font-size:13.5px; font-weight:700; }
+  .role-sub{ font-size:10.5px; color:var(--muted); margin-top:1px; }
+  .role-arrow{ margin-left:auto; color:var(--paper-line); font-size:16px; }
+  .role-item:hover .role-arrow{ color:var(--teal); }
+
+  .back-link{ text-align:center; font-size:11.5px; font-weight:700; color:var(--muted); margin-top:20px; cursor:pointer; }
+  .back-link:hover{ color:var(--teal-deep); }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <a href="01_home.html" class="brand"><span class="dot"></span>Merrakii+</a>
+  </div>
+
+  <div id="stage">
+    <div class="card">
+
+      <!-- PANEL 1: Login form -->
+      <div class="panel active" id="panel-login">
+        <div class="card-title">Welcome back</div>
+        <div class="card-sub">Log in to continue your journey.</div>
+
+        <form id="loginForm">
+          <div class="f-field"><label>Email</label><input type="email" required placeholder="you@example.com"></div>
+          <div class="f-field"><label>Password</label><input type="password" required placeholder="••••••••"></div>
+          <div class="f-forgot" onclick="alert('This would open a password reset flow.')">Forgot password?</div>
+          <button type="submit" class="f-submit">Log In</button>
+        </form>
+
+        <div class="f-signup">New to Merrakii+? <a onclick="window.location.href='01_home.html#discover'">Get your free career map</a></div>
+      </div>
+
+      <!-- PANEL 2: Role chooser -->
+      <div class="panel" id="panel-role">
+        <div class="card-title">Continue as…</div>
+        <div class="card-sub">Choose the dashboard you'd like to open.</div>
+
+        <div class="role-list">
+          <div class="role-item" onclick="window.location.href='16_student_dashboard.html'">
+            <div class="role-ic">🎓</div>
+            <div><div class="role-name">Student</div><div class="role-sub">My journey, portfolio &amp; programmes</div></div>
+            <div class="role-arrow">→</div>
+          </div>
+          <div class="role-item" onclick="window.location.href='19_partner_counsellor_dashboard.html'">
+            <div class="role-ic">🧑‍🏫</div>
+            <div><div class="role-name">Partner Counsellor</div><div class="role-sub">My students, earnings &amp; portfolio</div></div>
+            <div class="role-arrow">→</div>
+          </div>
+          <div class="role-item" onclick="window.location.href='17_career_professional_dashboard.html'">
+            <div class="role-ic">🎙️</div>
+            <div><div class="role-name">Career Professional</div><div class="role-sub">Sessions, validations &amp; portfolio</div></div>
+            <div class="role-arrow">→</div>
+          </div>
+          <div class="role-item" onclick="window.location.href='18_program_partner_dashboard.html'">
+            <div class="role-ic">📋</div>
+            <div><div class="role-name">Program Partner</div><div class="role-sub">Listings, leads &amp; commission</div></div>
+            <div class="role-arrow">→</div>
+          </div>
+        </div>
+
+        <div class="back-link" id="backToLogin">← Back to login</div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    // NOTE: mock auth — no real backend. On submit, reveal the role chooser
+    // since this prototype has no way to know which account type logged in.
+    document.getElementById('panel-login').classList.remove('active');
+    document.getElementById('panel-role').classList.add('active');
+  });
+
+  document.getElementById('backToLogin').addEventListener('click', function(){
+    document.getElementById('panel-role').classList.remove('active');
+    document.getElementById('panel-login').classList.add('active');
+  });
+</script>
+</body>
+</html>

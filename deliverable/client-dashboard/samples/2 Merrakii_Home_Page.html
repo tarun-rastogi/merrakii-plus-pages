@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii — Find your career path</title>
+<style>
+  :root {
+    --navy: #1E2A5E;
+    --navy-dark: #141d42;
+    --bg: #F7F7F4;
+    --card: #FFFFFF;
+    --border: #E4E2DA;
+    --text: #2C2C2A;
+    --muted: #7A7975;
+    --chip-job: #E6F1FB;
+    --chip-job-text: #0C447C;
+    --chip-interest: #EAF3DE;
+    --chip-interest-text: #27500A;
+    --chip-field: #FAEEDA;
+    --chip-field-text: #633806;
+    --summary-bg: #FDFCF9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 48px 20px 120px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; position: relative; }
+
+  /* ---- internal review-only control, not part of the shipped page ---- */
+  .review-toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 20;
+    background: #fff; border: 1px dashed #B7B4AA; border-radius: 20px;
+    padding: 5px 6px; display: flex; gap: 4px; font-size: 11px; color: var(--muted);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .review-toggle button {
+    border: none; background: transparent; padding: 5px 10px; border-radius: 14px;
+    font-size: 11px; cursor: pointer; color: var(--muted);
+  }
+  .review-toggle button.active { background: var(--navy); color: #fff; }
+  .review-toggle .rt-label { padding: 5px 4px 5px 8px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .logo-mark {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--navy); color: #fff; display: flex;
+    align-items: center; justify-content: center; font-weight: 700; font-size: 18px;
+  }
+  .logo-text { font-size: 22px; font-weight: 700; color: var(--navy); }
+
+  .headline {
+    font-size: 26px; font-weight: 700; color: var(--navy); margin: 8px 0 24px; line-height: 1.3;
+  }
+
+  .controls {
+    display: flex; gap: 10px; margin-bottom: 8px; font-size: 13px; color: var(--muted); flex-wrap: wrap;
+  }
+  .controls select {
+    padding: 6px 10px; border-radius: 8px; border: 0.5px solid var(--border);
+    background: var(--card); font-size: 14px; color: var(--text);
+  }
+  .controls label { display: flex; align-items: center; gap: 6px; }
+
+  .search-zone { position: relative; margin-top: 14px; }
+  .search-pill {
+    background: var(--card); border: 0.5px solid var(--border); border-radius: 32px;
+    padding: 8px; display: flex; align-items: center; gap: 8px; position: relative; z-index: 3;
+  }
+  .search-pill.dropdown-open { border-radius: 20px 20px 0 0; border-bottom-color: transparent; }
+  .search-pill input {
+    flex: 1; border: none; outline: none; font-size: 16px; padding: 10px 14px;
+    background: transparent; color: var(--text);
+  }
+  .search-pill button {
+    background: var(--navy); color: #fff; border: none; border-radius: 24px;
+    padding: 12px 22px; font-size: 14px; font-weight: 600; cursor: pointer;
+    white-space: nowrap;
+  }
+  .search-pill button:hover { background: var(--navy-dark); }
+
+  .dropdown {
+    display: none; position: relative; z-index: 2; margin-top: -1px;
+    background: var(--card); border: 0.5px solid var(--border); border-top: none;
+    border-radius: 0 0 20px 20px; padding: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  }
+  .dropdown.visible { display: block; }
+  .dropdown-label { font-size: 11px; color: var(--muted); padding: 8px 14px 4px; }
+  .dropdown-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 15px;
+  }
+  .dropdown-item:hover { background: var(--bg); }
+  .dropdown-item .tag { font-size: 11px; color: var(--muted); }
+
+  /* ---- exploration entry (Step 2) ---- */
+  .explore-link {
+    display: inline-block; margin-top: 12px; font-size: 13px; color: var(--navy);
+    background: none; border: none; cursor: pointer; font-weight: 600; padding: 0;
+  }
+  .explore-panel {
+    display: none; margin-top: 14px; background: var(--card); border: 0.5px solid var(--border);
+    border-radius: 14px; padding: 18px 20px;
+  }
+  .explore-panel.visible { display: block; }
+  .explore-panel-head {
+    display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;
+  }
+  .explore-panel-head p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; max-width: 520px; }
+  .explore-close {
+    border: none; background: none; color: var(--muted); font-size: 18px; cursor: pointer;
+    line-height: 1; padding: 2px 4px;
+  }
+  .explore-group { margin-bottom: 14px; }
+  .explore-group:last-child { margin-bottom: 0; }
+  .explore-group-label { font-size: 12px; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+  .explore-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .explore-pill {
+    border: 0.5px solid var(--border); background: var(--bg); color: var(--text);
+    border-radius: 16px; padding: 7px 14px; font-size: 13px; cursor: pointer; font-weight: 500;
+  }
+  .explore-pill:hover { background: #EFEEE8; }
+
+  .chip-area { margin-top: 16px; transition: opacity 0.15s ease; }
+  .chip-area.hidden { display: none; }
+  .chip-label { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: none; border-radius: 16px; padding: 7px 14px; font-size: 13px;
+    cursor: pointer; font-weight: 500; position: relative;
+  }
+  .chip:hover { filter: brightness(0.95); }
+  .chip.job { background: var(--chip-job); color: var(--chip-job-text); }
+  .chip.interest { background: var(--chip-interest); color: var(--chip-interest-text); }
+  .chip.field { background: var(--chip-field); color: var(--chip-field-text); }
+
+  .panel {
+    margin-top: 28px; background: var(--card); border: 0.5px solid var(--border);
+    border-radius: 12px; padding: 20px 22px; display: none;
+  }
+  .panel.visible { display: block; }
+  .panel-title { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+  .panel-heading { font-size: 18px; font-weight: 600; margin: 0 0 16px; }
+  .back-link {
+    background: none; border: none; color: var(--navy); font-size: 13px;
+    cursor: pointer; padding: 0; margin-bottom: 14px; font-weight: 500;
+  }
+  .journey-card { display: flex; flex-direction: column; gap: 10px; }
+  .journey-row { display: flex; justify-content: space-between; border-bottom: 0.5px solid var(--border); padding: 8px 0; font-size: 14px; }
+  .journey-row span:first-child { color: var(--muted); }
+
+  /* ---------- Career Summary Preview ---------- */
+  .selection-card {
+    position: fixed; right: 24px; bottom: 24px; width: 300px;
+    background: var(--summary-bg); border: 0.5px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+    opacity: 0; transform: translateY(6px); pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 5;
+  }
+  .selection-card.visible { opacity: 0.92; transform: translateY(0); pointer-events: auto; }
+  .selection-card.dimmed { opacity: 0.35; }
+  .selection-card .sc-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .selection-card .sc-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 4px;
+  }
+  .selection-card .sc-close {
+    border: none; background: none; color: var(--muted); font-size: 15px; cursor: pointer; line-height: 1; padding: 0 0 0 8px;
+  }
+  .selection-card .sc-title { font-size: 14px; font-weight: 700; color: var(--navy); margin: 0 0 6px; }
+  .selection-card .sc-body { font-size: 12.5px; line-height: 1.5; color: var(--text); margin: 0; }
+
+  .hover-card {
+    position: fixed; width: 260px;
+    background: var(--navy-dark); color: #fff; border-radius: 10px;
+    padding: 12px 14px; box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    opacity: 0; transform: translateY(4px); pointer-events: none;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    z-index: 10;
+  }
+  .hover-card.visible { opacity: 1; transform: translateY(0); }
+  .hover-card .hc-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; color: #B9C2E8; margin: 0 0 4px;
+  }
+  .hover-card .hc-title { font-size: 13px; font-weight: 700; color: #fff; margin: 0 0 6px; }
+  .hover-card .hc-body { font-size: 12.5px; line-height: 1.5; color: #E7E9F5; margin: 0; }
+  .hover-card.hint .hc-body { color: #E7E9F5; font-style: italic; }
+
+  /* ---------- Responsive / mobile layout ---------- */
+  @media (max-width: 640px) {
+    body { padding: 24px 16px 140px; }
+    .headline { font-size: 21px; }
+    .search-pill input { font-size: 16px; padding: 10px 8px; }
+    .search-pill button { padding: 12px 16px; font-size: 13px; }
+    .chip { padding: 9px 14px; font-size: 13.5px; }
+    .explore-pill { padding: 9px 14px; font-size: 13.5px; }
+    .selection-card {
+      left: 16px; right: 16px; width: auto; bottom: 16px;
+      border-radius: 14px 14px 10px 10px;
+    }
+    .hover-card { display: none; } /* no hover on touch — nothing ever opens this on mobile anyway */
+    .explore-panel-head { flex-direction: column; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="review-toggle" id="reviewToggle">
+  <span class="rt-label">Preview</span>
+  <button id="btnDesktop" class="active">Desktop</button>
+  <button id="btnTouch">Touch input</button>
+</div>
+
+<div class="wrap">
+
+  <div class="logo">
+    <div class="logo-mark">M</div>
+    <div class="logo-text">Merrakii</div>
+  </div>
+
+  <p class="headline">Know your path, before you choose one.</p>
+
+  <div class="controls">
+    <label>Class
+      <select id="classSelect">
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+    </label>
+    <label id="streamWrap" style="display:none;">Stream
+      <select id="streamSelect">
+        <option value="Science">Science</option>
+        <option value="Commerce">Commerce</option>
+        <option value="Arts">Arts</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="search-zone">
+    <div class="search-pill" id="searchPill">
+      <input id="searchInput" type="text" placeholder="What do you want to become?" autocomplete="off">
+      <button onclick="runSearch()">Find my path</button>
+    </div>
+    <div class="dropdown" id="dropdown"></div>
+  </div>
+
+  <button class="explore-link" id="exploreLink" onclick="openExplore()">Not sure what you want yet? Explore ideas</button>
+
+  <div class="explore-panel" id="explorePanel">
+    <div class="explore-panel-head">
+      <p>Pick anything that sounds like you. It'll drop into the search bar above — nothing happens until you hit "Find my path."</p>
+      <button class="explore-close" onclick="closeExplore()" aria-label="Close">&times;</button>
+    </div>
+    <div class="explore-group">
+      <p class="explore-group-label">What subjects do you enjoy?</p>
+      <div class="explore-row" id="exploreSubjects"></div>
+    </div>
+    <div class="explore-group">
+      <p class="explore-group-label">What kind of work appeals to you?</p>
+      <div class="explore-row" id="exploreWork"></div>
+    </div>
+    <div class="explore-group">
+      <p class="explore-group-label">What are you naturally good at?</p>
+      <div class="explore-row" id="exploreStrengths"></div>
+    </div>
+  </div>
+
+  <div class="chip-area" id="chipArea">
+    <p class="chip-label">Suggested searches</p>
+    <div class="chip-row" id="chipRow"></div>
+  </div>
+
+  <div class="panel" id="journeyPanel">
+    <button class="back-link" onclick="resetAll()">&larr; Back to search</button>
+    <p class="panel-title">Career journey map</p>
+    <p class="panel-heading" id="journeyTitle"></p>
+    <div class="journey-card">
+      <div class="journey-row"><span>Formal education path</span><span>12th &rarr; entrance exam &rarr; degree</span></div>
+      <div class="journey-row"><span>Core skills needed</span><span>Domain + communication</span></div>
+      <div class="journey-row"><span>Typical time investment</span><span>4&ndash;6 years</span></div>
+      <div class="journey-row"><span>Formal reward</span><span>Salary range, based on field</span></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="selection-card" id="selectionCard">
+  <div class="sc-top">
+    <p class="sc-label">Career summary</p>
+    <button class="sc-close" onclick="hideSelectionCard()" aria-label="Close">&times;</button>
+  </div>
+  <p class="sc-title" id="scTitle"></p>
+  <p class="sc-body" id="scBody"></p>
+</div>
+
+<div class="hover-card" id="hoverCard">
+  <p class="hc-label" id="hcLabel">Career summary</p>
+  <p class="hc-title" id="hcTitle"></p>
+  <p class="hc-body" id="hcBody"></p>
+</div>
+
+<script>
+/* Career data model — mirrors TRD Section 3.1 (is_broad / parent_career_id)
+   plus career_summary, the field this feature adds. Broad terms carry
+   `children` and no summary; leaf terms carry a `summary` and no children. */
+const careerDB = {
+  "doctor": { is_broad: true, children: ["general physician", "surgeon", "pediatrician"] },
+  "general physician": { is_broad: false, summary: "A general physician is often a patient's first stop for everyday health problems — fevers, infections, checkups. They diagnose common illnesses, manage ongoing conditions like diabetes, and refer patients to specialists when something needs deeper attention. The path usually means MBBS, then years of hands-on clinical practice." },
+  "surgeon": { is_broad: false, summary: "Surgeons treat illness and injury by operating — repairing, removing, or reconstructing parts of the body. It demands steady hands, calm decision-making under pressure, and years of specialised training after MBBS. Surgeons often work in teams inside operation theatres, and the specialisation you choose (heart, bone, brain) shapes your entire career." },
+  "pediatrician": { is_broad: false, summary: "Pediatricians focus entirely on the health of infants, children, and teenagers — tracking growth, giving vaccinations, and treating childhood illnesses. Beyond medicine, the role needs patience and an easy way with kids and worried parents alike. It's MBBS followed by a pediatric specialisation, with long-term relationships often built across a child's whole upbringing." },
+  "lawyer": { is_broad: true, children: ["criminal lawyer", "corporate lawyer", "taxation lawyer"] },
+  "criminal lawyer": { is_broad: false, summary: "Criminal lawyers represent people accused of crimes, or argue cases on behalf of the state, in court. The work involves building arguments from evidence, cross-examining witnesses, and thinking on your feet during trial. It suits people who enjoy debate and don't mind long, detail-heavy case preparation before every court date." },
+  "corporate lawyer": { is_broad: false, summary: "Corporate lawyers help companies navigate contracts, mergers, compliance, and business disputes — mostly behind the scenes rather than in a courtroom. The work is detail-driven: reading agreements closely, spotting risk, and advising business teams before decisions are made. It rewards precision and a comfort with dense, formal language." },
+  "taxation lawyer": { is_broad: false, summary: "Taxation lawyers specialise in how tax law applies to individuals and businesses — helping clients stay compliant, resolve disputes with tax authorities, and plan finances legally and efficiently. The field mixes law with a strong grip on numbers, and demand stays steady since every business eventually needs this kind of advice." },
+  "engineer": { is_broad: true, children: ["software engineer", "mechanical engineer", "civil engineer"] },
+  "software engineer": { is_broad: false, summary: "Software engineers design, build, and maintain the applications and systems that run on computers and phones. Day to day it's writing and testing code, fixing problems, and working closely with a team toward a shared product. It's a good fit if you enjoy logical puzzles and don't mind constantly learning new tools." },
+  "mechanical engineer": { is_broad: false, summary: "Mechanical engineers design and build physical machines and systems — engines, tools, manufacturing equipment, even parts of vehicles and appliances. The work blends maths and physics with hands-on problem-solving, often moving between a computer, a workshop, and a factory floor. It suits people who like understanding how things actually work." },
+  "civil engineer": { is_broad: false, summary: "Civil engineers plan and oversee the construction of roads, bridges, buildings, and other infrastructure. The job mixes technical design work with time spent on-site, coordinating with contractors and checking that construction matches the plan safely. It's a solid choice for someone who likes seeing tangible, lasting results from their work." },
+  "teacher": { is_broad: false, summary: "Teachers help students understand subjects, build skills, and grow in confidence — whether in a school classroom or a specialised coaching setting. The role needs patience, clear communication, and genuine interest in how different students learn. It usually follows a degree plus a teaching qualification, with strong long-term demand across every subject area." },
+  "pilot": { is_broad: false, summary: "Pilots fly aircraft, responsible for passenger or cargo safety from takeoff to landing. The work requires sharp focus, calm decision-making, and strict adherence to procedure, alongside a demanding physical and written training programme. It's a career built around precision and discipline, with licensing and health checks as ongoing requirements throughout." },
+  "data scientist": { is_broad: false, summary: "Data scientists find patterns in large amounts of information to help organisations make better decisions — from predicting trends to building the models behind recommendation systems. The work mixes maths, statistics, and coding, and rewards curiosity about numbers as much as comfort with computers. Demand has grown quickly across almost every industry." },
+  "chartered accountant": { is_broad: false, summary: "Chartered accountants manage financial records, audits, and tax filings for individuals and businesses, making sure everything is accurate and legally compliant. It's a respected, in-demand path in India that requires clearing the CA exams — rigorous, but leads to strong, stable career options in both companies and independent practice." },
+  "investment banker": { is_broad: false, summary: "Investment bankers help companies raise money, plan mergers, and make major financial decisions, often working with large sums and tight deadlines. The role suits people who are comfortable with numbers, thrive under pressure, and don't mind long working hours, especially in the early years of the career." },
+  "entrepreneur": { is_broad: false, summary: "Entrepreneurs start and run their own businesses, turning an idea into something real — spotting a problem, building a solution, and figuring out how to make it sustainable. There's no fixed education path; instead it needs resilience, comfort with uncertainty, and a willingness to learn constantly from both successes and setbacks." },
+  "journalist": { is_broad: false, summary: "Journalists research, verify, and report news and stories across print, TV, or digital media, helping the public understand what's happening in the world. The work needs curiosity, strong writing, and a nose for what matters, often under tight deadlines. It's a good fit for someone who likes asking questions and telling stories clearly." },
+  "psychologist": { is_broad: false, summary: "Psychologists study how people think, feel, and behave, and use that understanding to help clients work through emotional or mental health challenges. The path usually involves a psychology degree followed by specialised clinical training. It suits someone who's a good listener and genuinely interested in why people do what they do." },
+  "chef": { is_broad: false, summary: "Chefs plan, cook, and present food, often running a section or an entire kitchen. The work is hands-on and fast-paced, mixing creativity with discipline — recipes must turn out right every time, on a deadline. Training can start with a culinary course, or with years of practice under an experienced chef." },
+  "research scientist": { is_broad: false, summary: "Research scientists investigate unanswered questions — in labs, in the field, or through data — to build new knowledge or solve real problems. The path usually runs through a science degree into a master's or PhD, with findings tested and shared until they hold up. It rewards patience and genuine curiosity." },
+  "biotechnologist": { is_broad: false, summary: "Biotechnologists use living cells and biological processes to develop things like medicines, vaccines, and better crops. The work happens mostly in labs, combining biology with chemistry and hands-on lab technique. It suits someone who enjoys science practicals and wants their work to eventually help solve health or food problems." },
+  "financial analyst": { is_broad: false, summary: "Financial analysts study markets, companies, and numbers to help people or businesses make smarter money decisions — where to invest, what's risky, what's worth it. The work is spreadsheet-heavy and detail-focused, usually following a degree in finance, economics, or commerce, with steady demand across banks and companies." },
+  "marketing manager": { is_broad: false, summary: "Marketing managers plan how a brand or product gets noticed — deciding what message to send, which audience to reach, and where to spend the budget to do it. The role mixes creativity with strategy and numbers, and suits someone who enjoys understanding what makes people choose one thing over another." },
+  "actuary": { is_broad: false, summary: "Actuaries use maths, statistics, and probability to work out financial risk — mainly for insurance and pension companies, deciding what premiums or payouts should be. It's a highly numbers-driven career with a demanding set of professional exams, but strong job security for those who enjoy structured, analytical problem-solving." },
+  "content writer": { is_broad: false, summary: "Content writers create the words used in articles, websites, ads, and social media to inform or persuade an audience. The job needs clear writing, adaptability across tones and topics, and comfort with quick turnarounds. It's an accessible entry point into media and communication careers, often starting through internships or freelance work." },
+  "civil services officer": { is_broad: false, summary: "Civil services officers work within government to implement policy, administer public services, and manage districts or departments. In India this usually means clearing the UPSC exams — a long, demanding process — leading to roles across administration, police, or foreign service. It suits people driven by public duty and steady responsibility." },
+  "ux designer": { is_broad: false, summary: "UX designers shape how apps and websites feel to use — making sure navigation is clear, information is easy to find, and interactions feel natural. The work blends research (watching how people actually use a product) with visual design decisions. It suits people who enjoy problem-solving from the user's point of view." }
+};
+
+const allTerms = Object.keys(careerDB);
+
+/* Suggestion chip pools — composition rule tripled: 6 job + 3 interest + 3 field. */
+const chipPools = {
+  "9-10": {
+    job: ["Doctor", "Teacher", "Engineer", "Lawyer", "Pilot", "Chef"],
+    interest: ["I love drawing", "I'm good with numbers", "I like fixing things"],
+    field: ["Design", "Sports", "Technology"]
+  },
+  "11-12-Science": {
+    job: ["Doctor", "Data scientist", "Pilot", "Research scientist", "Biotechnologist", "Software engineer"],
+    interest: ["I love solving problems", "I'm curious how things work", "I enjoy lab experiments"],
+    field: ["Data science", "Healthcare", "Research"]
+  },
+  "11-12-Commerce": {
+    job: ["Chartered accountant", "Investment banker", "Entrepreneur", "Financial analyst", "Marketing manager", "Actuary"],
+    interest: ["I'm good with numbers", "I like negotiating", "I like managing budgets"],
+    field: ["Finance", "Business", "Economics"]
+  },
+  "11-12-Arts": {
+    job: ["Lawyer", "Journalist", "Psychologist", "Content writer", "Civil services officer", "UX designer"],
+    interest: ["I love writing", "I care about people's problems", "I enjoy debating ideas"],
+    field: ["Law", "Media", "Social work"]
+  }
+};
+
+/* Exploration entry (Step 2) — browsable prompts, not a questionnaire.
+   Tapping any pill only sets SearchInput's value, same as a chip tap;
+   it never evaluates or navigates on its own. */
+const exploreGroups = {
+  subjects: ["Math", "Science", "Languages", "Business studies", "Computers", "Arts"],
+  work: ["Helping people", "Building things", "Solving puzzles", "Creating and designing", "Leading a team", "Working with numbers"],
+  strengths: ["Talking to people", "Organizing things", "Drawing or making", "Analyzing data", "Fixing problems", "Writing"]
+};
+
+function renderExplore() {
+  const map = { subjects: "exploreSubjects", work: "exploreWork", strengths: "exploreStrengths" };
+  Object.entries(map).forEach(([key, elId]) => {
+    const row = document.getElementById(elId);
+    row.innerHTML = "";
+    exploreGroups[key].forEach(text => {
+      const btn = document.createElement("button");
+      btn.className = "explore-pill";
+      btn.textContent = text;
+      btn.onclick = () => {
+        setInputValue(text);
+        closeExplore();
+        document.getElementById("searchInput").focus();
+      };
+      row.appendChild(btn);
+    });
+  });
+}
+
+function openExplore() {
+  document.getElementById("explorePanel").classList.add("visible");
+  document.getElementById("chipArea").classList.add("hidden");
+  document.getElementById("exploreLink").style.display = "none";
+}
+function closeExplore() {
+  document.getElementById("explorePanel").classList.remove("visible");
+  document.getElementById("chipArea").classList.remove("hidden");
+  document.getElementById("exploreLink").style.display = "inline-block";
+}
+
+/* ---- review-only hover simulation control (not shipped) ---- */
+let forceNoHover = false;
+document.getElementById("btnDesktop").addEventListener("click", () => setPreviewMode(false));
+document.getElementById("btnTouch").addEventListener("click", () => setPreviewMode(true));
+function setPreviewMode(touch) {
+  forceNoHover = touch;
+  document.getElementById("btnDesktop").classList.toggle("active", !touch);
+  document.getElementById("btnTouch").classList.toggle("active", touch);
+  if (touch) hideHoverCard();
+}
+function hoverCapable() {
+  if (forceNoHover) return false;
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
+
+function poolKey() {
+  const cls = document.getElementById("classSelect").value;
+  if (cls === "9" || cls === "10") return "9-10";
+  return "11-12-" + document.getElementById("streamSelect").value;
+}
+
+function renderChips() {
+  const pool = chipPools[poolKey()];
+  const row = document.getElementById("chipRow");
+  row.innerHTML = "";
+  const picks = [];
+  for (let i = 0; i < 3; i++) {
+    picks.push([pool.job[2 * i], "job"]);
+    picks.push([pool.job[2 * i + 1], "job"]);
+    picks.push([pool.interest[i], "interest"]);
+    picks.push([pool.field[i], "field"]);
+  }
+  picks.forEach(([text, cat]) => {
+    const btn = document.createElement("button");
+    btn.className = "chip " + cat;
+    btn.textContent = text;
+    btn.onclick = () => { setInputValue(text); document.getElementById("searchInput").focus(); };
+
+    if (cat === "job") {
+      const key = text.toLowerCase();
+      attachHover(btn, key);
+    }
+    row.appendChild(btn);
+  });
+}
+
+function updateStreamVisibility() {
+  const cls = document.getElementById("classSelect").value;
+  document.getElementById("streamWrap").style.display = (cls === "11" || cls === "12") ? "flex" : "none";
+  renderChips();
+}
+document.getElementById("classSelect").addEventListener("change", updateStreamVisibility);
+document.getElementById("streamSelect").addEventListener("change", renderChips);
+
+function openDropdown(items) {
+  const dd = document.getElementById("dropdown");
+  dd.innerHTML = "";
+  const label = document.createElement("p");
+  label.className = "dropdown-label";
+  label.textContent = "Specializations";
+  dd.appendChild(label);
+  items.forEach(key => {
+    const display = key.charAt(0).toUpperCase() + key.slice(1);
+    const row = document.createElement("div");
+    row.className = "dropdown-item";
+    const isBroad = careerDB[key] && careerDB[key].is_broad;
+    row.innerHTML = "<span>" + display + "</span><span class='tag'>" + (isBroad ? "further options" : "select") + "</span>";
+    row.onclick = () => setInputValue(display);
+    attachHover(row, key);
+    dd.appendChild(row);
+  });
+  dd.classList.add("visible");
+  document.getElementById("searchPill").classList.add("dropdown-open");
+  document.getElementById("chipArea").classList.add("hidden");
+}
+
+function closeDropdown() {
+  document.getElementById("dropdown").classList.remove("visible");
+  document.getElementById("searchPill").classList.remove("dropdown-open");
+  if (!document.getElementById("explorePanel").classList.contains("visible")) {
+    document.getElementById("chipArea").classList.remove("hidden");
+  }
+}
+
+function setInputValue(text) {
+  document.getElementById("searchInput").value = text;
+  handleInput();
+}
+
+function handleInput() {
+  const raw = document.getElementById("searchInput").value.trim().toLowerCase();
+  if (!raw) { closeDropdown(); hideSelectionCard(); return; }
+
+  const exact = careerDB[raw];
+  if (exact && exact.is_broad) {
+    openDropdown(exact.children);
+    hideSelectionCard();
+    return;
+  }
+  if (exact && !exact.is_broad) {
+    closeDropdown();
+    showSelectionCard(raw);
+    return;
+  }
+
+  const matches = allTerms.filter(t => t.startsWith(raw) && t !== raw);
+  if (matches.length) {
+    openDropdown(matches);
+    hideSelectionCard();
+  } else {
+    closeDropdown();
+    hideSelectionCard();
+  }
+}
+
+document.getElementById("searchInput").addEventListener("input", handleInput);
+document.getElementById("searchInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") runSearch();
+});
+
+function resetAll() {
+  document.getElementById("journeyPanel").classList.remove("visible");
+  document.getElementById("searchInput").value = "";
+  closeDropdown();
+  hideSelectionCard();
+}
+
+function runSearch() {
+  const raw = document.getElementById("searchInput").value.trim();
+  if (!raw) return;
+  closeDropdown();
+  document.getElementById("journeyTitle").textContent = raw;
+  document.getElementById("journeyPanel").classList.add("visible");
+}
+
+let currentSelectionKey = null;
+
+function showSelectionCard(key) {
+  currentSelectionKey = key;
+  const data = careerDB[key];
+  if (!data || data.is_broad) return;
+  document.getElementById("scTitle").textContent = key.charAt(0).toUpperCase() + key.slice(1);
+  document.getElementById("scBody").textContent = data.summary;
+  document.getElementById("selectionCard").classList.add("visible");
+}
+
+function hideSelectionCard() {
+  currentSelectionKey = null;
+  document.getElementById("selectionCard").classList.remove("visible");
+}
+
+const HOVER_DELAY = 250;
+let hoverTimer = null;
+
+function attachHover(el, key) {
+  el.addEventListener("mouseenter", () => {
+    if (!hoverCapable()) return;
+    clearTimeout(hoverTimer);
+    hoverTimer = setTimeout(() => fireHoverPreview(el, key), HOVER_DELAY);
+  });
+  el.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimer);
+    hideHoverCard();
+  });
+}
+
+function fireHoverPreview(el, key) {
+  const data = careerDB[key];
+  if (!data) return;
+
+  const card = document.getElementById("hoverCard");
+  const rect = el.getBoundingClientRect();
+
+  if (data.is_broad) {
+    card.classList.add("hint");
+    document.getElementById("hcTitle").textContent = key.charAt(0).toUpperCase() + key.slice(1);
+    document.getElementById("hcBody").textContent = "Covers several specializations — pick one to see its own summary.";
+  } else {
+    card.classList.remove("hint");
+    document.getElementById("hcTitle").textContent = key.charAt(0).toUpperCase() + key.slice(1);
+    document.getElementById("hcBody").textContent = data.summary;
+  }
+
+  const cardWidth = 260;
+  let left = rect.left;
+  if (left + cardWidth > window.innerWidth - 16) left = window.innerWidth - cardWidth - 16;
+  let top = rect.bottom + 8;
+  card.style.left = left + "px";
+  card.style.top = top + "px";
+  card.classList.add("visible");
+
+  if (currentSelectionKey && currentSelectionKey !== key) {
+    document.getElementById("selectionCard").classList.add("dimmed");
+  }
+}
+
+function hideHoverCard() {
+  document.getElementById("hoverCard").classList.remove("visible");
+  document.getElementById("selectionCard").classList.remove("dimmed");
+}
+
+renderExplore();
+updateStreamVisibility();
+</script>
+</body>
+</html>

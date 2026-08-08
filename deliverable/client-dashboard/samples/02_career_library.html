@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Career Library</title>
+<meta name="description" content="Browse every career path — by stream, by domain, or search directly. See what's possible before you decide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ font-family:var(--font-body); background:var(--paper); color:var(--ink); overflow-x:hidden; }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  /* ============ NAV ============ */
+  #sitenav{
+    position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between;
+    padding:15px 30px; background:rgba(251,250,246,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--paper-line);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:18px; display:flex; align-items:center; gap:9px; color:var(--teal-deep); }
+  .nav-links{ display:flex; align-items:center; gap:18px; }
+  .nav-links a{ font-size:11.5px; font-weight:600; color:var(--muted); cursor:pointer; }
+  .nav-links a:hover{ color:var(--teal-deep); }
+  @media (max-width:900px){ .nav-links{ display:none; } }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+  .nav-cta{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; padding:10px 18px; border-radius:9px; font-size:12px; font-weight:700; border:none; cursor:pointer; }
+
+  /* ============ HERO + SEARCH ============ */
+  #hero{ max-width:760px; margin:0 auto; padding:54px 24px 10px; text-align:center; }
+  .eyebrow{ font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--coral); }
+  #hero h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(25px,4vw,36px); line-height:1.25; margin-top:14px; }
+  #hero h1 span{ color:var(--teal); }
+  .hero-sub{ font-size:13.5px; color:var(--muted); margin-top:12px; line-height:1.6; }
+
+  .search-wrap{ position:relative; max-width:560px; margin:26px auto 0; }
+  #searchInput{
+    width:100%; padding:15px 46px 15px 20px; border:1.5px solid var(--paper-line); border-radius:14px;
+    font-family:var(--font-body); font-size:14px; color:var(--ink); background:var(--white); outline:none;
+    box-shadow:0 10px 26px rgba(10,26,20,.06); transition:border-color .15s;
+  }
+  #searchInput:focus{ border-color:var(--teal); }
+  .search-ic{ position:absolute; right:18px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:16px; pointer-events:none; }
+  .search-count{ font-size:11px; color:var(--muted); margin-top:10px; }
+
+  /* ============ WRAP ============ */
+  #wrap{ max-width:1080px; margin:0 auto; padding:36px 24px 80px; }
+
+  /* ============ STREAM CARDS ============ */
+  .stream-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+  @media (max-width:980px){ .stream-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:640px){ .stream-grid{ grid-template-columns:repeat(2,1fr); } }
+  .stream-card{
+    background:var(--white); border:1.5px solid var(--paper-line); border-radius:16px; padding:20px 14px; text-align:center;
+    cursor:pointer; transition:all .15s;
+  }
+  .stream-card:hover{ border-color:var(--teal); transform:translateY(-2px); box-shadow:0 10px 24px rgba(15,110,86,.08); }
+  .stream-card.active{ border-color:var(--teal); background:var(--teal-light); }
+  .stream-ic{ font-size:26px; }
+  .stream-name{ font-family:var(--font-display); font-weight:700; font-size:13px; margin-top:8px; }
+  .stream-count{ font-family:var(--font-mono); font-size:10.5px; color:var(--teal-deep); margin-top:4px; }
+  .stream-desc{ font-size:9.5px; color:var(--muted); margin-top:5px; line-height:1.4; }
+
+  /* ============ BREADCRUMB / BACK ============ */
+  .back-row{ display:none; align-items:center; gap:10px; margin-bottom:18px; }
+  .back-row.show{ display:flex; }
+  .back-link{ font-size:12px; font-weight:700; color:var(--teal); cursor:pointer; }
+  .back-title{ font-family:var(--font-display); font-weight:700; font-size:18px; }
+
+  /* ============ DOMAIN ACCORDION ============ */
+  #domainArea{ display:none; margin-top:20px; }
+  #domainArea.show{ display:block; }
+  .domain-item{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; margin-bottom:10px; overflow:hidden; }
+  .domain-head{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; }
+  .domain-name{ font-family:var(--font-display); font-weight:700; font-size:14px; }
+  .domain-meta{ display:flex; align-items:center; gap:12px; }
+  .domain-count{ font-size:10.5px; color:var(--muted); font-family:var(--font-mono); }
+  .domain-chev{ color:var(--muted); transition:transform .2s; }
+  .domain-item.open .domain-chev{ transform:rotate(180deg); }
+  .domain-body{ display:none; padding:4px 20px 18px; }
+  .domain-item.open .domain-body{ display:block; }
+  .career-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .career-chip{
+    padding:8px 14px; border:1px solid var(--paper-line); border-radius:20px; background:var(--paper);
+    font-size:12px; font-weight:600; color:var(--ink); cursor:pointer; transition:all .15s;
+  }
+  .career-chip:hover{ border-color:var(--teal); background:var(--teal-light); color:var(--teal-deep); }
+  .career-chip.flagship{ background:var(--gold-light); border-color:var(--gold); color:var(--gold-deep); font-weight:700; }
+
+  /* ============ SEARCH RESULTS ============ */
+  #searchResults{ display:none; margin-top:20px; }
+  #searchResults.show{ display:block; }
+  .result-row{ display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:12px 16px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+  .result-row:hover{ border-color:var(--teal); }
+  .result-name{ font-size:13px; font-weight:700; flex:1; }
+  .result-path{ font-size:10.5px; color:var(--muted); }
+  .result-flag{ font-size:9px; font-weight:800; color:var(--gold-deep); background:var(--gold-light); padding:3px 9px; border-radius:20px; }
+
+  /* ============ INTRO NOTE ============ */
+  .intro-note{ text-align:center; font-size:11.5px; color:var(--muted); margin-top:26px; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6; }
+
+  /* ============ DRAWER (quick view) ============ */
+  #overlay{ position:fixed; inset:0; background:rgba(10,26,20,.42); opacity:0; pointer-events:none; transition:opacity .28s ease; z-index:50; }
+  #overlay.show{ opacity:1; pointer-events:auto; }
+  #drawer{
+    position:fixed; top:0; right:0; height:100%; width:60%; min-width:340px; background:var(--white);
+    box-shadow:-14px 0 40px rgba(10,26,20,.22); transform:translateX(100%); transition:transform .32s cubic-bezier(.2,.9,.25,1);
+    z-index:51; display:flex; flex-direction:column;
+  }
+  #drawer.show{ transform:translateX(0); }
+  @media (max-width:860px){
+    #drawer{ width:100%; top:auto; bottom:0; height:70%; border-radius:18px 18px 0 0; transform:translateY(100%); }
+    #drawer.show{ transform:translateY(0); }
+  }
+  #drawer-head{ padding:22px 26px 18px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; position:relative; flex-shrink:0; }
+  #drawer-close{ position:absolute; top:16px; right:18px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.16); border:none; color:#fff; font-size:16px; cursor:pointer; }
+  #dh-crumb{ font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.78; }
+  #dh-title{ font-family:var(--font-display); font-weight:700; font-size:22px; margin-top:6px; }
+  #drawer-body{ flex:1; overflow-y:auto; padding:24px 26px 28px; }
+  .dv-para{ font-size:13px; line-height:1.75; color:var(--ink); }
+  .dv-trust{ margin-top:18px; display:flex; gap:10px; background:var(--teal-light); border:1px solid #CFEAE0; border-radius:12px; padding:13px 15px; font-size:11.5px; color:#204338; line-height:1.55; }
+  #drawer-foot{ padding:18px 26px 22px; border-top:1px solid var(--paper-line); flex-shrink:0; }
+  .cta-main{
+    width:100%; padding:14px 18px; border:none; border-radius:12px; cursor:pointer;
+    background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; font-weight:800; font-size:13.5px;
+    box-shadow:0 8px 20px rgba(255,107,74,.32);
+  }
+  .cta-sub{ text-align:center; font-size:10.5px; color:var(--muted); margin-top:10px; }
+  .foot-cols{ display:flex; gap:50px; flex-wrap:wrap; }
+  .foot-col h4{ font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; opacity:.6; margin-bottom:12px; }
+  .foot-col a{ display:block; font-size:12.5px; opacity:.85; margin-bottom:9px; cursor:pointer; }
+  .foot-col a:hover{ opacity:1; }
+</style>
+</head>
+<body>
+
+  <nav id="sitenav">
+    <a href="01_home.html" class="brand"><span class="dot"></span>Merrakii+</a>
+    <div class="nav-links"><a href="02_career_library.html">Library</a>
+      <a href="04_students_parents_info.html">Students &amp; Parents</a>
+      <a href="05_schools_info.html">Schools</a>
+      <a href="06_career_professionals_info.html">Professionals</a>
+      <a href="07_program_partners_info.html">Programs</a>
+      <a href="08_partner_counsellor_info.html">Counsellors</a>
+      <a href="10_contact.html">Contact</a>
+      <a href="11_login.html">Login</a></div>
+    <button class="nav-cta" onclick="window.location.href='01_home.html#discover'">Get My Free Career Map</button>
+  </nav>
+
+  <section id="hero">
+    <div class="eyebrow">Career Library</div>
+    <h1>Every path, before you <span>pick one</span></h1>
+    <p class="hero-sub">Browse by stream, explore a domain, or search directly. This is the same free look at "what's possible" your child gets during Explore — no login, no cost, nothing to commit to yet.</p>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search 500+ careers — e.g. Data Scientist, Architect, IAS Officer" autocomplete="off">
+      <span class="search-ic">🔍</span>
+    </div>
+    <div class="search-count" id="searchCount"></div>
+  </section>
+
+  <div id="wrap">
+
+    <div class="back-row" id="backRow">
+      <span class="back-link" id="backLink">← All Streams</span>
+      <span class="back-title" id="backTitle"></span>
+    </div>
+
+    <div class="stream-grid" id="streamGrid"></div>
+
+    <div id="domainArea"></div>
+
+    <div id="searchResults"></div>
+
+    <p class="intro-note" id="introNote">Every career here can be mapped specifically to your class, your profile, and your timeline — free, in seconds. The full write-up (like our example below) grows as our Career Professional network validates more paths.</p>
+  </div>
+
+  <div id="overlay"></div>
+  <div id="drawer" role="dialog" aria-modal="true">
+    <div id="drawer-head">
+      <button id="drawer-close" aria-label="Close">✕</button>
+      <div id="dh-crumb">STREAM › DOMAIN</div>
+      <div id="dh-title">Career Name</div>
+    </div>
+    <div id="drawer-body"></div>
+    <div id="drawer-foot">
+      <button class="cta-main" id="ctaBtn">🗺️ Map My Journey for This Career →</button>
+      <div class="cta-sub">Free · Takes seconds · No signup required</div>
+    </div>
+  </div>
+
+<script>
+  // ============ Full taxonomy (real data, no salary fields anywhere) ============
+  const taxonomy = [
+    { stream:"Commerce", icon:"💼", desc:"Business, finance, law, and services", domains:[
+      { domain:"Banking & Financial Services", careers:["Actuary","Banking Officer","Branch Manager","Credit Analyst","Equity Research Analyst","Financial Advisor","Financial Analyst","Insurance Advisor","Investment Banker","Mutual Fund Manager","Portfolio Manager","Relationship Manager","Retail Banker","Risk Analyst","Stock Broker","Tax Consultant","Treasury Analyst","Underwriter","Wealth Manager","Financial Planner"] },
+      { domain:"Business & Management", careers:["Brand Manager","Business Analyst","Business Consultant","Business Development Manager","CEO","COO","Entrepreneur","Franchise Owner","General Manager","HR Manager","Management Consultant","Marketing Manager","Operations Manager","Product Manager","Project Manager","Sales Director","Sales Manager","Startup Founder","Strategy Consultant","Supply Chain Manager"] },
+      { domain:"Commerce & Finance", careers:["Accountant","Auditor","Chartered Accountant","Company Secretary","Compliance Officer","Cost Accountant","Finance Controller","Finance Executive","Finance Manager","GST Consultant","Internal Auditor","Payroll Specialist","Tax Advisor","Treasury Manager","VAT Consultant","Budget Analyst","Accounts Manager","Financial Controller","Cost Analyst"] },
+      { domain:"Economics & Public Policy", careers:["Development Economist","Economic Analyst","Economist","Fiscal Analyst","Policy Advisor","Policy Researcher","Public Finance Expert","Research Associate","Social Policy Analyst","Trade Analyst","Urban Economist","Welfare Economist","International Economist","Labour Economist","Environmental Economist","Data Economist","Economic Consultant","Government Economist","Market Economist","Quantitative Economist"] },
+      { domain:"Entrepreneurship", careers:["Business Owner","E-commerce Entrepreneur","Exporter","Franchise Owner","Importer","Retail Entrepreneur","Social Entrepreneur","Startup Founder","Technology Entrepreneur","Trading Business Owner","Agri Entrepreneur","Manufacturing Entrepreneur","Service Entrepreneur","Digital Entrepreneur","Food Entrepreneur","Fashion Entrepreneur","Education Entrepreneur","Healthcare Entrepreneur","Innovator","Venture Founder"] },
+      { domain:"Hospitality, Tourism & Event Management", careers:["Banquet Manager","Cruise Manager","Event Coordinator","Event Manager","Front Office Manager","Hotel Manager","Resort Manager","Restaurant Manager","Tour Guide","Tour Manager","Tourism Officer","Travel Agent","Travel Consultant","Wedding Planner","Hospitality Consultant","Guest Relations Executive","Convention Manager","Airline Hospitality Executive","Catering Manager","Destination Manager"] },
+      { domain:"Law", careers:["Advocate","Arbitrator","Corporate Lawyer","Criminal Lawyer","Cyber Lawyer","Family Lawyer","High Court Lawyer","Judge","Judicial Officer","Legal Advisor","Legal Consultant","Legal Officer","Litigation Lawyer","Notary","Patent Attorney","Property Lawyer","Public Prosecutor","Solicitor","Tax Lawyer","Trademark Attorney"] },
+      { domain:"Marketing, Sales & Digital Business", careers:["Advertising Manager","Brand Strategist","Content Marketer","Digital Marketing Manager","E-commerce Manager","Market Research Analyst","Marketing Executive","Marketing Manager","Media Planner","Product Marketing Manager","Public Relations Officer","Sales Executive","Sales Manager","SEO Specialist","Social Media Manager","Trade Marketing Manager","Business Development Executive","CRM Manager","Campaign Manager","Marketing Consultant"] }
+    ]},
+    { stream:"Diploma", icon:"🛠️", desc:"Applied engineering & technical tracks", domains:[
+      { domain:"Engineering Diploma", careers:["Automobile Engineer","Civil Engineer","Computer Engineer","Electrical Engineer","Electronics Engineer","Instrumentation Engineer","Marine Engineer","Mechanical Engineer","Mechatronics Engineer","Mining Engineer","Petroleum Engineer","Plastic Engineer","Production Engineer","Robotics Engineer","Software Engineer","Structural Engineer","Survey Engineer","Tool Engineer","Welding Engineer","Textile Engineer"] },
+      { domain:"Technology & Applied Sciences", careers:["CAD Designer","CNC Programmer","Data Technician","Embedded Systems Engineer","GIS Technician","Industrial Designer","IoT Technician","Lab Technician","Network Engineer","Quality Inspector","Robotics Technician","Solar Technician","System Administrator","Telecom Technician","Testing Engineer","UAV Technician","Web Developer","Automation Engineer","AI Technician","Electronics Technician"] }
+    ]},
+    { stream:"Humanities / Arts", icon:"🎭", desc:"Public service, media, arts & psychology", domains:[
+      { domain:"Civil Services & Public Administration", careers:["Administrative Officer","Block Development Officer","IAS Officer","IFS Officer","IPS Officer","IRS Officer","Labour Officer","Municipal Commissioner","Policy Officer","Public Administrator","Railway Officer","Revenue Officer","State Civil Services Officer","Sub Divisional Magistrate","Tehsildar","UPSC Officer","Welfare Officer","Election Officer","Foreign Service Officer","Customs Officer"] },
+      { domain:"Education & Training", careers:["Academic Coordinator","Career Counsellor","College Lecturer","Corporate Trainer","Curriculum Developer","Education Consultant","Education Officer","Principal","Professor","School Counsellor","School Principal","School Teacher","Special Educator","Trainer","Tutor","Vice Principal","Educational Researcher","Online Educator","Instructional Designer","Learning Consultant"] },
+      { domain:"Languages & Literature", careers:["Author","Copy Editor","Editor","Interpreter","Language Expert","Lexicographer","Linguist","Novelist","Proofreader","Publisher","Script Writer","Speech Writer","Technical Writer","Translator","Writer","Content Editor","Book Reviewer","Literary Critic","Communication Specialist","Documentation Specialist"] },
+      { domain:"Media, Journalism & Communication", careers:["Anchor","Broadcaster","Content Creator","Copywriter","Editor","Journalist","Media Planner","News Reporter","Photojournalist","Podcast Host","Public Relations Officer","Radio Jockey","Script Writer","Social Media Manager","Television Presenter","Video Producer","War Correspondent","Web Journalist","News Analyst","Digital Journalist"] },
+      { domain:"Performing Arts & Entertainment", careers:["Actor","Choreographer","Comedian","Dancer","Director","Film Editor","Lyricist","Music Composer","Music Director","Music Producer","Musician","Playback Singer","Screenwriter","Sound Engineer","Theatre Artist","TV Host","Voice Artist","Cinematographer","Stage Performer","Video Creator"] },
+      { domain:"Psychology & Social Sciences", careers:["Behavioural Analyst","Child Psychologist","Clinical Psychologist","Counsellor","Criminologist","Educational Psychologist","HR Psychologist","Industrial Psychologist","Organisational Psychologist","Political Scientist","Psychologist","Social Researcher","Social Worker","Sociologist","Therapist","Community Development Officer","NGO Manager","Family Counsellor","Rehabilitation Specialist","Youth Counsellor"] }
+    ]},
+    { stream:"ITI / Skill-Based", icon:"🔧", desc:"Hands-on skilled trades", domains:[
+      { domain:"Skilled Trades & Technical Services", careers:["AC Technician","Automobile Mechanic","Carpenter","CNC Operator","Draughtsman","Electrician","Elevator Technician","Fitter","Instrument Mechanic","Machinist","Mason","Painter","Plumber","Refrigeration Technician","Solar Technician","Turner","Welder","Wireman","Workshop Technician","Maintenance Technician"] }
+    ]},
+    { stream:"Science", icon:"🔬", desc:"Medicine, tech, research & engineering", domains:[
+      { domain:"Agriculture & Food Sciences", careers:["Agricultural Engineer","Agricultural Officer","Agricultural Scientist","Agronomist","Dairy Technologist","Fisheries Officer","Food Scientist","Food Technologist","Horticulturist","Irrigation Engineer","Nutrition Scientist","Organic Farming Expert","Plant Breeder","Seed Technologist","Soil Scientist","Veterinary Doctor","Veterinary Officer","Wildlife Biologist","Agribusiness Manager","Floriculturist"] },
+      { domain:"Architecture & Planning", careers:["Architect","Building Designer","Conservation Architect","Construction Planner","Interior Architect","Interior Designer","Landscape Architect","Smart City Planner","Structural Designer","Survey Planner","Town Planner","Transport Planner","Urban Designer","Urban Planner","BIM Specialist","Green Building Consultant","CAD Architect","Heritage Planner","Planning Consultant","Project Architect"] },
+      { domain:"Computer Science, AI & Data", careers:["AI Engineer","Blockchain Developer","Cloud Engineer","Cybersecurity Analyst","Data Analyst","Data Engineer","Data Scientist","Database Administrator","DevOps Engineer","Full Stack Developer","Game Developer","Machine Learning Engineer","Mobile App Developer","Network Engineer","Robotics Engineer","Software Developer","Software Engineer","Systems Analyst","UI Designer","Web Developer"] },
+      { domain:"Defence & Security", careers:["Air Force Officer","Army Officer","BSF Officer","CISF Officer","Coast Guard Officer","Commando","CRPF Officer","Defence Scientist","Intelligence Officer","Military Doctor","Military Engineer","Navy Officer","NCC Officer","Para SF Officer","Police Officer","RAW Officer","Security Analyst","Soldier","Territorial Army Officer","Weapon Systems Officer"] },
+      { domain:"Engineering & Technology", careers:["Aerospace Engineer","Automobile Engineer","Biomedical Engineer","Chemical Engineer","Civil Engineer","Computer Engineer","Electrical Engineer","Electronics Engineer","Environmental Engineer","Industrial Engineer","Marine Engineer","Mechanical Engineer","Mechatronics Engineer","Mining Engineer","Petroleum Engineer","Robotics Engineer","Software Engineer","Structural Engineer","Textile Engineer","AI Engineer"] },
+      { domain:"Environmental & Sustainability", careers:["Climate Scientist","Conservation Scientist","Ecologist","Environmental Consultant","Environmental Engineer","Environmental Lawyer","Environmental Scientist","Forest Officer","Geologist","Hydrologist","Pollution Control Officer","Renewable Energy Engineer","Sustainability Consultant","Waste Management Expert","Water Resource Engineer","Wildlife Biologist","Wildlife Conservationist","Environmental Planner","Carbon Analyst","ESG Consultant"] },
+      { domain:"Medical & Healthcare", careers:["Anaesthesiologist","Cardiologist","Dentist","Dermatologist","Dietitian","Doctor","Medical Laboratory Scientist","Microbiologist","Nurse","Occupational Therapist","Ophthalmologist","Orthopaedic Surgeon","Paediatrician","Paramedic","Pathologist","Pharmacist","Physiotherapist","Psychiatrist","Radiologist","Surgeon"] },
+      { domain:"Research & Pure Sciences", careers:["Astronomer","Biochemist","Biologist","Botanist","Chemist","Data Researcher","Geneticist","Geologist","Marine Biologist","Mathematician","Microbiologist","Physicist","Research Scientist","Space Scientist","Statistician","Toxicologist","Virologist","Wildlife Researcher","Zoologist","Materials Scientist"] },
+      { domain:"Space, Aviation & Marine", careers:["Aircraft Maintenance Engineer","Air Traffic Controller","Astronaut","Aviation Safety Officer","Cabin Crew","Commercial Pilot","Deck Officer","Flight Instructor","Marine Engineer","Merchant Navy Officer","Naval Architect","Pilot","Ship Captain","Space Engineer","Space Scientist","UAV Pilot","Airport Operations Manager","Aerospace Scientist","Navigation Officer","Flight Dispatcher"] }
+    ]}
+  ];
+
+  const FLAGSHIP = "Data Scientist"; // the one career with a full written page
+  const FLAGSHIP_URL = "19_career_detail_data_scientist.html";
+
+  function countCareers(streamObj){
+    return streamObj.domains.reduce((sum,d)=>sum+d.careers.length, 0);
+  }
+  function totalCareers(){
+    return taxonomy.reduce((sum,s)=>sum+countCareers(s), 0);
+  }
+
+  // ============ Render stream cards ============
+  const streamGrid = document.getElementById('streamGrid');
+  function renderStreams(){
+    streamGrid.innerHTML = taxonomy.map((s,i)=>`
+      <div class="stream-card" data-i="${i}">
+        <div class="stream-ic">${s.icon}</div>
+        <div class="stream-name">${s.stream}</div>
+        <div class="stream-count">${countCareers(s)} careers</div>
+        <div class="stream-desc">${s.desc}</div>
+      </div>
+    `).join('');
+    streamGrid.querySelectorAll('.stream-card').forEach(card=>{
+      card.addEventListener('click', ()=> openStream(parseInt(card.dataset.i)));
+    });
+  }
+
+  // ============ Domain accordion for a selected stream ============
+  const domainArea = document.getElementById('domainArea');
+  const backRow = document.getElementById('backRow');
+  const backTitle = document.getElementById('backTitle');
+  const introNote = document.getElementById('introNote');
+
+  function openStream(i){
+    const s = taxonomy[i];
+    streamGrid.style.display = 'none';
+    backRow.classList.add('show');
+    backTitle.textContent = `${s.stream} · ${countCareers(s)} careers`;
+    domainArea.classList.add('show');
+    domainArea.innerHTML = s.domains.map((d,di)=>`
+      <div class="domain-item ${di===0?'open':''}" data-di="${di}">
+        <div class="domain-head" onclick="toggleDomain(${i},${di})">
+          <div class="domain-name">${d.domain}</div>
+          <div class="domain-meta"><span class="domain-count">${d.careers.length}</span><span class="domain-chev">⌄</span></div>
+        </div>
+        <div class="domain-body">
+          <div class="career-chips">
+            ${d.careers.map(c=>`<span class="career-chip ${c===FLAGSHIP?'flagship':''}" onclick="openCareer('${s.stream}','${d.domain}','${c.replace(/'/g,"\\'")}')">${c}${c===FLAGSHIP?' ★':''}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  function toggleDomain(si,di){
+    const item = domainArea.querySelectorAll('.domain-item')[di];
+    item.classList.toggle('open');
+  }
+  document.getElementById('backLink').addEventListener('click', ()=>{
+    streamGrid.style.display = 'grid';
+    backRow.classList.remove('show');
+    domainArea.classList.remove('show');
+    domainArea.innerHTML = '';
+  });
+
+  // ============ Search ============
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const searchCount = document.getElementById('searchCount');
+
+  function flatList(){
+    const flat = [];
+    taxonomy.forEach(s=> s.domains.forEach(d=> d.careers.forEach(c=> flat.push({stream:s.stream, domain:d.domain, career:c}))));
+    return flat;
+  }
+  const ALL = flatList();
+
+  searchInput.addEventListener('input', ()=>{
+    const q = searchInput.value.trim().toLowerCase();
+    if(q.length < 2){
+      searchResults.classList.remove('show');
+      searchResults.innerHTML = '';
+      searchCount.textContent = '';
+      streamGrid.style.display = 'grid';
+      backRow.classList.remove('show');
+      domainArea.classList.remove('show');
+      domainArea.innerHTML = '';
+      introNote.style.display = 'block';
+      return;
+    }
+    const matches = ALL.filter(x=> x.career.toLowerCase().includes(q));
+    streamGrid.style.display = 'none';
+    backRow.classList.remove('show');
+    domainArea.classList.remove('show');
+    introNote.style.display = 'none';
+    searchCount.textContent = `${matches.length} of ${ALL.length} careers match "${searchInput.value}"`;
+    searchResults.classList.add('show');
+    searchResults.innerHTML = matches.slice(0,60).map(m=>`
+      <div class="result-row" onclick="openCareer('${m.stream}','${m.domain}','${m.career.replace(/'/g,"\\'")}')">
+        <div class="result-name">${m.career}${m.career===FLAGSHIP?' ★':''}</div>
+        <div class="result-path">${m.stream} › ${m.domain}</div>
+        ${m.career===FLAGSHIP?'<span class="result-flag">Full Guide</span>':''}
+      </div>
+    `).join('') || `<p style="text-align:center; color:var(--muted); font-size:12.5px; padding:20px;">No careers match — try a different term.</p>`;
+  });
+
+  // ============ Career quick-view drawer ============
+  function openCareer(stream, domain, career){
+    if(career === FLAGSHIP){
+      window.location.href = FLAGSHIP_URL;
+      return;
+    }
+    document.getElementById('dh-crumb').textContent = `${stream.toUpperCase()} › ${domain.toUpperCase()}`;
+    document.getElementById('dh-title').textContent = career;
+    document.getElementById('drawer-body').innerHTML = `
+      <p class="dv-para">${career} is one of the career paths within <b>${domain}</b>, part of the <b>${stream}</b> stream. Like every career in the Merrakii+ library, the real detail — academic road, entrance exams, required skills, and the actual decision points along the way — is generated specifically for your class and profile, not shown as one generic version for everyone.</p>
+      <p class="dv-para" style="margin-top:14px;">Tap below and we'll map exactly what this path looks like from where you stand today.</p>
+      <div class="dv-trust">✓ Career categories on Merrakii+ are reviewed by working professionals in that field through our Career Professional network before being used in any student's journey.</div>
+    `;
+    document.getElementById('ctaBtn').onclick = ()=> alert(`This would open the free career map tool, pre-filled with "${career}".`);
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('drawer').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  document.getElementById('overlay').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+  // ============ Init ============
+  renderStreams();
+</script>
+  <footer id="sitefoot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <div class="brand"><span class="dot"></span>Merrakii+</div>
+        <p class="foot-tag">Decision Enabling Student Success System — helping students move from Class 9 to Career Entry with real decisions, not just information.</p>
+        <div class="foot-contact">info@merrakii.co.in<br>merrakii.co.in<br>Gurugram, Haryana, India</div>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Platform</h4>
+          <a href="02_career_library.html">Career Library</a>
+          <a href="01_home.html#how-it-works">How it Works</a>
+          <a href="01_home.html#philosophy">Our Philosophy</a>
+        </div>
+        <div class="foot-col">
+          <h4>For You</h4>
+          <a href="04_students_parents_info.html">Students &amp; Parents</a>
+          <a href="05_schools_info.html">Schools</a>
+        </div>
+        <div class="foot-col">
+          <h4>Partners</h4>
+          <a href="06_career_professionals_info.html">Career Professionals</a>
+          <a href="07_program_partners_info.html">Program Partners</a>
+          <a href="08_partner_counsellor_info.html">Partner Counsellors</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="09_about.html">About Us</a>
+          <a href="10_contact.html">Contact</a>
+          <a href="11_login.html">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 Munjal Universal Consultancy Private Limited · Merrakii+</div>
+  </footer>
+</body>
+</html>

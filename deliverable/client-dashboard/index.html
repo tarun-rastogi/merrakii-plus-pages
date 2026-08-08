@@ -1,0 +1,4702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merrakii+ Client Dashboard — Maple AI Technologies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00b4d8;
+      --blue: #4361ee;
+      --purple: #7c3aed;
+      --navy: #1c2340;
+      --gray: #888fa8;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #ffffff;
+      --soft: #f8fafc;
+      --brand: #c1121f;
+      --doc-w: 1440px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background: var(--paper);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      background: var(--paper);
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      /* Keep horizontal containment without clipping the header logo tip */
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .top {
+      flex-shrink: 0;
+      padding: 18px 28px;
+      background:
+        radial-gradient(ellipse 70% 120% at 100% 0%, rgba(0, 180, 216, 0.1), transparent 55%),
+        radial-gradient(ellipse 50% 100% at 0% 0%, rgba(124, 58, 237, 0.08), transparent 50%),
+        #fff;
+      border-bottom: 1px solid var(--line);
+      overflow: visible;
+    }
+
+    .brand-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      overflow: visible;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+      overflow: visible;
+    }
+
+    .brand-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Maple AI logo at 2× previous size (was 44px); transparent PNG blends into header */
+    .brand-left img.maple {
+      height: 88px;
+      width: auto;
+      max-height: 88px;
+      background: transparent;
+      display: block;
+      flex-shrink: 0;
+      object-fit: contain;
+      object-position: left center;
+      overflow: visible;
+    }
+    .brand-right img.merrakii { height: 34px; width: auto; }
+
+    /* Live viewers — top-right presence bubble */
+    .presence {
+      position: relative;
+      z-index: 40;
+    }
+
+    .presence-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px 6px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(28, 35, 64, 0.08);
+      cursor: pointer;
+      font: inherit;
+      color: var(--navy);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .presence-btn:hover,
+    .presence-btn[aria-expanded="true"] {
+      border-color: rgba(67, 97, 238, 0.35);
+      box-shadow: 0 6px 22px rgba(67, 97, 238, 0.12);
+    }
+
+    .presence-avatars {
+      display: flex;
+      align-items: center;
+      direction: ltr;
+    }
+
+    .presence-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      margin-left: -8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 0 1px rgba(28, 35, 64, 0.06);
+    }
+
+    .presence-avatar:first-child { margin-left: 0; }
+
+    .presence-empty {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--line);
+      background: var(--soft);
+    }
+
+    .presence-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
+      line-height: 1.15;
+      text-align: left;
+    }
+
+    .presence-count {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .presence-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .presence-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55);
+      animation: presence-pulse 1.8s ease-out infinite;
+    }
+
+    .presence-dot.is-offline {
+      background: var(--gray);
+      animation: none;
+      box-shadow: none;
+    }
+
+    @keyframes presence-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+      70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+
+    .presence-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(320px, calc(100vw - 48px));
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(28, 35, 64, 0.14);
+      display: none;
+    }
+
+    .presence-panel.open { display: block; }
+
+    .presence-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .presence-panel-head strong {
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .presence-panel-head span {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .presence-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 240px;
+      overflow-y: auto;
+    }
+
+    .presence-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .presence-list .presence-avatar {
+      margin-left: 0;
+      flex-shrink: 0;
+    }
+
+    .presence-list .who {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .presence-list .who .name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .presence-list .who .tab {
+      font-size: 0.72rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .presence-list .who .ip {
+      font-size: 0.68rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.01em;
+      color: var(--navy);
+      opacity: 0.72;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .presence-list .you-tag {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(67, 97, 238, 0.1);
+      padding: 3px 7px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .presence-empty-msg {
+      margin: 4px 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 8px 4px;
+    }
+
+    .presence-rename {
+      margin-top: 10px;
+      width: 100%;
+      border: 0;
+      background: var(--soft);
+      color: var(--blue);
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .presence-rename:hover { background: rgba(67, 97, 238, 0.1); }
+
+    /* Dashboard guide — header popover */
+    .guide {
+      position: relative;
+      z-index: 41;
+    }
+
+    .guide-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(28, 35, 64, 0.08);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--navy);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .guide-btn:hover,
+    .guide-btn[aria-expanded="true"] {
+      border-color: rgba(67, 97, 238, 0.35);
+      box-shadow: 0 6px 22px rgba(67, 97, 238, 0.12);
+      background: #f8faff;
+    }
+
+    .guide-btn-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      flex-shrink: 0;
+    }
+
+    .guide-panel {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: min(420px, calc(100vw - 32px));
+      max-height: min(70vh, 560px);
+      padding: 0;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 16px 40px rgba(28, 35, 64, 0.14);
+      display: none;
+      overflow: hidden;
+    }
+
+    .guide-panel.open { display: flex; flex-direction: column; }
+
+    .guide-panel-head {
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(ellipse 80% 120% at 100% 0%, rgba(0, 180, 216, 0.08), transparent 55%),
+        #fff;
+    }
+
+    .guide-panel-head strong {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .guide-panel-head p {
+      margin: 4px 0 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+      max-width: 28em;
+    }
+
+    .guide-close {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--muted);
+      font: inherit;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .guide-close:hover {
+      background: #eef2ff;
+      color: var(--navy);
+    }
+
+    .guide-body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 8px 10px 12px;
+    }
+
+    .guide-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 8px;
+      border-radius: 10px;
+      border: 0;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+
+    .guide-item:hover { background: var(--soft); }
+
+    .guide-item:focus-visible {
+      outline: 2px solid rgba(67, 97, 238, 0.45);
+      outline-offset: 1px;
+    }
+
+    .guide-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--blue);
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .guide-copy { min-width: 0; }
+
+    .guide-title {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+    }
+
+    .guide-desc {
+      margin: 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .guide-tip {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      background: rgba(0, 180, 216, 0.12);
+    }
+
+    .guide-foot {
+      flex-shrink: 0;
+      padding: 10px 16px 12px;
+      border-top: 1px solid var(--line);
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.4;
+      background: var(--soft);
+    }
+
+    .guide-foot kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fff;
+      font-size: 0.68rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--navy);
+    }
+
+    .brand-meta h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .brand-meta p {
+      margin: 4px 0 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(67, 97, 238, 0.1);
+      padding: 5px 10px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    /* Student-dashboard style: left vertical nav + main content */
+    .body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      background: var(--soft);
+    }
+
+    .sidenav {
+      width: 260px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 14px 12px;
+      background: #fff;
+      border-right: 1px solid var(--line);
+      overflow-y: auto;
+    }
+
+    .sidenav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .sidenav-label {
+      margin: 8px 10px 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .sidenav-group:first-child .sidenav-label {
+      margin-top: 0;
+    }
+
+    .nav-item {
+      appearance: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      font: 600 0.86rem inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-item:hover {
+      background: #f1f5f9;
+      color: var(--navy);
+    }
+
+    .nav-item[aria-selected="true"] {
+      background: rgba(67, 97, 238, 0.1);
+      color: var(--blue);
+    }
+
+    .nav-item:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    .nav-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      margin-top: 1px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+    }
+
+    .nav-item[aria-selected="true"] .nav-num {
+      background: rgba(67, 97, 238, 0.18);
+      color: var(--blue);
+    }
+
+    .nav-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .nav-title {
+      line-height: 1.25;
+    }
+
+    .nav-sub {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--gray);
+      line-height: 1.3;
+    }
+
+    .nav-item[aria-selected="true"] .nav-sub {
+      color: rgba(67, 97, 238, 0.75);
+    }
+
+    .panels {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--soft);
+    }
+
+    .panel {
+      display: none;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      flex-direction: column;
+    }
+
+    .panel.active { display: flex; }
+
+    .panel-toolbar {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      padding: 12px 20px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-toolbar .label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .panel-toolbar a.open-new,
+    .panel-toolbar select {
+      font: 500 0.88rem inherit;
+    }
+
+    .panel-toolbar a.open-new {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .panel-toolbar a.open-new:hover { text-decoration: underline; }
+
+    .panel-toolbar select {
+      max-width: min(420px, 100%);
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--navy);
+    }
+
+    .frame-wrap {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      background: #e8eef5;
+      overflow: hidden;
+    }
+
+    /* Blueprint (and flat embeds): no grey inset behind the iframe */
+    .frame-wrap.frame-wrap--flat {
+      background: var(--paper);
+    }
+
+    .frame-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+
+    .scope-wrap {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 20px 24px 32px;
+    }
+
+    .scope-wrap h2 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .scope-wrap .note {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .scope-sheet {
+      margin-bottom: 28px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .scope-sheet h3 {
+      margin: 0;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .scope-sheet .table-scroll { overflow-x: auto; }
+
+    table.scope {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    table.scope th,
+    table.scope td {
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    table.scope th {
+      font-weight: 700;
+      background: #fafbfc;
+      white-space: nowrap;
+    }
+
+    table.scope tr:last-child td { border-bottom: none; }
+
+    /* Maple AI Updates — day × blueprint-page matrix from data/updates.json */
+    .updates-wrap {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: visible;
+      padding: 20px 24px 32px;
+      background: var(--soft);
+    }
+
+    html.tab-updates {
+      height: auto !important;
+      overflow-y: auto;
+    }
+
+    /*
+     * Updates tab: document/page scroll instead of nested panel scroll.
+     * flex:1 + min-height:0 on ancestors collapses height when the shell
+     * is height:auto — force those containers to size to content.
+     */
+    body.tab-updates {
+      height: auto !important;
+      min-height: 100vh;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+
+    body.tab-updates .shell {
+      overflow: visible;
+      height: auto !important;
+      min-height: 100vh;
+      flex: 0 0 auto;
+    }
+
+    body.tab-updates .body {
+      flex: 0 0 auto;
+      align-items: flex-start;
+      overflow: visible;
+      min-height: calc(100vh - 120px);
+      height: auto;
+    }
+
+    body.tab-updates .sidenav {
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      max-height: 100vh;
+    }
+
+    body.tab-updates .panels {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: auto;
+      height: auto;
+      overflow: visible;
+    }
+
+    body.tab-updates .panel.active {
+      display: block;
+      flex: none;
+      min-height: auto;
+      height: auto;
+      overflow: visible;
+    }
+
+    body.tab-updates .updates-wrap {
+      display: block;
+      flex: none;
+      min-height: auto;
+      height: auto;
+      overflow: visible;
+    }
+
+    /* Blueprint tab — embed document on the page (no iframe tile) */
+    .blueprint-wrap {
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: visible;
+      padding: 0 20px;
+      background: var(--paper);
+    }
+
+    .blueprint-wrap .bp-inject {
+      max-width: none;
+    }
+
+    .blueprint-wrap .bp-inject .wrap-screen {
+      padding: 0 !important;
+    }
+
+    .blueprint-wrap .bp-inject .doc {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+    }
+
+    .blueprint-wrap .bp-inject .toolbar {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 12px 24px 0 !important;
+    }
+
+    html.tab-blueprint {
+      height: auto !important;
+      overflow-y: auto;
+    }
+
+    body.tab-blueprint {
+      height: auto !important;
+      min-height: 100vh;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+
+    body.tab-blueprint .shell {
+      overflow: visible;
+      height: auto !important;
+      min-height: 100vh;
+      flex: 0 0 auto;
+    }
+
+    body.tab-blueprint .body {
+      flex: 0 0 auto;
+      align-items: flex-start;
+      overflow: visible;
+      min-height: calc(100vh - 120px);
+      height: auto;
+    }
+
+    body.tab-blueprint .sidenav {
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      max-height: 100vh;
+    }
+
+    body.tab-blueprint .panels {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: auto;
+      height: auto;
+      overflow: visible;
+      background: var(--paper);
+    }
+
+    body.tab-blueprint .panel-toolbar {
+      background: var(--paper);
+    }
+
+    body.tab-blueprint .panel.active {
+      display: block;
+      flex: none;
+      min-height: auto;
+      height: auto;
+      overflow: visible;
+    }
+
+    body.tab-blueprint .blueprint-wrap {
+      display: block;
+      flex: none;
+      min-height: auto;
+      height: auto;
+      overflow: visible;
+    }
+
+    .updates-doc {
+      max-width: none;
+      min-width: 0;
+      margin: 0;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .updates-doc h1 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+    }
+
+    .updates-doc .subtitle {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      max-width: 72em;
+    }
+
+    .updates-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .updates-meta strong { color: var(--navy); }
+
+    .updates-strategic {
+      border: 1px solid rgba(217, 119, 6, 0.35);
+      background: rgba(217, 119, 6, 0.08);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .updates-strategic h2 {
+      margin: 0 0 6px;
+      font-size: 0.98rem;
+      color: #b45309;
+    }
+
+    .updates-strategic p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--navy);
+      line-height: 1.45;
+    }
+
+    .updates-flow {
+      background: linear-gradient(135deg, rgba(0, 180, 216, 0.08), rgba(124, 58, 237, 0.06));
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .updates-flow h2 { margin: 0 0 8px; font-size: 1.02rem; }
+    .updates-flow p { margin: 0 0 10px; color: var(--muted); font-size: 0.88rem; }
+    .updates-flow .steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      align-items: center;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+    .updates-flow .arrow { color: var(--blue); }
+
+    .updates-level-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .updates-level-filters .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .updates-level-filters button {
+      font: 600 0.78rem inherit;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .updates-level-filters button.is-active {
+      border-color: var(--blue);
+      background: rgba(67, 97, 238, 0.1);
+      color: var(--blue);
+    }
+
+    .updates-matrix-wrap {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      max-height: none;
+      overflow: visible;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    table.updates-matrix {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: max-content;
+      min-width: 100%;
+      font-size: 0.78rem;
+    }
+
+    table.updates-matrix th,
+    table.updates-matrix td {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      padding: 8px 10px;
+    }
+
+    table.updates-matrix thead th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #f1f5f9;
+      color: var(--navy);
+      font-weight: 700;
+      text-align: left;
+      line-height: 1.25;
+    }
+
+    table.updates-matrix thead tr.level-row th {
+      top: 0;
+      z-index: 4;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 7px 8px;
+    }
+
+    table.updates-matrix thead tr.page-row th {
+      top: 30px;
+      z-index: 3;
+      font-size: 0.72rem;
+      min-width: 160px;
+      max-width: 200px;
+      white-space: normal;
+      background: #f8fafc;
+    }
+
+    table.updates-matrix thead tr.level-row th.lvl-L1 { background: rgba(67, 97, 238, 0.14); }
+    table.updates-matrix thead tr.level-row th.lvl-L2 { background: rgba(0, 180, 216, 0.16); }
+    table.updates-matrix thead tr.level-row th.lvl-L3 { background: rgba(217, 119, 6, 0.14); }
+    table.updates-matrix thead tr.level-row th.lvl-L4 { background: rgba(124, 58, 237, 0.12); }
+    table.updates-matrix thead tr.level-row th.lvl-L5 { background: rgba(124, 58, 237, 0.18); }
+    table.updates-matrix thead tr.level-row th.lvl-L6 { background: rgba(5, 150, 105, 0.14); }
+
+    table.updates-matrix th.day-col,
+    table.updates-matrix td.day-col {
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      min-width: 150px;
+      max-width: 170px;
+      background: #fff;
+      font-weight: 700;
+      box-shadow: 2px 0 0 var(--line);
+    }
+
+    table.updates-matrix thead th.day-col {
+      z-index: 6;
+      background: #e2e8f0;
+    }
+
+    table.updates-matrix td.day-col .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--navy);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    table.updates-matrix td.day-col .day-title {
+      display: block;
+      font-size: 0.78rem;
+      line-height: 1.3;
+    }
+
+    table.updates-matrix td.cell {
+      min-width: 160px;
+      max-width: 220px;
+      color: var(--navy);
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+
+    table.updates-matrix td.cell.is-empty {
+      color: #94a3b8;
+      background: #fcfcfd;
+    }
+
+    table.updates-matrix td.cell.is-pause {
+      background: rgba(217, 119, 6, 0.06);
+    }
+
+    table.updates-matrix td.cell.is-focus {
+      background: rgba(5, 150, 105, 0.08);
+    }
+
+    table.updates-matrix tbody tr:hover td { background: #f8fafc; }
+    table.updates-matrix tbody tr:hover td.day-col { background: #f1f5f9; }
+
+    .updates-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin: 10px 0 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .updates-legend span::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 6px;
+      vertical-align: -1px;
+      border: 1px solid var(--line);
+    }
+
+    .updates-legend .lg-empty::before { background: #fcfcfd; }
+    .updates-legend .lg-pause::before { background: rgba(217, 119, 6, 0.25); }
+    .updates-legend .lg-focus::before { background: rgba(5, 150, 105, 0.35); }
+
+    /* Spreadsheet editor overlay */
+    body.sheet-editor-open { overflow: hidden; }
+
+    #sheet-editor-root {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+    }
+
+    #sheet-editor-root[hidden] { display: none !important; }
+
+    .se-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    .se-panel {
+      position: absolute;
+      inset: 18px;
+      max-width: 1440px;
+      width: calc(100% - 36px);
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .se-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f8fafc, #fff);
+    }
+
+    .se-header h2 {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+    }
+
+    .se-hint {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .se-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .se-status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-width: 8em;
+      text-align: right;
+    }
+
+    .se-status.is-ok { color: #059669; }
+    .se-status.is-err { color: #c1121f; }
+
+    .se-toolbar {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fafbfc;
+    }
+
+    .se-sep {
+      width: 1px;
+      align-self: stretch;
+      background: var(--line);
+      margin: 0 4px;
+    }
+
+    .se-btn {
+      font: 600 0.82rem "DM Sans", system-ui, sans-serif;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .se-btn:hover { background: #f1f5f9; }
+    .se-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .se-btn-primary {
+      border: none;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff;
+    }
+
+    .se-btn-primary:hover { filter: brightness(1.05); }
+
+    .se-btn-ghost { background: transparent; }
+
+    .se-btn-danger {
+      color: #c1121f;
+      border-color: rgba(193, 18, 31, 0.25);
+    }
+
+    .se-sheets {
+      flex-shrink: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 8px 16px 0;
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .se-sheet-tab {
+      font: 600 0.8rem "DM Sans", system-ui, sans-serif;
+      padding: 8px 14px;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .se-sheet-tab.is-active {
+      background: #fff;
+      color: var(--navy);
+      border-color: var(--line);
+      position: relative;
+      bottom: -1px;
+    }
+
+    .se-grid-wrap {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 0;
+      background: #fff;
+    }
+
+    table.se-grid {
+      border-collapse: collapse;
+      min-width: 100%;
+      font-size: 0.84rem;
+    }
+
+    table.se-grid th,
+    table.se-grid td {
+      border: 1px solid #dbe3ef;
+      padding: 0;
+      vertical-align: top;
+    }
+
+    .se-corner,
+    .se-colhead,
+    .se-rowhead {
+      background: #f1f5f9;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: center;
+      user-select: none;
+      padding: 6px 8px !important;
+      white-space: nowrap;
+    }
+
+    .se-rowhead { min-width: 40px; }
+    .se-colhead { min-width: 120px; }
+
+    td.se-cell {
+      min-width: 140px;
+      max-width: 420px;
+      padding: 8px 10px !important;
+      outline: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+      cursor: cell;
+    }
+
+    td.se-cell.is-header-row {
+      font-weight: 700;
+      background: #fafbfc;
+    }
+
+    td.se-cell.is-selected {
+      background: rgba(67, 97, 238, 0.12);
+      box-shadow: inset 0 0 0 2px rgba(67, 97, 238, 0.55);
+    }
+
+    td.se-cell:focus {
+      box-shadow: inset 0 0 0 2px var(--blue);
+      background: #fff;
+    }
+
+    .overview-wrap {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 20px 24px 36px;
+      background: #f1f5f9;
+    }
+
+    .overview-wrap .lede {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      max-width: 52em;
+      line-height: 1.5;
+    }
+
+    .overview-product {
+      margin-bottom: 16px;
+    }
+
+    .overview-product-body {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      max-width: none;
+      width: 100%;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    .overview-pillars {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .overview-pillars { grid-template-columns: 1fr; }
+    }
+
+    .overview-pillars li {
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    .overview-pillars .pillar-name {
+      margin: 0 0 6px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+
+    .overview-pillars .pillar-detail {
+      margin: 0;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .overview-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: center;
+      margin-bottom: 18px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .overview-start {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 28px;
+      align-items: stretch;
+      margin-bottom: 16px;
+      padding: 16px 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .overview-start-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+    }
+
+    .overview-start-item .k {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .overview-start-item .v {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+    }
+
+    .overview-start-item .v.accent {
+      color: var(--blue);
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 980px) {
+      .overview-grid { grid-template-columns: 1fr; }
+    }
+
+    .overview-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px 20px 20px;
+    }
+
+    .overview-card.full {
+      grid-column: 1 / -1;
+    }
+
+    .overview-card h2 {
+      margin: 0 0 6px;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .overview-card .card-sub {
+      margin: 0 0 14px;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .overview-progress {
+      height: 10px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .overview-progress > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+    }
+
+    .overview-progress-label {
+      margin: 0 0 16px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .milestone-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .milestone-list li {
+      display: grid;
+      grid-template-columns: 88px 1fr auto;
+      gap: 10px 12px;
+      align-items: start;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--soft);
+    }
+
+    .milestone-list .status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .milestone-list .status.done {
+      background: rgba(5, 150, 105, 0.12);
+      color: #047857;
+    }
+
+    .milestone-list .status.in_progress {
+      background: rgba(67, 97, 238, 0.12);
+      color: var(--blue);
+    }
+
+    .milestone-list .status.upcoming {
+      background: #eef2f7;
+      color: var(--muted);
+    }
+
+    .milestone-list .m-name {
+      margin: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .milestone-list .m-detail {
+      margin: 3px 0 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .milestone-list .m-due {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--navy);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .milestone-list .m-due span {
+      display: block;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .overview-list {
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--navy);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .overview-list li { margin-bottom: 8px; }
+    .overview-list li:last-child { margin-bottom: 0; }
+
+    table.artifacts {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    table.artifacts th,
+    table.artifacts td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    table.artifacts thead th {
+      background: #fafbfc;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    table.artifacts thead th.sortable {
+      cursor: pointer;
+      user-select: none;
+      padding-right: 22px;
+      position: relative;
+    }
+
+    table.artifacts thead th.sortable:hover {
+      color: var(--navy);
+      background: #f1f5f9;
+    }
+
+    table.artifacts thead th.sortable::after {
+      content: "⇅";
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.7rem;
+      opacity: 0.35;
+      font-weight: 700;
+    }
+
+    table.artifacts thead th.sortable.is-asc::after {
+      content: "▲";
+      opacity: 0.85;
+      color: var(--blue);
+    }
+
+    table.artifacts thead th.sortable.is-desc::after {
+      content: "▼";
+      opacity: 0.85;
+      color: var(--blue);
+    }
+
+    table.artifacts tr:last-child td { border-bottom: none; }
+
+    table.artifacts a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    table.artifacts a:hover { text-decoration: underline; }
+
+    table.artifacts .url-note {
+      color: var(--muted);
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    table.artifacts .owner {
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    table.artifacts .date {
+      white-space: nowrap;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    table.artifacts .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      background: #eef2f7;
+      color: var(--muted);
+    }
+
+    table.artifacts .status-pill.shared,
+    table.artifacts .status-pill.live {
+      background: rgba(67, 97, 238, 0.12);
+      color: var(--blue);
+    }
+
+    table.artifacts .status-pill.active {
+      background: rgba(5, 150, 105, 0.12);
+      color: #047857;
+    }
+
+    table.artifacts .status-pill.archived {
+      background: #eef2f7;
+      color: var(--muted);
+    }
+
+    table.artifacts .status-pill.private,
+    table.artifacts .status-pill.draft {
+      background: rgba(124, 58, 237, 0.1);
+      color: #6d28d9;
+    }
+
+    .overview-edit-banner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(67, 97, 238, 0.25);
+      background: rgba(67, 97, 238, 0.08);
+      color: var(--navy);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .overview-edit-banner .hint {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.82rem;
+    }
+
+    .overview-edit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .overview-edit-actions .btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .overview-edit-actions .btn-save {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    .overview-edit-actions .btn-exit {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    .overview-edit-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .overview-edit-field label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .overview-edit-field input,
+    .overview-edit-field textarea,
+    .overview-edit-field select,
+    table.artifacts-edit input,
+    table.artifacts-edit select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 0.88rem;
+      color: var(--navy);
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    .overview-edit-field textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    table.artifacts-edit th:last-child,
+    table.artifacts-edit td:last-child {
+      width: 72px;
+      text-align: center;
+    }
+
+    table.artifacts-edit .btn-remove {
+      appearance: none;
+      border: 1px solid #fecaca;
+      background: #fff1f2;
+      color: #b91c1c;
+      border-radius: 8px;
+      padding: 6px 8px;
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .overview-edit-status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .overview-edit-status.is-ok { color: #15803d; }
+
+    .feedback-wrap {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 20px 24px 32px;
+      background: #f1f5f9;
+    }
+
+    .feedback-wrap .note {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      max-width: 720px;
+    }
+
+    .feedback-wrap .note kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #f1f5f9;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: var(--ink);
+    }
+
+    .feedback-wrap .note code {
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .feedback-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .feedback-actions .btn {
+      appearance: none;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .feedback-actions .btn-save {
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(67, 97, 238, 0.28);
+    }
+
+    .feedback-actions .btn-add {
+      background: #fff;
+      color: var(--navy);
+      border: 1px solid var(--line);
+    }
+
+    .feedback-actions .btn:hover { filter: brightness(1.04); }
+
+    .feedback-save-status {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .feedback-save-status.is-ok { color: #15803d; }
+
+    .feedback-sheet {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .feedback-sheet .table-scroll {
+      overflow: auto;
+      max-height: calc(100vh - 220px);
+    }
+
+    table.feedback {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.86rem;
+    }
+
+    table.feedback th,
+    table.feedback td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      vertical-align: top;
+      background: #fff;
+    }
+
+    table.feedback th:last-child,
+    table.feedback td:last-child { border-right: none; }
+
+    table.feedback thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #fafbfc;
+      font-weight: 700;
+    }
+
+    table.feedback th.page-col,
+    table.feedback td.page-col {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      min-width: 260px;
+      max-width: 320px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    table.feedback thead th.page-col { z-index: 3; }
+
+    table.feedback th.teammate-col {
+      min-width: 180px;
+      padding: 6px 8px;
+    }
+
+    table.feedback .col-name {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 6px 8px;
+      font: inherit;
+      font-weight: 700;
+      background: transparent;
+      color: var(--navy);
+    }
+
+    table.feedback .col-name:hover,
+    table.feedback .col-name:focus {
+      border-color: #c7d2fe;
+      background: #fff;
+      outline: none;
+    }
+
+    table.feedback .cell-input {
+      width: 100%;
+      min-width: 160px;
+      min-height: 64px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px;
+      font: inherit;
+      font-size: 0.84rem;
+      line-height: 1.35;
+      resize: vertical;
+      color: var(--navy);
+      background: #fff;
+    }
+
+    table.feedback .cell-input:focus {
+      outline: 2px solid rgba(67, 97, 238, 0.35);
+      border-color: #a5b4fc;
+    }
+
+    table.feedback .page-cat {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .pill-yes { background: rgba(22, 163, 74, 0.12); color: #15803d; }
+    .pill-no { background: rgba(100, 116, 139, 0.12); color: #64748b; }
+    .pill-maybe { background: rgba(234, 179, 8, 0.16); color: #a16207; }
+
+    .completeness {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .completeness-bar {
+      width: 56px;
+      height: 6px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+
+    .completeness-bar > i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+    }
+
+    .empty-state {
+      margin: auto;
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--muted);
+      max-width: 28em;
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 0; }
+      .top { padding: 14px; }
+      .shell { border-radius: 0; }
+      .body { flex-direction: column; }
+      .sidenav {
+        width: 100%;
+        max-height: 42vh;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand-left img.maple { height: 64px; }
+      .milestone-list li {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .milestone-list .m-due { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="brand-row">
+        <div class="brand-left">
+          <img class="maple" src="images/maple-ai-logo.png" alt="Maple AI Technologies" width="601" height="400" decoding="async" />
+          <div class="brand-meta">
+            <span class="chip">Client dashboard</span>
+            <h1>Merrakii+ programme hub</h1>
+            <p>Overview, statement of work, scope, sample pages, Maple AI updates, and the live application.</p>
+          </div>
+        </div>
+        <div class="brand-right">
+          <div class="guide" id="guide-root">
+            <button type="button" class="guide-btn" id="guide-btn" aria-expanded="false" aria-controls="guide-panel" title="How to use this dashboard">
+              <span class="guide-btn-icon" aria-hidden="true">?</span>
+              Guide
+            </button>
+            <div class="guide-panel" id="guide-panel" role="dialog" aria-label="Dashboard guide" hidden>
+              <div class="guide-panel-head">
+                <div>
+                  <strong>Dashboard guide</strong>
+                  <p>What each tab is for — click a row to jump there.</p>
+                </div>
+                <button type="button" class="guide-close" id="guide-close" aria-label="Close guide">&times;</button>
+              </div>
+              <div class="guide-body">
+                <button type="button" class="guide-item" data-guide-tab="overview">
+                  <span class="guide-num">1</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Overview</span>
+                    <p class="guide-desc">Programme status at a glance: milestones, plan, and shared artifacts.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="sow">
+                  <span class="guide-num">2</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Statement of Work</span>
+                    <p class="guide-desc">Commercial &amp; delivery contract. V2 is active (scoped pages); V1 is the archived baseline.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="scope">
+                  <span class="guide-num">3</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Scoped pages</span>
+                    <p class="guide-desc">Phase 1 page inventory from the in-scope workbook — what we are building now.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="blueprint">
+                  <span class="guide-num">4</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Blueprint</span>
+                    <p class="guide-desc">Build plan in six levels — how pages graduate from shell to production-ready.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="samples">
+                  <span class="guide-num">5</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Sample Pages</span>
+                    <p class="guide-desc">Merrakii-provided HTML references. Use the dropdown to preview any sample.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="updates">
+                  <span class="guide-num">6</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Maple AI Updates</span>
+                    <p class="guide-desc">Daily progress matrix: blueprint levels × pages — what shipped and what’s next.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="app">
+                  <span class="guide-num">7</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Merrakii application</span>
+                    <p class="guide-desc">Live product preview on GitHub Pages — the working app, not a mock.</p>
+                  </span>
+                </button>
+                <button type="button" class="guide-item" data-guide-tab="feedback">
+                  <span class="guide-num">8</span>
+                  <span class="guide-copy">
+                    <span class="guide-title">Feedback</span>
+                    <p class="guide-desc">Teammate notes per in-scope page. Add columns for reviewers; Save keeps notes in this browser.</p>
+                  </span>
+                </button>
+              </div>
+              <div class="guide-foot">
+                Live viewers (top right) show who else is on this URL right now.
+              </div>
+            </div>
+          </div>
+          <div class="presence" id="presence-root">
+            <button type="button" class="presence-btn" id="presence-btn" aria-expanded="false" aria-controls="presence-panel" title="People viewing this dashboard right now">
+              <span class="presence-avatars" id="presence-avatars" aria-hidden="true">
+                <span class="presence-empty"></span>
+              </span>
+              <span class="presence-meta">
+                <span class="presence-count" id="presence-count">Connecting…</span>
+                <span class="presence-live"><span class="presence-dot is-offline" id="presence-dot"></span><span id="presence-live-label">Offline</span></span>
+              </span>
+            </button>
+            <div class="presence-panel" id="presence-panel" role="dialog" aria-label="Live viewers">
+              <div class="presence-panel-head">
+                <strong>Live on this URL</strong>
+                <span id="presence-panel-sub">Real-time</span>
+              </div>
+              <ul class="presence-list" id="presence-list"></ul>
+              <p class="presence-empty-msg" id="presence-empty-msg" hidden>No one else is here yet.</p>
+              <button type="button" class="presence-rename" id="presence-rename">Change my display name</button>
+            </div>
+          </div>
+          <img class="merrakii" src="images/merrakii-logo.png" alt="Merrakii" />
+        </div>
+      </div>
+    </header>
+
+    <div class="body">
+      <nav class="sidenav" aria-label="Dashboard apps" id="sidenav">
+        <div class="sidenav-group">
+          <div class="sidenav-label">Programme</div>
+          <button type="button" class="nav-item" role="tab" id="tab-overview" aria-controls="panel-overview" aria-selected="true" data-tab="overview">
+            <span class="nav-num" aria-hidden>1</span>
+            <span class="nav-copy">
+              <span class="nav-title">Overview</span>
+              <span class="nav-sub">Progress, plan &amp; artifacts</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-sow" aria-controls="panel-sow" aria-selected="false" data-tab="sow">
+            <span class="nav-num" aria-hidden>2</span>
+            <span class="nav-copy">
+              <span class="nav-title">Statement of Work</span>
+              <span class="nav-sub">V2 active · V1 archived</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-scope" aria-controls="panel-scope" aria-selected="false" data-tab="scope">
+            <span class="nav-num" aria-hidden>3</span>
+            <span class="nav-copy">
+              <span class="nav-title">Scoped pages</span>
+              <span class="nav-sub">Phase 1 page inventory</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-blueprint" aria-controls="panel-blueprint" aria-selected="false" data-tab="blueprint">
+            <span class="nav-num" aria-hidden>4</span>
+            <span class="nav-copy">
+              <span class="nav-title">Blueprint</span>
+              <span class="nav-sub">Build levels 1–6</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-samples" aria-controls="panel-samples" aria-selected="false" data-tab="samples">
+            <span class="nav-num" aria-hidden>5</span>
+            <span class="nav-copy">
+              <span class="nav-title">Sample Pages</span>
+              <span class="nav-sub">Merrakii HTML samples</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-updates" aria-controls="panel-updates" aria-selected="false" data-tab="updates">
+            <span class="nav-num" aria-hidden>6</span>
+            <span class="nav-copy">
+              <span class="nav-title">Maple AI Updates</span>
+              <span class="nav-sub">Blueprint levels × daily matrix</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-app" aria-controls="panel-app" aria-selected="false" data-tab="app">
+            <span class="nav-num" aria-hidden>7</span>
+            <span class="nav-copy">
+              <span class="nav-title">Merrakii application</span>
+              <span class="nav-sub">Live GitHub Pages preview</span>
+            </span>
+          </button>
+          <button type="button" class="nav-item" role="tab" id="tab-feedback" aria-controls="panel-feedback" aria-selected="false" data-tab="feedback">
+            <span class="nav-num" aria-hidden>8</span>
+            <span class="nav-copy">
+              <span class="nav-title">Feedback</span>
+              <span class="nav-sub">Teammate notes per page</span>
+            </span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="panels">
+        <!-- 1. Overview -->
+        <section class="panel active" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+          <div class="panel-toolbar">
+            <span class="label">Programme overview</span>
+          </div>
+          <div class="overview-wrap" id="overview-root">
+            <p class="empty-state">Loading overview…</p>
+          </div>
+        </section>
+
+        <!-- 2. SOW -->
+        <section class="panel" id="panel-sow" role="tabpanel" aria-labelledby="tab-sow" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Statement of Work</span>
+            <select id="sow-select" aria-label="Choose SOW version">
+              <option value="../statement-of-work/Merrakii_plus_statement_of_work_v2.html" selected>V2 — Scoped pages (active)</option>
+              <option value="../statement-of-work/Merrakii_plus_statement_of_work_v1.html">V1 — Archived baseline (8 Jul 2026)</option>
+            </select>
+            <a class="open-new" id="sow-open" href="../statement-of-work/Merrakii_plus_statement_of_work_v2.html" target="_blank" rel="noopener">Open in new tab</a>
+          </div>
+          <div class="frame-wrap">
+            <iframe id="sow-frame" title="Statement of Work" src="../statement-of-work/Merrakii_plus_statement_of_work_v2.html" loading="lazy"></iframe>
+          </div>
+        </section>
+
+        <!-- 3. Scoped pages -->
+        <section class="panel" id="panel-scope" role="tabpanel" aria-labelledby="tab-scope" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Scoped pages (from Merrakii_pages_inscope.xlsx)</span>
+            <a class="open-new" href="data/Merrakii_pages_inscope.xlsx" download>Download Excel</a>
+          </div>
+          <div class="scope-wrap" id="scope-root">
+            <p class="empty-state">Loading scoped pages…</p>
+          </div>
+        </section>
+
+        <!-- 4. Blueprint -->
+        <section class="panel" id="panel-blueprint" role="tabpanel" aria-labelledby="tab-blueprint" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Merrakii+ Build Blueprint — Levels 1–6</span>
+            <a class="open-new" id="blueprint-open" href="blueprint/Merrakii_plus_build_blueprint.html" target="_blank" rel="noopener">Open in new tab</a>
+          </div>
+          <div class="blueprint-wrap" id="blueprint-root">
+            <p class="empty-state">Loading Build Blueprint…</p>
+          </div>
+        </section>
+
+        <!-- Sample Pages -->
+        <section class="panel" id="panel-samples" role="tabpanel" aria-labelledby="tab-samples" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Sample Pages (provided by Merrakii)</span>
+            <select id="sample-select" aria-label="Choose a sample page"></select>
+            <a class="open-new" id="sample-open" href="#" target="_blank" rel="noopener">Open in new tab</a>
+          </div>
+          <div class="frame-wrap">
+            <iframe id="sample-frame" title="Merrakii sample HTML" src="about:blank" loading="lazy"></iframe>
+          </div>
+        </section>
+
+        <!-- Maple AI Updates -->
+        <section class="panel" id="panel-updates" role="tabpanel" aria-labelledby="tab-updates" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Maple AI Updates — blueprint levels × daily progress</span>
+            <a class="open-new" id="updates-open" href="../maple-ai-updates/Maple_AI_Updates_2026-08-07.html" target="_blank" rel="noopener">Open in new tab</a>
+          </div>
+          <div class="updates-wrap" id="updates-root">
+            <p class="empty-state">Loading Maple AI Updates…</p>
+          </div>
+        </section>
+
+        <!-- Application -->
+        <section class="panel" id="panel-app" role="tabpanel" aria-labelledby="tab-app" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Merrakii+ application (GitHub Pages preview)</span>
+            <a class="open-new" id="app-open" href="https://tarun-rastogi.github.io/merrakii-plus-pages/" target="_blank" rel="noopener">Open in new tab</a>
+          </div>
+          <div class="frame-wrap">
+            <iframe id="app-frame" title="Merrakii+ application" src="about:blank" loading="lazy" data-src="https://tarun-rastogi.github.io/merrakii-plus-pages/"></iframe>
+          </div>
+        </section>
+
+        <!-- Feedback -->
+        <section class="panel" id="panel-feedback" role="tabpanel" aria-labelledby="tab-feedback" hidden>
+          <div class="panel-toolbar">
+            <span class="label">Feedback — pages in scope × teammates</span>
+          </div>
+          <div class="feedback-wrap" id="feedback-root">
+            <p class="empty-state">Loading feedback grid…</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div id="sheet-editor-root" hidden aria-hidden="true"></div>
+  <script src="js/sheet-editor.js"></script>
+  <script>
+    (function () {
+      var SAMPLES = [
+        { file: "01_home.html", label: "01 — Home" },
+        { file: "2 Merrakii_Home_Page.html", label: "Home (alternate)" },
+        { file: "02_career_library.html", label: "02 — Career library" },
+        { file: "03_career_detail_data_scientist.html", label: "03 — Career detail (Data Scientist)" },
+        { file: "03_career_detail_data_scientist_2.html", label: "03b — Career detail (Data Scientist v2)" },
+        { file: "04_students_parents_info.html", label: "04 — Students & parents info" },
+        { file: "05_schools_info.html", label: "05 — Schools info" },
+        { file: "06_career_professionals_info.html", label: "06 — Career professionals info" },
+        { file: "07_program_partners_info.html", label: "07 — Program partners info" },
+        { file: "08_partner_counsellor_info.html", label: "08 — Partner counsellor info" },
+        { file: "09_about.html", label: "09 — About" },
+        { file: "10_contact.html", label: "10 — Contact" },
+        { file: "11_login.html", label: "11 — Login" },
+        { file: "12_career_journey_map.html", label: "12 — Career journey map" },
+        { file: "13_signup_99.html", label: "13 — Signup ₹99" },
+        { file: "14_deep_profiling.html", label: "14 — Deep profiling" },
+        { file: "15_career_journey_report.html", label: "15 — Career journey report" },
+        { file: "16_student_dashboard.html", label: "16 — Student dashboard" },
+        { file: "17_career_professional_dashboard.html", label: "17 — Career professional dashboard" },
+        { file: "18_program_partner_dashboard.html", label: "18 — Program partner dashboard" },
+        { file: "19_partner_counsellor_dashboard.html", label: "19 — Partner counsellor dashboard" },
+        { file: "20_student_portfolio_public.html", label: "20 — Student portfolio (public)" },
+        { file: "21_career_professional_portfolio_public.html", label: "21 — Professional portfolio (public)" },
+        { file: "22_partner_counsellor_portfolio_public.html", label: "22 — Partner counsellor portfolio (public)" },
+        { file: "23_admin_dashboard.html", label: "23 — Admin dashboard" }
+      ];
+
+      var tabs = document.querySelectorAll(".sidenav [role='tab']");
+      var panels = {
+        overview: document.getElementById("panel-overview"),
+        sow: document.getElementById("panel-sow"),
+        scope: document.getElementById("panel-scope"),
+        blueprint: document.getElementById("panel-blueprint"),
+        samples: document.getElementById("panel-samples"),
+        updates: document.getElementById("panel-updates"),
+        app: document.getElementById("panel-app"),
+        feedback: document.getElementById("panel-feedback")
+      };
+      var loaded = { overview: false, scope: false, updates: false, samples: false, app: false, feedback: false, blueprint: false };
+      var FEEDBACK_KEY = "merrakii_client_feedback_v1";
+      var OVERVIEW_KEY = "merrakii_client_overview_v1";
+      var ARTIFACT_STATUSES = ["Shared", "Active", "Live", "Archived", "Private", "Draft"];
+      var feedbackState = null;
+      var overviewData = null;
+      var overviewEditMode = false;
+      var artifactsSort = { key: "dateShared", dir: "desc" };
+
+      function activate(name) {
+        var pageScrollTabs = name === "updates" || name === "blueprint";
+        document.body.classList.toggle("tab-updates", name === "updates");
+        document.documentElement.classList.toggle("tab-updates", name === "updates");
+        document.body.classList.toggle("tab-blueprint", name === "blueprint");
+        document.documentElement.classList.toggle("tab-blueprint", name === "blueprint");
+        document.body.classList.toggle("tab-page-scroll", pageScrollTabs);
+        document.documentElement.classList.toggle("tab-page-scroll", pageScrollTabs);
+        tabs.forEach(function (btn) {
+          var on = btn.getAttribute("data-tab") === name;
+          btn.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        Object.keys(panels).forEach(function (key) {
+          var panel = panels[key];
+          var on = key === name;
+          panel.classList.toggle("active", on);
+          if (on) panel.removeAttribute("hidden");
+          else panel.setAttribute("hidden", "");
+        });
+        if (name === "overview") loadOverview();
+        if (name === "scope") loadScope();
+        if (name === "blueprint") loadBlueprint();
+        if (name === "updates") loadUpdates();
+        if (name === "samples") loadSamples();
+        if (name === "app") loadApp();
+        if (name === "feedback") loadFeedback();
+        try {
+          var url = new URL(location.href);
+          history.replaceState(null, "", url.pathname + url.search + "#" + name);
+        } catch (e) {
+          if (history.replaceState) history.replaceState(null, "", "#" + name);
+          else location.hash = name;
+        }
+      }
+
+      tabs.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          activate(btn.getAttribute("data-tab"));
+        });
+      });
+
+      (function wireSowVersion() {
+        var select = document.getElementById("sow-select");
+        var frame = document.getElementById("sow-frame");
+        var open = document.getElementById("sow-open");
+        if (!select || !frame || !open) return;
+        function showSow() {
+          frame.src = select.value;
+          open.href = select.value;
+        }
+        select.addEventListener("change", showSow);
+      })();
+
+      function loadApp() {
+        if (loaded.app) return;
+        var frame = document.getElementById("app-frame");
+        frame.src = frame.getAttribute("data-src");
+        loaded.app = true;
+      }
+
+      function statusLabel(status) {
+        if (status === "done") return "Done";
+        if (status === "in_progress") return "In progress";
+        return "Upcoming";
+      }
+
+      function artifactStatusClass(status) {
+        return String(status || "shared")
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, "-");
+      }
+
+      function readOverviewStore() {
+        try {
+          var raw = localStorage.getItem(OVERVIEW_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function writeOverviewStore(data) {
+        localStorage.setItem(OVERVIEW_KEY, JSON.stringify(data));
+      }
+
+      function isEditQuery() {
+        try {
+          return new URLSearchParams(location.search).get("edit") === "1";
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function setEditQuery(on) {
+        try {
+          var url = new URL(location.href);
+          if (on) url.searchParams.set("edit", "1");
+          else url.searchParams.delete("edit");
+          history.replaceState(null, "", url.pathname + url.search + (url.hash || "#overview"));
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+      function listHtml(items) {
+        return (
+          "<ul class=\"overview-list\">" +
+          (items || [])
+            .map(function (item) {
+              return "<li>" + escapeHtml(item) + "</li>";
+            })
+            .join("") +
+          "</ul>"
+        );
+      }
+
+      function statusSelectHtml(selected) {
+        var html = "<select data-field=\"status\" aria-label=\"Artifact status\">";
+        ARTIFACT_STATUSES.forEach(function (opt) {
+          html +=
+            '<option value="' +
+            escapeHtml(opt) +
+            '"' +
+            (opt === selected ? " selected" : "") +
+            ">" +
+            escapeHtml(opt) +
+            "</option>";
+        });
+        if (selected && ARTIFACT_STATUSES.indexOf(selected) === -1) {
+          html +=
+            '<option value="' +
+            escapeHtml(selected) +
+            '" selected>' +
+            escapeHtml(selected) +
+            "</option>";
+        }
+        html += "</select>";
+        return html;
+      }
+
+      function collectOverviewFromDom() {
+        if (!overviewData) return null;
+        var root = document.getElementById("overview-root");
+        if (!root) return null;
+        var next = JSON.parse(JSON.stringify(overviewData));
+        var body = root.querySelector('[data-field="summaryBody"]');
+        var start = root.querySelector('[data-field="startDate"]');
+        var goLive = root.querySelector('[data-field="goLiveDate"]');
+        if (!next.productOverview) next.productOverview = {};
+        if (body) next.productOverview.body = body.value;
+        if (start) next.startDate = start.value.trim();
+        if (goLive) next.goLiveDate = goLive.value.trim();
+        next.updatedAt = new Date().toISOString().slice(0, 10);
+        var artifacts = [];
+        root.querySelectorAll("tbody tr[data-artifact-row]").forEach(function (tr) {
+          var get = function (field) {
+            var el = tr.querySelector('[data-field="' + field + '"]');
+            return el ? String(el.value || "").trim() : "";
+          };
+          artifacts.push({
+            name: get("name"),
+            url: get("url"),
+            urlNote: get("urlNote"),
+            owner: get("owner"),
+            dateShared: get("dateShared"),
+            status: get("status") || "Shared"
+          });
+        });
+        next.artifacts = artifacts.filter(function (row) {
+          return row.name || row.url || row.owner;
+        });
+        next.savedAt = new Date().toISOString();
+        return next;
+      }
+
+      function renderOverviewView(data) {
+        var root = document.getElementById("overview-root");
+        if (!root || !data) return;
+        var timeline = data.timeline || {};
+        var milestones = timeline.milestones || [];
+        var artifacts = sortArtifacts(data.artifacts || [], artifactsSort);
+        var pct = Math.max(0, Math.min(100, Number(timeline.overallPercent) || 0));
+        var product = data.productOverview || {};
+        var pillars = product.pillars || [];
+
+        var html = "";
+
+        html += '<section class="overview-card full overview-product">';
+        html += "<h2>" + escapeHtml(product.title || "Summary") + "</h2>";
+        if (product.body) {
+          html += '<p class="overview-product-body">' + escapeHtml(product.body) + "</p>";
+        } else if (data.summary) {
+          html += '<p class="overview-product-body">' + escapeHtml(data.summary) + "</p>";
+        }
+        if (pillars.length) {
+          html += '<ul class="overview-pillars">';
+          pillars.forEach(function (p) {
+            html += "<li>";
+            html += '<p class="pillar-name">' + escapeHtml(p.name || "") + "</p>";
+            if (p.detail) html += '<p class="pillar-detail">' + escapeHtml(p.detail) + "</p>";
+            html += "</li>";
+          });
+          html += "</ul>";
+        }
+        html += "</section>";
+
+        html += '<section class="overview-start" aria-label="Project dates">';
+        html += '<div class="overview-start-item">';
+        html += '<span class="k">Project start date</span>';
+        html += '<span class="v accent">' + escapeHtml(data.startDate || "—") + "</span>";
+        html += "</div>";
+        if (data.goLiveDate) {
+          html += '<div class="overview-start-item">';
+          html += '<span class="k">Target go-live</span>';
+          html += '<span class="v">' + escapeHtml(data.goLiveDate) + "</span>";
+          html += "</div>";
+        }
+        html += "</section>";
+
+        html += '<div class="overview-grid">';
+
+        html += '<section class="overview-card full">';
+        html += "<h2>" + escapeHtml(timeline.label || "Programme timeline") + "</h2>";
+        html +=
+          '<div class="overview-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' +
+          pct +
+          '"><span style="width:' +
+          pct +
+          '%"></span></div>';
+        html +=
+          '<p class="overview-progress-label">' +
+          pct +
+          "% — " +
+          escapeHtml(timeline.overallLabel || "") +
+          "</p>";
+        html += '<ul class="milestone-list">';
+        milestones.forEach(function (m) {
+          var st = m.status || "upcoming";
+          html += "<li>";
+          html += '<span class="status ' + escapeHtml(st) + '">' + escapeHtml(statusLabel(st)) + "</span>";
+          html += "<div>";
+          html += '<p class="m-name">' + escapeHtml(m.name || "") + "</p>";
+          if (m.detail) html += '<p class="m-detail">' + escapeHtml(m.detail) + "</p>";
+          html += "</div>";
+          html +=
+            '<div class="m-due">' +
+            escapeHtml(m.due || "") +
+            "<span>" +
+            escapeHtml(m.duration || "") +
+            "</span></div>";
+          html += "</li>";
+        });
+        html += "</ul></section>";
+
+        html += '<section class="overview-card full">';
+        html += "<h2>Artifacts exchanged</h2>";
+        html +=
+          '<div class="feedback-sheet"><div class="table-scroll" style="max-height:none"><table class="artifacts" id="artifacts-table"><thead><tr>';
+        html += artifactSortHeader("name", "Artifact name");
+        html += artifactSortHeader("url", "URL");
+        html += artifactSortHeader("owner", "Owner");
+        html += artifactSortHeader("dateShared", "Date shared");
+        html += artifactSortHeader("status", "Status");
+        html += "</tr></thead><tbody>";
+        artifacts.forEach(function (row) {
+          var st = row.status || "Shared";
+          html += "<tr>";
+          html += "<td>" + escapeHtml(row.name || "") + "</td>";
+          html += "<td>";
+          if (row.url) {
+            html +=
+              '<a href="' +
+              escapeHtml(row.url) +
+              '" target="_blank" rel="noopener">' +
+              escapeHtml(row.url) +
+              "</a>";
+          } else {
+            html +=
+              '<span class="url-note">' +
+              escapeHtml(row.urlNote || "Shared privately") +
+              "</span>";
+          }
+          html += "</td>";
+          html += '<td class="owner">' + escapeHtml(row.owner || "") + "</td>";
+          html += '<td class="date">' + escapeHtml(row.dateShared || "") + "</td>";
+          html +=
+            '<td><span class="status-pill ' +
+            escapeHtml(artifactStatusClass(st)) +
+            '">' +
+            escapeHtml(st) +
+            "</span></td>";
+          html += "</tr>";
+        });
+        html += "</tbody></table></div></div></section>";
+        html += "</div>";
+
+        root.innerHTML = html;
+        wireArtifactsSortHeaders();
+      }
+
+      function artifactSortHeader(key, label) {
+        var cls = "sortable";
+        var aria = "none";
+        if (artifactsSort.key === key) {
+          cls += artifactsSort.dir === "asc" ? " is-asc" : " is-desc";
+          aria = artifactsSort.dir === "asc" ? "ascending" : "descending";
+        }
+        return (
+          '<th scope="col" class="' +
+          cls +
+          '" data-sort-key="' +
+          key +
+          '" aria-sort="' +
+          aria +
+          '" title="Sort by ' +
+          escapeHtml(label) +
+          '">' +
+          escapeHtml(label) +
+          "</th>"
+        );
+      }
+
+      function artifactSortValue(row, key) {
+        if (key === "url") {
+          return String(row.url || row.urlNote || "").toLowerCase();
+        }
+        if (key === "dateShared") {
+          var raw = String(row.dateShared || "").trim();
+          var t = Date.parse(raw);
+          return isNaN(t) ? 0 : t;
+        }
+        return String(row[key] || "").toLowerCase();
+      }
+
+      function sortArtifacts(rows, sort) {
+        var list = (rows || []).slice();
+        if (!sort || !sort.key) return list;
+        var dir = sort.dir === "desc" ? -1 : 1;
+        var key = sort.key;
+        list.sort(function (a, b) {
+          var av = artifactSortValue(a, key);
+          var bv = artifactSortValue(b, key);
+          if (av < bv) return -1 * dir;
+          if (av > bv) return 1 * dir;
+          // Stable-ish tie-break by name
+          var an = String(a.name || "").toLowerCase();
+          var bn = String(b.name || "").toLowerCase();
+          if (an < bn) return -1;
+          if (an > bn) return 1;
+          return 0;
+        });
+        return list;
+      }
+
+      function wireArtifactsSortHeaders() {
+        var table = document.getElementById("artifacts-table");
+        if (!table) return;
+        table.querySelectorAll("th.sortable[data-sort-key]").forEach(function (th) {
+          th.addEventListener("click", function () {
+            var key = th.getAttribute("data-sort-key");
+            if (artifactsSort.key === key) {
+              artifactsSort.dir = artifactsSort.dir === "asc" ? "desc" : "asc";
+            } else {
+              artifactsSort.key = key;
+              artifactsSort.dir = key === "dateShared" ? "desc" : "asc";
+            }
+            if (overviewData) renderOverviewView(overviewData);
+          });
+        });
+      }
+
+      function renderOverviewEdit(data) {
+        var root = document.getElementById("overview-root");
+        if (!root || !data) return;
+        var product = data.productOverview || {};
+        var artifacts = data.artifacts || [];
+        var html = "";
+
+        html += '<div class="overview-edit-banner">';
+        html += "<div><div>Edit mode — Overview</div>";
+        html +=
+          '<div class="hint">Save stores in this browser. Download gives you overview.json to commit. Use Exit edit to return to the client view.</div></div>';
+        html += '<div class="overview-edit-actions">';
+        html += '<button type="button" class="btn" id="overview-add-artifact">+ Add artifact</button>';
+        html += '<button type="button" class="btn" id="overview-download">Download JSON</button>';
+        html += '<button type="button" class="btn btn-save" id="overview-save">Save</button>';
+        html += '<button type="button" class="btn btn-exit" id="overview-exit-edit">Exit edit</button>';
+        html += "</div></div>";
+        html += '<p class="overview-edit-status" id="overview-edit-status" aria-live="polite"></p>';
+
+        html += '<section class="overview-card full">';
+        html += "<h2>Summary</h2>";
+        html += '<div class="overview-edit-field"><label for="overview-summary-body">Summary body</label>';
+        html +=
+          '<textarea id="overview-summary-body" data-field="summaryBody">' +
+          escapeHtml(product.body || data.summary || "") +
+          "</textarea></div>";
+        html += '<div class="overview-edit-field"><label for="overview-start-date">Project start date</label>';
+        html +=
+          '<input id="overview-start-date" data-field="startDate" type="text" value="' +
+          escapeHtml(data.startDate || "") +
+          '" /></div>';
+        html += '<div class="overview-edit-field"><label for="overview-golive-date">Target go-live</label>';
+        html +=
+          '<input id="overview-golive-date" data-field="goLiveDate" type="text" value="' +
+          escapeHtml(data.goLiveDate || "") +
+          '" /></div>';
+        html += "</section>";
+
+        html += '<section class="overview-card full">';
+        html += "<h2>Artifacts exchanged</h2>";
+        html +=
+          '<div class="feedback-sheet"><div class="table-scroll" style="max-height:none"><table class="artifacts artifacts-edit"><thead><tr>';
+        html += "<th scope=\"col\">Artifact name</th>";
+        html += "<th scope=\"col\">URL</th>";
+        html += "<th scope=\"col\">URL note (if no URL)</th>";
+        html += "<th scope=\"col\">Owner</th>";
+        html += "<th scope=\"col\">Date shared</th>";
+        html += "<th scope=\"col\">Status</th>";
+        html += "<th scope=\"col\">Remove</th>";
+        html += "</tr></thead><tbody>";
+        artifacts.forEach(function (row, i) {
+          html += '<tr data-artifact-row="' + i + '">';
+          html +=
+            '<td><input data-field="name" type="text" value="' +
+            escapeHtml(row.name || "") +
+            '" /></td>';
+          html +=
+            '<td><input data-field="url" type="text" value="' +
+            escapeHtml(row.url || "") +
+            '" /></td>';
+          html +=
+            '<td><input data-field="urlNote" type="text" value="' +
+            escapeHtml(row.urlNote || "") +
+            '" /></td>';
+          html +=
+            '<td><input data-field="owner" type="text" value="' +
+            escapeHtml(row.owner || "") +
+            '" /></td>';
+          html +=
+            '<td><input data-field="dateShared" type="text" value="' +
+            escapeHtml(row.dateShared || "") +
+            '" /></td>';
+          html += "<td>" + statusSelectHtml(row.status || "Shared") + "</td>";
+          html +=
+            '<td><button type="button" class="btn-remove" data-remove-artifact>Remove</button></td>';
+          html += "</tr>";
+        });
+        html += "</tbody></table></div></div></section>";
+
+        root.innerHTML = html;
+
+        var statusEl = document.getElementById("overview-edit-status");
+        if (data.savedAt) {
+          try {
+            statusEl.textContent =
+              "Last saved " +
+              new Date(data.savedAt).toLocaleString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+              });
+            statusEl.classList.add("is-ok");
+          } catch (e) {
+            statusEl.textContent = "Saved in this browser";
+            statusEl.classList.add("is-ok");
+          }
+        }
+
+        document.getElementById("overview-add-artifact").addEventListener("click", function () {
+          var next = collectOverviewFromDom() || overviewData;
+          next.artifacts = next.artifacts || [];
+          next.artifacts.push({
+            name: "",
+            url: "",
+            urlNote: "",
+            owner: "Maple AI",
+            dateShared: "",
+            status: "Draft"
+          });
+          overviewData = next;
+          renderOverviewEdit(overviewData);
+        });
+
+        root.querySelectorAll("[data-remove-artifact]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var tr = btn.closest("tr");
+            if (tr) tr.remove();
+          });
+        });
+
+        document.getElementById("overview-save").addEventListener("click", function () {
+          var next = collectOverviewFromDom();
+          if (!next) return;
+          overviewData = next;
+          writeOverviewStore(next);
+          statusEl.textContent = "Saving…";
+          statusEl.classList.remove("is-ok");
+          var done = function (msg) {
+            statusEl.textContent = msg;
+            statusEl.classList.add("is-ok");
+          };
+          if (typeof saveDashboardData === "function") {
+            saveDashboardData("overview", next)
+              .then(function () {
+                try {
+                  localStorage.removeItem(OVERVIEW_KEY);
+                } catch (e) {}
+                done(
+                  "Saved to overview.json · " +
+                    new Date(next.savedAt).toLocaleString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      hour: "numeric",
+                      minute: "2-digit"
+                    })
+                );
+              })
+              .catch(function () {
+                done(
+                  "Saved in this browser (server save unavailable) · " +
+                    new Date(next.savedAt).toLocaleString("en-IN", {
+                      day: "numeric",
+                      month: "short",
+                      hour: "numeric",
+                      minute: "2-digit"
+                    })
+                );
+              });
+          } else {
+            done(
+              "Saved in this browser · " +
+                new Date(next.savedAt).toLocaleString("en-IN", {
+                  day: "numeric",
+                  month: "short",
+                  hour: "numeric",
+                  minute: "2-digit"
+                })
+            );
+          }
+        });
+
+        document.getElementById("overview-download").addEventListener("click", function () {
+          var next = collectOverviewFromDom() || overviewData;
+          var blob = new Blob([JSON.stringify(next, null, 2)], { type: "application/json" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "overview.json";
+          a.click();
+          URL.revokeObjectURL(a.href);
+          statusEl.textContent = "Downloaded overview.json";
+          statusEl.classList.add("is-ok");
+        });
+
+        document.getElementById("overview-exit-edit").addEventListener("click", function () {
+          setOverviewEditMode(false);
+        });
+      }
+
+      function renderOverview(data) {
+        if (overviewEditMode) renderOverviewEdit(data);
+        else renderOverviewView(data);
+      }
+
+      function setOverviewEditMode(on) {
+        overviewEditMode = !!on;
+        setEditQuery(overviewEditMode);
+        var tab = (location.hash || "#overview").replace(/^#/, "");
+        if (overviewEditMode) {
+          if (tab !== "overview") {
+            activate("overview");
+          } else if (overviewData) {
+            renderOverview(overviewData);
+          } else {
+            loadOverview(true);
+          }
+        } else if (overviewData) {
+          renderOverview(overviewData);
+        }
+      }
+
+      function loadOverview(force) {
+        if (loaded.overview && !force && overviewData) {
+          if (isEditQuery()) overviewEditMode = true;
+          renderOverview(overviewData);
+          return;
+        }
+        var root = document.getElementById("overview-root");
+        fetch("data/overview.json?t=" + Date.now())
+          .then(function (r) {
+            if (!r.ok) throw new Error("Could not load programme overview");
+            return r.json();
+          })
+          .then(function (data) {
+            var stored = readOverviewStore();
+            overviewData = data;
+            if (stored && stored.savedAt && (!data.savedAt || stored.savedAt > data.savedAt)) {
+              overviewData = stored;
+            }
+            if (isEditQuery()) overviewEditMode = true;
+            renderOverview(overviewData);
+            loaded.overview = true;
+          })
+          .catch(function (err) {
+            var stored = readOverviewStore();
+            if (stored) {
+              overviewData = stored;
+              if (isEditQuery()) overviewEditMode = true;
+              renderOverview(overviewData);
+              loaded.overview = true;
+              return;
+            }
+            root.innerHTML =
+              '<p class="empty-state">' +
+              escapeHtml(err.message || "Failed to load overview.") +
+              "</p>";
+          });
+      }
+
+      function loadSamples() {
+        if (loaded.samples) return;
+        var select = document.getElementById("sample-select");
+        var frame = document.getElementById("sample-frame");
+        var open = document.getElementById("sample-open");
+        SAMPLES.forEach(function (item, i) {
+          var opt = document.createElement("option");
+          opt.value = "samples/" + item.file.split("/").map(encodeURIComponent).join("/");
+          opt.textContent = item.label;
+          if (i === 0) opt.selected = true;
+          select.appendChild(opt);
+        });
+        function showSample() {
+          frame.src = select.value;
+          open.href = select.value;
+        }
+        select.addEventListener("change", showSample);
+        showSample();
+        loaded.samples = true;
+      }
+
+      function pillPhase(val) {
+        var v = String(val || "").trim().toLowerCase();
+        if (v === "yes") return '<span class="pill pill-yes">Yes</span>';
+        if (v === "no") return '<span class="pill pill-no">No</span>';
+        if (v === "yes / no" || v === "yes/no") return '<span class="pill pill-maybe">Yes / No</span>';
+        return escapeHtml(val);
+      }
+
+      function formatCompleteness(val) {
+        if (val === "" || val == null) return "";
+        var n = Number(val);
+        if (!isFinite(n)) return escapeHtml(val);
+        if (n >= 0 && n <= 1) n = n * 100;
+        n = Math.round(n);
+        return (
+          '<span class="completeness">' +
+          '<span class="completeness-bar" aria-hidden="true"><i style="width:' +
+          n +
+          '%"></i></span>' +
+          n +
+          "%</span>"
+        );
+      }
+
+      function escapeHtml(s) {
+        return String(s == null ? "" : s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function loadScope(force) {
+        if (loaded.scope && !force) return;
+        var root = document.getElementById("scope-root");
+        root.innerHTML = '<p class="empty-state">Loading scoped pages…</p>';
+        fetch("data/scope.json?t=" + Date.now())
+          .then(function (r) {
+            if (!r.ok) throw new Error("Could not load scope data");
+            return r.json();
+          })
+          .then(function (data) {
+            var merges = data._merges || {};
+            root.innerHTML =
+              "<h2>Scoped pages</h2>" +
+              "<p class=\"note\">Source: <em>Merrakii_pages_inscope.xlsx</em>. Phase 1 shows current build scope; Completeness shows build progress where tracked.</p>";
+            Object.keys(data).forEach(function (sheetName) {
+              if (sheetName.charAt(0) === "_") return;
+              var rows = data[sheetName];
+              if (!rows || !rows.length) return;
+              var header = rows[0] || [];
+              var colCount = header.length;
+              rows.forEach(function (row) {
+                if (row && row.length > colCount) colCount = row.length;
+              });
+              var phaseIdx = header.findIndex(function (h) {
+                return String(h).toLowerCase() === "phase 1";
+              });
+              var completenessIdx = header.findIndex(function (h) {
+                return String(h).toLowerCase() === "completeness";
+              });
+              var map = window.SheetEditor
+                ? SheetEditor.buildCoverMap(merges[sheetName] || [], rows.length, colCount)
+                : { cover: {}, origins: {} };
+              var html = '<div class="scope-sheet"><h3>' + escapeHtml(sheetName) + "</h3>";
+              html += '<div class="table-scroll"><table class="scope"><tbody>';
+              rows.forEach(function (row, r) {
+                html += "<tr>";
+                for (var c = 0; c < colCount; c++) {
+                  var key = r + ":" + c;
+                  if (map.cover[key]) continue;
+                  var origin = map.origins[key];
+                  var rs = origin ? origin.rowSpan : 1;
+                  var cs = origin ? origin.colSpan : 1;
+                  var cell = row && row[c] != null ? row[c] : "";
+                  var rendered;
+                  if (r === 0) {
+                    rendered = escapeHtml(cell);
+                    html +=
+                      "<th" +
+                      (rs > 1 ? ' rowspan="' + rs + '"' : "") +
+                      (cs > 1 ? ' colspan="' + cs + '"' : "") +
+                      ">" +
+                      rendered +
+                      "</th>";
+                    continue;
+                  }
+                  if (c === phaseIdx) rendered = pillPhase(cell);
+                  else if (c === completenessIdx) rendered = formatCompleteness(cell);
+                  else rendered = escapeHtml(cell);
+                  html +=
+                    "<td" +
+                    (rs > 1 ? ' rowspan="' + rs + '"' : "") +
+                    (cs > 1 ? ' colspan="' + cs + '"' : "") +
+                    ">" +
+                    rendered +
+                    "</td>";
+                }
+                html += "</tr>";
+              });
+              html += "</tbody></table></div></div>";
+              root.insertAdjacentHTML("beforeend", html);
+            });
+            loaded.scope = true;
+            window.__scopeData = data;
+          })
+          .catch(function (err) {
+            root.innerHTML =
+              '<p class="empty-state">' +
+              escapeHtml(err.message || "Failed to load scoped pages.") +
+              "</p>";
+          });
+      }
+
+      function cellToneClass(text) {
+        var t = String(text || "").toLowerCase();
+        if (!t.trim()) return "is-empty";
+        if (t.indexOf("paused") >= 0 || t.indexOf("pause") >= 0) return "is-pause";
+        if (t.indexOf("alfran") >= 0 || t.indexOf("in progress") >= 0 || t.indexOf("strategic decision") >= 0) {
+          return "is-focus";
+        }
+        return "";
+      }
+
+      function renderUpdatesFromData(data, filterLevel) {
+        var root = document.getElementById("updates-root");
+        if (!root || !data) return;
+        var doc = data.document || {};
+        var sheets = data.sheets || {};
+        var pagesSheet = sheets.Pages || [];
+        var matrix = sheets["Daily matrix"] || [];
+        var levelRowSheet = sheets["Level row"] || [];
+        var flow = sheets["Journey flow"] || [];
+        var activeFilter = filterLevel || (root.getAttribute("data-level-filter") || "ALL");
+
+        var pageMeta = [];
+        pagesSheet.forEach(function (row, i) {
+          if (i === 0) return;
+          pageMeta.push({
+            level: String(row[0] || ""),
+            levelName: String(row[1] || ""),
+            page: String(row[2] || "")
+          });
+        });
+
+        var header = matrix[0] || [];
+        var pageStart = 2;
+        var pageCols = [];
+        for (var c = pageStart; c < header.length; c++) {
+          var name = String(header[c] || "");
+          var meta = pageMeta.find(function (p) {
+            return p.page === name;
+          });
+          var level =
+            (levelRowSheet[0] && levelRowSheet[0][c]) ||
+            (meta && meta.level) ||
+            "";
+          pageCols.push({
+            index: c,
+            name: name,
+            level: String(level || ""),
+            levelName: (meta && meta.levelName) || ""
+          });
+        }
+
+        if (activeFilter && activeFilter !== "ALL") {
+          pageCols = pageCols.filter(function (p) {
+            return p.level === activeFilter;
+          });
+        }
+
+        var levelGroups = [];
+        pageCols.forEach(function (p) {
+          var last = levelGroups[levelGroups.length - 1];
+          if (!last || last.level !== p.level) {
+            levelGroups.push({ level: p.level, levelName: p.levelName, count: 1 });
+          } else {
+            last.count += 1;
+          }
+        });
+
+        var html = '<article class="updates-doc">';
+        html += "<h1>" + escapeHtml(doc.title || "Maple AI Updates") + "</h1>";
+        if (doc.subtitle) {
+          html += '<p class="subtitle">' + escapeHtml(doc.subtitle) + "</p>";
+        }
+        var metaKeys = Object.keys(doc.meta || {});
+        if (metaKeys.length) {
+          html += '<div class="updates-meta">';
+          metaKeys.forEach(function (k) {
+            html +=
+              "<span><strong>" +
+              escapeHtml(k) +
+              ":</strong> " +
+              escapeHtml(doc.meta[k]) +
+              "</span>";
+          });
+          html += "</div>";
+        }
+
+        if (doc.strategicNote) {
+          html += '<section class="updates-strategic">';
+          html += "<h2>Strategic decision</h2>";
+          html += "<p>" + escapeHtml(doc.strategicNote) + "</p>";
+          html += "</section>";
+        }
+
+        var flowSteps = [];
+        flow.forEach(function (row, i) {
+          if (i === 0) return;
+          var step = row && row[0] != null ? row[0] : "";
+          if (step) flowSteps.push(step);
+        });
+        if (doc.flowIntro || doc.flowNote || flowSteps.length) {
+          html += '<section class="updates-flow">';
+          html += "<h2>Blueprint student journey (wireframe target)</h2>";
+          if (doc.flowIntro) {
+            html += "<p>" + escapeHtml(doc.flowIntro) + "</p>";
+          }
+          if (flowSteps.length) {
+            html += '<div class="steps">';
+            flowSteps.forEach(function (step, i) {
+              if (i > 0) html += '<span class="arrow">→</span>';
+              html += "<span>" + escapeHtml(step) + "</span>";
+            });
+            html += "</div>";
+          }
+          if (doc.flowNote) {
+            html +=
+              '<p style="margin-top:10px;margin-bottom:0">' +
+              escapeHtml(doc.flowNote) +
+              "</p>";
+          }
+          html += "</section>";
+        }
+
+        html += '<div class="updates-level-filters" role="group" aria-label="Filter by blueprint level">';
+        html += '<span class="hint">Show columns:</span>';
+        ["ALL", "L1", "L2", "L3", "L4", "L5", "L6"].forEach(function (lvl) {
+          html +=
+            '<button type="button" data-level="' +
+            lvl +
+            '" class="' +
+            (activeFilter === lvl ? "is-active" : "") +
+            '">' +
+            (lvl === "ALL" ? "All levels" : lvl) +
+            "</button>";
+        });
+        html += "</div>";
+
+        html += '<div class="updates-matrix-wrap"><table class="updates-matrix">';
+        html += "<thead>";
+        html += '<tr class="level-row">';
+        html += '<th class="day-col" rowspan="2">Day</th>';
+        levelGroups.forEach(function (g) {
+          html +=
+            '<th class="lvl-' +
+            escapeHtml(g.level) +
+            '" colspan="' +
+            g.count +
+            '">' +
+            escapeHtml(g.level + (g.levelName ? " · " + g.levelName.replace(/^Level \d+ — /, "") : "")) +
+            "</th>";
+        });
+        html += "</tr>";
+        html += '<tr class="page-row">';
+        pageCols.forEach(function (p) {
+          html += "<th>" + escapeHtml(p.name) + "</th>";
+        });
+        html += "</tr></thead><tbody>";
+
+        for (var r = 1; r < matrix.length; r++) {
+          var row = matrix[r] || [];
+          var day = row[0] || "";
+          var badge = row[1] || "";
+          html += "<tr>";
+          html += '<td class="day-col">';
+          if (badge) html += '<span class="badge">' + escapeHtml(badge) + "</span>";
+          html += '<span class="day-title">' + escapeHtml(day) + "</span>";
+          html += "</td>";
+          pageCols.forEach(function (p) {
+            var text = row[p.index] != null ? String(row[p.index]) : "";
+            var tone = cellToneClass(text);
+            html +=
+              '<td class="cell' +
+              (tone ? " " + tone : "") +
+              '">' +
+              (text.trim() ? escapeHtml(text) : "—") +
+              "</td>";
+          });
+          html += "</tr>";
+        }
+        html += "</tbody></table></div>";
+
+        html += '<p class="updates-legend">';
+        html += '<span class="lg-empty">No update that day</span>';
+        html += '<span class="lg-pause">Paused pending wireframe</span>';
+        html += '<span class="lg-focus">Strategic / active focus</span>';
+        html += "</p></article>";
+        root.innerHTML = html;
+        root.setAttribute("data-level-filter", activeFilter);
+
+        root.querySelectorAll(".updates-level-filters button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var lvl = btn.getAttribute("data-level") || "ALL";
+            root.setAttribute("data-level-filter", lvl);
+            renderUpdatesFromData(window.__updatesData || data, lvl);
+          });
+        });
+      }
+
+      function loadBlueprint(force) {
+        if (loaded.blueprint && !force) return;
+        var root = document.getElementById("blueprint-root");
+        if (!root) return;
+        root.innerHTML = '<p class="empty-state">Loading Build Blueprint…</p>';
+        var src = "blueprint/Merrakii_plus_build_blueprint.html?t=" + Date.now();
+        fetch(src)
+          .then(function (r) {
+            if (!r.ok) throw new Error("Could not load Build Blueprint");
+            return r.text();
+          })
+          .then(function (html) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, "text/html");
+            var screen = doc.querySelector(".wrap-screen");
+            if (!screen) throw new Error("Blueprint document structure missing");
+
+            root.innerHTML = "";
+            var host = document.createElement("div");
+            host.className = "bp-inject";
+            root.appendChild(host);
+
+            var shadow = host.attachShadow({ mode: "open" });
+
+            doc.querySelectorAll('link[rel="stylesheet"]').forEach(function (linkEl) {
+              var link = document.createElement("link");
+              link.rel = "stylesheet";
+              link.href = linkEl.href;
+              shadow.appendChild(link);
+            });
+
+            // Flatten overrides so the embed never looks like a floating card.
+            var flat = document.createElement("style");
+            flat.textContent =
+              "html, body { margin: 0; background: #fff; }" +
+              ".wrap-screen { padding: 0 !important; }" +
+              ".doc {" +
+              "  width: 100% !important; max-width: none !important; margin: 0 !important;" +
+              "  border: none !important; border-radius: 0 !important; box-shadow: none !important;" +
+              "  background: transparent !important; overflow: visible !important;" +
+              "}" +
+              ".toolbar { width: 100% !important; max-width: none !important; margin: 0 !important; padding: 12px 24px 0 !important; }";
+            shadow.appendChild(flat);
+
+            doc.querySelectorAll("style").forEach(function (styleEl) {
+              var s = document.createElement("style");
+              // Avoid restyling the parent dashboard page — shadow CSS is local.
+              s.textContent = String(styleEl.textContent || "")
+                .replace(/\bbody\s*\{/g, ":host, .bp-root {")
+                .replace(/\bhtml\s*\{/g, ":host {");
+              shadow.appendChild(s);
+            });
+
+            var clone = screen.cloneNode(true);
+            clone.classList.add("bp-root");
+            clone.querySelectorAll("[src]").forEach(function (el) {
+              var raw = el.getAttribute("src") || "";
+              if (!raw || /^(https?:|data:|\/)/i.test(raw)) return;
+              el.setAttribute(
+                "src",
+                new URL("blueprint/" + raw.replace(/^\.\//, ""), location.href).href
+              );
+            });
+            shadow.appendChild(clone);
+            loaded.blueprint = true;
+          })
+          .catch(function (err) {
+            root.innerHTML =
+              '<p class="empty-state">' +
+              escapeHtml(err.message || "Failed to load Build Blueprint.") +
+              "</p>";
+          });
+      }
+
+      function loadUpdates(force) {
+        if (loaded.updates && !force) return;
+        var root = document.getElementById("updates-root");
+        root.innerHTML = '<p class="empty-state">Loading Maple AI Updates…</p>';
+        fetch("data/updates.json?t=" + Date.now())
+          .then(function (r) {
+            if (!r.ok) throw new Error("Could not load updates data");
+            return r.json();
+          })
+          .then(function (data) {
+            window.__updatesData = data;
+            renderUpdatesFromData(data);
+            loaded.updates = true;
+          })
+          .catch(function (err) {
+            root.innerHTML =
+              '<p class="empty-state">' +
+              escapeHtml(err.message || "Failed to load Maple AI Updates.") +
+              "</p>";
+          });
+      }
+
+      function readFeedbackStore() {
+        try {
+          var raw = localStorage.getItem(FEEDBACK_KEY);
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function writeFeedbackStore(data) {
+        localStorage.setItem(FEEDBACK_KEY, JSON.stringify(data));
+      }
+
+      function feedbackStateToSheets(state) {
+        var columns = (state && state.columns) || ["Teammate 1"];
+        var pages = (state && state.pages) || [];
+        var cells = (state && state.cells) || {};
+        var header = ["Category", "Topic"].concat(columns);
+        var rows = [header];
+        pages.forEach(function (page) {
+          var pageCells = cells[page.id] || {};
+          var row = [page.category || "", page.topic || ""];
+          columns.forEach(function (_name, i) {
+            row.push(pageCells[String(i)] != null ? pageCells[String(i)] : "");
+          });
+          rows.push(row);
+        });
+        if (rows.length === 1) rows.push(["", "", ""]);
+        return { Feedback: rows };
+      }
+
+      function feedbackStateFromSheets(sheets) {
+        var names = Object.keys(sheets || {}).filter(function (k) {
+          return k.charAt(0) !== "_";
+        });
+        var rows = (sheets && (sheets.Feedback || sheets[names[0]])) || [];
+        if (!rows.length) {
+          return {
+            columns: ["Teammate 1"],
+            cells: {},
+            pages: [],
+            savedAt: new Date().toISOString()
+          };
+        }
+        var header = rows[0] || [];
+        var columns = header.slice(2).map(function (name, i) {
+          var label = String(name == null ? "" : name).trim();
+          return label || "Teammate " + (i + 1);
+        });
+        if (!columns.length) columns = ["Teammate 1"];
+        var pages = [];
+        var cells = {};
+        rows.slice(1).forEach(function (row) {
+          var category = row[0] != null ? String(row[0]).trim() : "";
+          var topic = row[1] != null ? String(row[1]).trim() : "";
+          if (!category && !topic) {
+            var hasNote = false;
+            for (var j = 2; j < Math.max(row.length, columns.length + 2); j++) {
+              if (String(row[j] == null ? "" : row[j]).trim()) {
+                hasNote = true;
+                break;
+              }
+            }
+            if (!hasNote) return;
+            category = category || "General";
+            topic = topic || "Untitled page";
+          }
+          var id = category + "||" + topic;
+          pages.push({ id: id, category: category || "General", topic: topic || "Untitled page" });
+          cells[id] = {};
+          columns.forEach(function (_name, i) {
+            cells[id][String(i)] = row[i + 2] != null ? String(row[i + 2]) : "";
+          });
+        });
+        return {
+          columns: columns,
+          cells: cells,
+          pages: pages,
+          savedAt: new Date().toISOString()
+        };
+      }
+
+      function collectFeedbackFromDom() {
+        if (!feedbackState) return null;
+        var root = document.getElementById("feedback-root");
+        if (!root) return null;
+        var columns = [];
+        root.querySelectorAll("thead .col-name").forEach(function (input) {
+          columns.push(String(input.value || "").trim() || "Teammate");
+        });
+        var cells = {};
+        root.querySelectorAll("tbody tr[data-page-id]").forEach(function (tr) {
+          var pageId = tr.getAttribute("data-page-id");
+          cells[pageId] = {};
+          tr.querySelectorAll("textarea.cell-input").forEach(function (area) {
+            var col = area.getAttribute("data-col");
+            cells[pageId][col] = area.value;
+          });
+        });
+        return {
+          columns: columns,
+          cells: cells,
+          pages: feedbackState.pages,
+          savedAt: new Date().toISOString()
+        };
+      }
+
+      function renderFeedbackGrid() {
+        var root = document.getElementById("feedback-root");
+        if (!root || !feedbackState) return;
+        var columns = feedbackState.columns;
+        var cells = feedbackState.cells || {};
+        var pages = feedbackState.pages || [];
+
+        var html = "";
+        html +=
+          '<p class="note">Column 1 lists Phase 1 in-scope pages. Rename teammate columns, add notes in each cell, then Save. Data is stored in this browser' +
+          (window.__feedbackFileLoaded ? " and synced to <code>data/feedback.json</code> when the local server is running" : "") +
+          ".</p>";
+        html += '<div class="feedback-actions">';
+        html +=
+          '<button type="button" class="btn btn-add" id="feedback-add-col">+ Add teammate column</button>';
+        html += '<button type="button" class="btn btn-save" id="feedback-save">Save</button>';
+        html +=
+          '<span class="feedback-save-status" id="feedback-save-status" aria-live="polite"></span>';
+        html += "</div>";
+        html +=
+          '<div class="feedback-sheet"><div class="table-scroll"><table class="feedback"><thead><tr>';
+        html += '<th class="page-col">Page (in scope)</th>';
+        columns.forEach(function (name, i) {
+          html +=
+            '<th class="teammate-col"><input class="col-name" type="text" data-col="' +
+            i +
+            '" value="' +
+            escapeHtml(name) +
+            '" aria-label="Teammate column ' +
+            (i + 1) +
+            ' name" /></th>';
+        });
+        html += "</tr></thead><tbody>";
+        pages.forEach(function (page) {
+          var pageCells = cells[page.id] || {};
+          html += '<tr data-page-id="' + escapeHtml(page.id) + '">';
+          html +=
+            '<td class="page-col"><span class="page-cat">' +
+            escapeHtml(page.category) +
+            "</span>" +
+            escapeHtml(page.topic) +
+            "</td>";
+          columns.forEach(function (_name, i) {
+            var val = pageCells[String(i)] != null ? pageCells[String(i)] : "";
+            html +=
+              '<td><textarea class="cell-input" data-col="' +
+              i +
+              '" rows="3" placeholder="Add feedback…">' +
+              escapeHtml(val) +
+              "</textarea></td>";
+          });
+          html += "</tr>";
+        });
+        html += "</tbody></table></div></div>";
+        root.innerHTML = html;
+
+        var status = document.getElementById("feedback-save-status");
+        if (feedbackState.savedAt) {
+          try {
+            status.textContent =
+              "Last saved " +
+              new Date(feedbackState.savedAt).toLocaleString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+              });
+            status.classList.add("is-ok");
+          } catch (e) {
+            status.textContent = "Saved";
+            status.classList.add("is-ok");
+          }
+        }
+
+        document.getElementById("feedback-add-col").addEventListener("click", function () {
+          feedbackState = collectFeedbackFromDom() || feedbackState;
+          feedbackState.columns.push("Teammate " + (feedbackState.columns.length + 1));
+          renderFeedbackGrid();
+        });
+
+        document.getElementById("feedback-save").addEventListener("click", function () {
+          var next = collectFeedbackFromDom();
+          if (!next) return;
+          feedbackState = next;
+          writeFeedbackStore(next);
+          window.__feedbackData = {
+            sheets: feedbackStateToSheets(next),
+            merges: (window.__feedbackData && window.__feedbackData.merges) || {},
+            columns: next.columns,
+            cells: next.cells,
+            pages: next.pages,
+            savedAt: next.savedAt
+          };
+          status.textContent =
+            "Saved " +
+            new Date(next.savedAt).toLocaleString("en-IN", {
+              day: "numeric",
+              month: "short",
+              hour: "numeric",
+              minute: "2-digit"
+            });
+          status.classList.add("is-ok");
+          fetch("/api/data/feedback", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(window.__feedbackData)
+          }).catch(function () {});
+        });
+      }
+
+      function phase1PagesFromScope(data) {
+        var rows = (data && data["New Website Pages"]) || [];
+        if (!rows.length) return [];
+        var header = rows[0];
+        var catIdx = header.indexOf("Category");
+        var topicIdx = header.indexOf("Topic");
+        var phaseIdx = header.indexOf("Phase 1");
+        var cat = "";
+        var pages = [];
+        rows.slice(1).forEach(function (row) {
+          var c = row[catIdx] != null ? String(row[catIdx]).trim() : "";
+          if (c) cat = c;
+          var topic = row[topicIdx] != null ? String(row[topicIdx]).trim() : "";
+          var phase = row[phaseIdx] != null ? String(row[phaseIdx]).trim().toLowerCase() : "";
+          if (!topic || phase !== "yes") return;
+          pages.push({
+            id: cat + "||" + topic,
+            category: cat || "General",
+            topic: topic
+          });
+        });
+        return pages;
+      }
+
+      function mergeFeedbackSources(scopePages, fileData, stored) {
+        var fromFile = null;
+        if (fileData && fileData.sheets) {
+          fromFile = feedbackStateFromSheets(fileData.sheets);
+        } else if (fileData && fileData.columns) {
+          fromFile = {
+            columns: fileData.columns,
+            cells: fileData.cells || {},
+            pages: fileData.pages || [],
+            savedAt: fileData.savedAt || null
+          };
+        }
+        function hasRows(state) {
+          return !!(state && state.pages && state.pages.length);
+        }
+        var preferred = hasRows(fromFile) ? fromFile : hasRows(stored) ? stored : fromFile || stored;
+        var columns =
+          preferred && preferred.columns && preferred.columns.length
+            ? preferred.columns
+            : ["Teammate 1"];
+        var cells = preferred && preferred.cells ? preferred.cells : {};
+        var pages = hasRows(preferred) ? preferred.pages : scopePages;
+        return {
+          pages: pages,
+          columns: columns,
+          cells: cells,
+          savedAt: preferred && preferred.savedAt ? preferred.savedAt : null,
+          merges: (fileData && fileData.merges) || {}
+        };
+      }
+
+      function loadFeedback(force) {
+        if (loaded.feedback && !force) return Promise.resolve(feedbackState);
+        var root = document.getElementById("feedback-root");
+        if (!force) {
+          root.innerHTML = '<p class="empty-state">Loading feedback grid…</p>';
+        }
+        return Promise.all([
+          fetch("data/scope.json?t=" + Date.now()).then(function (r) {
+            if (!r.ok) throw new Error("Could not load scoped pages for feedback");
+            return r.json();
+          }),
+          fetch("data/feedback.json?t=" + Date.now())
+            .then(function (r) {
+              if (!r.ok) return null;
+              return r.json();
+            })
+            .catch(function () {
+              return null;
+            })
+        ])
+          .then(function (pair) {
+            var scopeData = pair[0];
+            var fileData = pair[1];
+            window.__feedbackFileLoaded = !!fileData;
+            var pages = phase1PagesFromScope(scopeData);
+            var stored = readFeedbackStore();
+            var merged = mergeFeedbackSources(pages, fileData, stored);
+            feedbackState = {
+              pages: merged.pages,
+              columns: merged.columns,
+              cells: merged.cells,
+              savedAt: merged.savedAt
+            };
+            window.__feedbackData = {
+              sheets: feedbackStateToSheets(feedbackState),
+              merges: merged.merges || {},
+              columns: feedbackState.columns,
+              cells: feedbackState.cells,
+              pages: feedbackState.pages,
+              savedAt: feedbackState.savedAt
+            };
+            renderFeedbackGrid();
+            loaded.feedback = true;
+            return feedbackState;
+          })
+          .catch(function (err) {
+            root.innerHTML =
+              '<p class="empty-state">' +
+              escapeHtml(err.message || "Failed to load feedback grid.") +
+              "</p>";
+            throw err;
+          });
+      }
+
+      var initial = (location.hash || "#overview").replace(/^#/, "");
+      if (initial.indexOf("samples") === 0) initial = "samples";
+      if (!panels[initial]) initial = "overview";
+      activate(initial);
+
+      window.addEventListener("hashchange", function () {
+        var name = (location.hash || "#overview").replace(/^#/, "");
+        if (name.indexOf("samples") === 0) name = "samples";
+        if (panels[name]) activate(name);
+      });
+
+      /* —— Spreadsheet editor (Scope, Updates & Feedback) —— */
+      var dataChannel = null;
+      try {
+        dataChannel = new BroadcastChannel("merrakii-dashboard-data");
+      } catch (e) {
+        dataChannel = null;
+      }
+
+      function refreshAfterSave(kind) {
+        if (kind === "scope") loadScope(true);
+        if (kind === "updates") loadUpdates(true);
+        if (kind === "overview") loadOverview(true);
+        if (kind === "feedback") loadFeedback(true);
+      }
+
+      if (dataChannel) {
+        dataChannel.addEventListener("message", function (ev) {
+          var msg = ev && ev.data;
+          if (!msg || !msg.kind) return;
+          refreshAfterSave(msg.kind);
+        });
+      }
+
+      function applyFeedbackEditorPayload(payload) {
+        var next = feedbackStateFromSheets(payload.sheets || {});
+        feedbackState = next;
+        writeFeedbackStore(next);
+        window.__feedbackData = {
+          sheets: payload.sheets || feedbackStateToSheets(next),
+          merges: payload.merges || {},
+          columns: next.columns,
+          cells: next.cells,
+          pages: next.pages,
+          savedAt: next.savedAt
+        };
+        window.__feedbackFileLoaded = true;
+        renderFeedbackGrid();
+        loaded.feedback = true;
+        return window.__feedbackData;
+      }
+
+      function saveDashboardData(kind, payload) {
+        if (kind === "feedback") {
+          var filePayload = applyFeedbackEditorPayload(payload);
+          return fetch("/api/data/feedback", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(filePayload)
+          })
+            .then(function (r) {
+              return r.json().then(function (body) {
+                if (!r.ok) throw new Error((body && body.error) || "Save failed");
+                return body;
+              });
+            })
+            .then(function (body) {
+              if (dataChannel) {
+                try {
+                  dataChannel.postMessage({
+                    kind: "feedback",
+                    savedAt: body.savedAt || Date.now()
+                  });
+                } catch (e) {}
+              }
+              return body;
+            })
+            .catch(function () {
+              // Static hosting (GitHub Pages): localStorage save already applied.
+              return { savedAt: Date.now(), localOnly: true };
+            });
+        }
+        return fetch("/api/data/" + kind, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        }).then(function (r) {
+          return r.json().then(function (body) {
+            if (!r.ok) throw new Error((body && body.error) || "Save failed");
+            return body;
+          });
+        }).then(function (body) {
+          refreshAfterSave(kind);
+          if (dataChannel) {
+            try {
+              dataChannel.postMessage({ kind: kind, savedAt: body.savedAt || Date.now() });
+            } catch (e) {}
+          }
+          return body;
+        });
+      }
+
+      var editor = null;
+      if (window.SheetEditor) {
+        editor = new SheetEditor({
+          root: document.getElementById("sheet-editor-root"),
+          onSave: saveDashboardData
+        });
+      }
+
+      function openEditorForCurrentTab() {
+        var tab = (location.hash || "#overview").replace(/^#/, "");
+        if (tab === "overview") {
+          setOverviewEditMode(true);
+          return;
+        }
+        if (!editor) return;
+        if (tab !== "scope" && tab !== "updates" && tab !== "feedback") return;
+
+        if (tab === "feedback") {
+          var openFeedback = function () {
+            var live = collectFeedbackFromDom() || feedbackState;
+            if (!live) return;
+            feedbackState = live;
+            var merges =
+              (window.__feedbackData && window.__feedbackData.merges) || {};
+            editor.open({
+              kind: "feedback",
+              title: "Edit Feedback",
+              sheets: feedbackStateToSheets(live),
+              merges: merges,
+              activeSheet: "Feedback"
+            });
+          };
+          if (feedbackState) openFeedback();
+          else {
+            loadFeedback(true).then(openFeedback).catch(function () {});
+          }
+          return;
+        }
+
+        if (tab === "scope") {
+          var openScope = function (data) {
+            var sheets = {};
+            Object.keys(data).forEach(function (k) {
+              if (k.charAt(0) === "_") return;
+              sheets[k] = data[k];
+            });
+            editor.open({
+              kind: "scope",
+              title: "Edit Scoped pages",
+              sheets: sheets,
+              merges: data._merges || {}
+            });
+          };
+          if (window.__scopeData) openScope(window.__scopeData);
+          else {
+            fetch("data/scope.json?t=" + Date.now())
+              .then(function (r) {
+                return r.json();
+              })
+              .then(function (data) {
+                window.__scopeData = data;
+                openScope(data);
+              });
+          }
+          return;
+        }
+
+        var openUpdates = function (data) {
+          editor.open({
+            kind: "updates",
+            title: "Edit Maple AI Updates",
+            document: data.document || {},
+            sheets: data.sheets || {},
+            merges: data.merges || {}
+          });
+        };
+        if (window.__updatesData) openUpdates(window.__updatesData);
+        else {
+          fetch("data/updates.json?t=" + Date.now())
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (data) {
+              window.__updatesData = data;
+              openUpdates(data);
+            });
+        }
+      }
+
+      document.addEventListener(
+        "keydown",
+        function (e) {
+          var isE = e.code === "KeyE" || String(e.key).toLowerCase() === "e";
+          if (!isE) return;
+          var primary = (e.metaKey || e.ctrlKey) && e.shiftKey;
+          var fallback = e.altKey && e.shiftKey && !e.metaKey && !e.ctrlKey;
+          if (!primary && !fallback) return;
+
+          var tab = (location.hash || "#overview").replace(/^#/, "");
+          if (tab === "overview" || overviewEditMode) {
+            e.preventDefault();
+            e.stopPropagation();
+            setOverviewEditMode(!overviewEditMode);
+            return;
+          }
+          if (tab !== "scope" && tab !== "updates" && tab !== "feedback") return;
+          e.preventDefault();
+          openEditorForCurrentTab();
+        },
+        true
+      );
+    })();
+  </script>
+  <script>
+    (function () {
+      var root = document.getElementById("guide-root");
+      var btn = document.getElementById("guide-btn");
+      var panel = document.getElementById("guide-panel");
+      var closeBtn = document.getElementById("guide-close");
+      if (!root || !btn || !panel) return;
+
+      function closePresence() {
+        var p = document.getElementById("presence-panel");
+        var b = document.getElementById("presence-btn");
+        if (p) p.classList.remove("open");
+        if (b) b.setAttribute("aria-expanded", "false");
+      }
+
+      function setOpen(open) {
+        panel.classList.toggle("open", open);
+        panel.hidden = !open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) closePresence();
+      }
+
+      window.__closeDashboardGuide = function () {
+        setOpen(false);
+      };
+
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        setOpen(!panel.classList.contains("open"));
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          setOpen(false);
+        });
+      }
+
+      panel.addEventListener("click", function (e) {
+        var item = e.target.closest("[data-guide-tab]");
+        if (!item || !panel.contains(item)) return;
+        var tab = item.getAttribute("data-guide-tab");
+        if (!tab) return;
+        setOpen(false);
+        location.hash = tab;
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!root.contains(e.target)) setOpen(false);
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && panel.classList.contains("open")) {
+          setOpen(false);
+        }
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      var STORAGE_NAME = "merrakii_cd_presence_name";
+      var STORAGE_ID = "merrakii_cd_presence_id";
+      var HEARTBEAT_MS = 4000;
+      var TAB_LABELS = {
+        overview: "Overview",
+        sow: "Statement of Work",
+        scope: "Scoped pages",
+        samples: "Sample Pages",
+        updates: "Maple AI Updates",
+        app: "Merrakii application",
+        feedback: "Feedback"
+      };
+      var COLORS = ["#4361ee", "#00b4d8", "#7c3aed", "#c1121f", "#0f766e", "#ea580c", "#2563eb", "#db2777"];
+
+      var root = document.getElementById("presence-root");
+      if (!root) return;
+
+      var btn = document.getElementById("presence-btn");
+      var panel = document.getElementById("presence-panel");
+      var avatarsEl = document.getElementById("presence-avatars");
+      var countEl = document.getElementById("presence-count");
+      var dotEl = document.getElementById("presence-dot");
+      var liveLabel = document.getElementById("presence-live-label");
+      var listEl = document.getElementById("presence-list");
+      var emptyMsg = document.getElementById("presence-empty-msg");
+      var panelSub = document.getElementById("presence-panel-sub");
+      var renameBtn = document.getElementById("presence-rename");
+
+      var viewerId = localStorage.getItem(STORAGE_ID);
+      if (!viewerId) {
+        viewerId =
+          "v_" +
+          Math.random().toString(36).slice(2, 10) +
+          "_" +
+          Date.now().toString(36);
+        localStorage.setItem(STORAGE_ID, viewerId);
+      }
+
+      var myName = (localStorage.getItem(STORAGE_NAME) || "").trim() || "Guest";
+      if (!localStorage.getItem(STORAGE_NAME)) {
+        localStorage.setItem(STORAGE_NAME, myName);
+      }
+      var myColor = COLORS[hashStr(viewerId) % COLORS.length];
+      var myIp = "";
+      var viewers = [];
+      var mode = "connecting"; // connecting | api | peer | local
+      var heartbeatTimer = null;
+      var peerHost = null;
+      var peerSelf = null;
+      var peerConns = {};
+      var peerRoster = {};
+
+      function detectBrowserIp() {
+        // Public IP as seen from this browser (works behind NAT).
+        function fromProvider(url) {
+          return fetch(url, { cache: "no-store" }).then(function (r) {
+            if (!r.ok) throw new Error("ip lookup " + r.status);
+            return r.json();
+          }).then(function (data) {
+            myIp = String((data && data.ip) || "").trim();
+            return myIp;
+          });
+        }
+
+        var lookup = fromProvider("https://api.ipify.org?format=json").catch(function () {
+          return fromProvider("https://api64.ipify.org?format=json");
+        }).catch(function () {
+          myIp = myIp || "";
+          return myIp;
+        });
+
+        // Never block presence joining on a slow IP provider.
+        var timedOut = new Promise(function (resolve) {
+          setTimeout(function () {
+            resolve(myIp || "");
+          }, 2500);
+        });
+
+        return Promise.race([lookup, timedOut]);
+      }
+
+      function hashStr(s) {
+        var h = 0;
+        for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+        return Math.abs(h);
+      }
+
+      function initials(name) {
+        var parts = String(name || "?")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+        if (!parts.length) return "?";
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+
+      function currentTab() {
+        var name = (location.hash || "#overview").replace(/^#/, "");
+        if (name.indexOf("samples") === 0) return "samples";
+        return TAB_LABELS[name] ? name : "overview";
+      }
+
+      function tabLabel(tab) {
+        return TAB_LABELS[tab] || tab || "Overview";
+      }
+
+      function selfPayload() {
+        return {
+          id: viewerId,
+          name: myName || "Guest",
+          tab: currentTab(),
+          color: myColor,
+          ip: myIp || "",
+          seenAt: Date.now()
+        };
+      }
+
+      function mergeViewers(list) {
+        var map = {};
+        (list || []).forEach(function (v) {
+          if (!v || !v.id) return;
+          map[v.id] = {
+            id: v.id,
+            name: String(v.name || "Guest").slice(0, 40),
+            tab: v.tab || "overview",
+            color: v.color || COLORS[hashStr(v.id) % COLORS.length],
+            ip: String(v.ip || "").trim(),
+            seenAt: v.seenAt || Date.now()
+          };
+        });
+        // Keep own row authoritative, but preserve server IP if browser lookup failed.
+        var self = selfPayload();
+        if (!self.ip && map[viewerId] && map[viewerId].ip) self.ip = map[viewerId].ip;
+        map[viewerId] = self;
+        viewers = Object.keys(map)
+          .map(function (k) {
+            return map[k];
+          })
+          .sort(function (a, b) {
+            if (a.id === viewerId) return -1;
+            if (b.id === viewerId) return 1;
+            return a.name.localeCompare(b.name);
+          });
+        render();
+      }
+
+      function render() {
+        var n = viewers.length;
+        countEl.textContent =
+          n === 1 ? "1 viewing" : n + " viewing";
+
+        if (mode === "connecting") {
+          liveLabel.textContent = "Connecting";
+          dotEl.classList.add("is-offline");
+        } else if (mode === "local") {
+          liveLabel.textContent = "This tab";
+          dotEl.classList.add("is-offline");
+        } else {
+          liveLabel.textContent = "Live";
+          dotEl.classList.remove("is-offline");
+        }
+
+        panelSub.textContent =
+          mode === "api"
+            ? "Synced via dashboard server"
+            : mode === "peer"
+              ? "Synced peer-to-peer"
+              : mode === "local"
+                ? "Server unavailable — showing you only"
+                : "Connecting…";
+
+        var preview = viewers.slice(0, 4);
+        if (!preview.length) {
+          avatarsEl.innerHTML = '<span class="presence-empty"></span>';
+        } else {
+          avatarsEl.innerHTML = preview
+            .map(function (v) {
+              return (
+                '<span class="presence-avatar" style="background:' +
+                escapeAttr(v.color) +
+                '" title="' +
+                escapeAttr(v.name) +
+                '">' +
+                escapeHtml(initials(v.name)) +
+                "</span>"
+              );
+            })
+            .join("");
+          if (n > 4) {
+            avatarsEl.innerHTML +=
+              '<span class="presence-avatar" style="background:#1c2340">+' +
+              (n - 4) +
+              "</span>";
+          }
+        }
+
+        if (!viewers.length) {
+          listEl.innerHTML = "";
+          emptyMsg.hidden = false;
+        } else {
+          emptyMsg.hidden = true;
+          listEl.innerHTML = viewers
+            .map(function (v) {
+              var you =
+                v.id === viewerId
+                  ? '<span class="you-tag">You</span>'
+                  : "";
+              var ipLine = v.ip
+                ? '<div class="ip" title="IP address">' +
+                  escapeHtml(v.ip) +
+                  "</div>"
+                : '<div class="ip" title="IP address">IP pending…</div>';
+              return (
+                "<li>" +
+                '<span class="presence-avatar" style="background:' +
+                escapeAttr(v.color) +
+                '" title="' +
+                escapeAttr(v.name + (v.ip ? " · " + v.ip : "")) +
+                '">' +
+                escapeHtml(initials(v.name)) +
+                "</span>" +
+                '<div class="who"><div class="name">' +
+                escapeHtml(v.name) +
+                '</div><div class="tab">' +
+                escapeHtml(tabLabel(v.tab)) +
+                "</div>" +
+                ipLine +
+                "</div>" +
+                you +
+                "</li>"
+              );
+            })
+            .join("");
+        }
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function escapeAttr(s) {
+        return escapeHtml(s).replace(/'/g, "&#39;");
+      }
+
+      function setPanelOpen(open) {
+        panel.classList.toggle("open", open);
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+
+      function saveName(raw, allowGuest) {
+        var next = String(raw || "").trim().slice(0, 40);
+        if (!next) {
+          if (!allowGuest) return false;
+          next = "Guest";
+        }
+        myName = next;
+        localStorage.setItem(STORAGE_NAME, myName);
+        mergeViewers(viewers);
+        beat();
+        return true;
+      }
+
+      function apiUrl() {
+        var u = new URL("api/presence", location.href);
+        // Prefer IPv4 so we hit serve.py even if a plain http.server is on ::1.
+        if (u.hostname === "localhost") u.hostname = "127.0.0.1";
+        return u.toString();
+      }
+
+      function beatApi() {
+        return fetch(apiUrl(), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(selfPayload()),
+          keepalive: true
+        }).then(function (r) {
+          if (!r.ok) throw new Error("presence " + r.status);
+          return r.json();
+        }).then(function (data) {
+          mode = "api";
+          mergeViewers(data.viewers || []);
+          return true;
+        });
+      }
+
+      function leaveApi() {
+        try {
+          fetch(apiUrl() + "?id=" + encodeURIComponent(viewerId), {
+            method: "DELETE",
+            keepalive: true
+          });
+        } catch (e) {}
+      }
+
+      /* ---- PeerJS mesh (GitHub Pages / no presence API) ---- */
+      var PEER_HOST_ID = "merrakii-cd-presence-host-v1";
+      var peerStarting = false;
+
+      function broadcastPeer(msg) {
+        Object.keys(peerConns).forEach(function (id) {
+          var c = peerConns[id];
+          if (c && c.open) {
+            try {
+              c.send(msg);
+            } catch (e) {}
+          }
+        });
+      }
+
+      function publishPeerRoster() {
+        peerRoster[viewerId] = selfPayload();
+        var list = Object.keys(peerRoster).map(function (k) {
+          return peerRoster[k];
+        });
+        mergeViewers(list);
+        broadcastPeer({ type: "roster", viewers: list });
+      }
+
+      function handlePeerData(data) {
+        if (!data || !data.type) return;
+        if (data.type === "hello" && data.viewer) {
+          peerRoster[data.viewer.id] = data.viewer;
+          publishPeerRoster();
+        } else if (data.type === "roster" && data.viewers) {
+          data.viewers.forEach(function (v) {
+            if (v && v.id) peerRoster[v.id] = v;
+          });
+          peerRoster[viewerId] = selfPayload();
+          mergeViewers(
+            Object.keys(peerRoster).map(function (k) {
+              return peerRoster[k];
+            })
+          );
+        } else if (data.type === "leave" && data.id) {
+          delete peerRoster[data.id];
+          publishPeerRoster();
+        } else if (data.type === "ping" && data.viewer) {
+          peerRoster[data.viewer.id] = data.viewer;
+          mergeViewers(
+            Object.keys(peerRoster).map(function (k) {
+              return peerRoster[k];
+            })
+          );
+        }
+      }
+
+      function wireConn(conn) {
+        peerConns[conn.peer] = conn;
+        conn.on("data", handlePeerData);
+        conn.on("open", function () {
+          conn.send({ type: "hello", viewer: selfPayload() });
+          if (peerHost) publishPeerRoster();
+        });
+        conn.on("close", function () {
+          delete peerConns[conn.peer];
+        });
+      }
+
+      function startAsPeerClient() {
+        peerSelf = new Peer();
+        peerSelf.on("open", function () {
+          mode = "peer";
+          peerStarting = false;
+          peerRoster[viewerId] = selfPayload();
+          mergeViewers([selfPayload()]);
+          var conn = peerSelf.connect(PEER_HOST_ID, { reliable: true });
+          wireConn(conn);
+        });
+        peerSelf.on("error", function () {
+          peerStarting = false;
+          mode = "local";
+          mergeViewers([selfPayload()]);
+        });
+      }
+
+      function startPeerPresence() {
+        if (peerStarting || mode === "peer" || typeof Peer === "undefined") {
+          if (typeof Peer === "undefined") {
+            mode = "local";
+            mergeViewers([selfPayload()]);
+          }
+          return;
+        }
+        peerStarting = true;
+        peerHost = new Peer(PEER_HOST_ID);
+        peerHost.on("open", function () {
+          mode = "peer";
+          peerStarting = false;
+          peerSelf = peerHost;
+          peerRoster[viewerId] = selfPayload();
+          mergeViewers([selfPayload()]);
+        });
+        peerHost.on("connection", function (conn) {
+          wireConn(conn);
+        });
+        peerHost.on("error", function (err) {
+          if (err && err.type === "unavailable-id") {
+            peerHost = null;
+            startAsPeerClient();
+            return;
+          }
+          peerStarting = false;
+          mode = "local";
+          mergeViewers([selfPayload()]);
+        });
+      }
+
+      function beatPeer() {
+        peerRoster[viewerId] = selfPayload();
+        if (peerHost) {
+          publishPeerRoster();
+        } else {
+          broadcastPeer({ type: "ping", viewer: selfPayload() });
+          mergeViewers(
+            Object.keys(peerRoster).map(function (k) {
+              return peerRoster[k];
+            })
+          );
+        }
+      }
+
+      function beat() {
+        if (mode === "api") {
+          beatApi().catch(function () {
+            mode = "connecting";
+            startPeerPresence();
+          });
+          return;
+        }
+        if (mode === "peer") {
+          beatPeer();
+          return;
+        }
+        if (mode === "local") {
+          mergeViewers([selfPayload()]);
+        }
+      }
+
+      function startHeartbeat() {
+        if (heartbeatTimer) clearInterval(heartbeatTimer);
+        beat();
+        heartbeatTimer = setInterval(beat, HEARTBEAT_MS);
+      }
+
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var willOpen = !panel.classList.contains("open");
+        setPanelOpen(willOpen);
+        if (willOpen && typeof window.__closeDashboardGuide === "function") {
+          window.__closeDashboardGuide();
+        }
+      });
+
+      document.addEventListener("click", function (e) {
+        if (!root.contains(e.target)) setPanelOpen(false);
+      });
+
+      renameBtn.addEventListener("click", function () {
+        var next = window.prompt("Display name", myName || "Guest");
+        if (next == null) return;
+        saveName(next, true);
+      });
+
+      window.addEventListener("hashchange", function () {
+        beat();
+      });
+
+      window.addEventListener("beforeunload", function () {
+        if (mode === "api") leaveApi();
+        if (mode === "peer") {
+          broadcastPeer({ type: "leave", id: viewerId });
+          try {
+            if (peerSelf) peerSelf.destroy();
+          } catch (e) {}
+        }
+      });
+
+      // Prefer server presence; PeerJS loads only if API is missing.
+      countEl.textContent = "Connecting…";
+      render();
+
+      function startPresenceTransport() {
+        beatApi()
+          .then(function () {
+            mode = "api";
+            startHeartbeat();
+          })
+          .catch(function () {
+            var s = document.createElement("script");
+            s.src = "https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js";
+            s.async = true;
+            s.onload = function () {
+              startPeerPresence();
+              startHeartbeat();
+            };
+            s.onerror = function () {
+              mode = "local";
+              mergeViewers([selfPayload()]);
+              startHeartbeat();
+            };
+            document.head.appendChild(s);
+          });
+      }
+
+      // Start presence immediately; attach public IP as soon as the browser lookup returns.
+      startPresenceTransport();
+      detectBrowserIp().then(function () {
+        if (myIp) beat();
+      });
+    })();
+  </script>
+</body>
+</html>

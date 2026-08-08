@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | About Us</title>
+<meta name="description" content="Merrakii+ is a Decision Enabling Student Success System, helping students move from Class 9 to Career Entry with real decisions, not just information.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:var(--font-body); background:var(--paper); color:var(--ink); overflow-x:hidden; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  #sitenav{ position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between; padding:15px 30px; background:rgba(251,250,246,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--paper-line); }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:18px; display:flex; align-items:center; gap:9px; color:var(--teal-deep); }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+  .nav-links{ display:flex; align-items:center; gap:18px; }
+  .nav-links a{ font-size:11.5px; font-weight:600; color:var(--muted); cursor:pointer; }
+  .nav-links a:hover{ color:var(--teal-deep); }
+  @media (max-width:900px){ .nav-links{ display:none; } }
+  .nav-cta{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; padding:10px 18px; border-radius:9px; font-size:12px; font-weight:700; border:none; cursor:pointer; }
+
+  #hero{ max-width:760px; margin:0 auto; padding:64px 24px 20px; text-align:center; }
+  .eyebrow{ font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--coral); }
+  #hero h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(27px,4.4vw,42px); line-height:1.28; margin-top:16px; }
+  #hero h1 span{ color:var(--teal); }
+  .hero-lede{ font-size:14.5px; color:var(--muted); line-height:1.75; margin-top:20px; max-width:620px; margin-left:auto; margin-right:auto; }
+
+  .section{ max-width:900px; margin:0 auto; padding:56px 24px; }
+  .section-eyebrow{ font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--coral); text-align:center; }
+  .section-title{ font-family:var(--font-display); font-weight:700; font-size:clamp(22px,3.2vw,28px); text-align:center; margin-top:8px; }
+  .section-sub{ font-size:13.5px; color:var(--muted); text-align:center; max-width:580px; margin:12px auto 0; line-height:1.65; }
+
+  #story{ background:var(--white); border-top:1px solid var(--paper-line); border-bottom:1px solid var(--paper-line); }
+  .story-box{ background:var(--paper); border:1px solid var(--paper-line); border-radius:16px; padding:26px 28px; margin-top:36px; }
+  .story-box p{ font-size:13.5px; line-height:1.8; color:var(--ink); }
+  .story-box p + p{ margin-top:14px; }
+
+  .mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:40px; }
+  @media (max-width:700px){ .mode-grid{ grid-template-columns:1fr; } }
+  .mode-card{ border-radius:18px; padding:24px 22px; }
+  .mode-card.memory{ background:#FDF4F1; border:1px solid #F5DCD2; }
+  .mode-card.intel{ background:var(--teal-light); border:1px solid #CFEAE0; }
+  .mode-label{ font-family:var(--font-display); font-weight:700; font-size:15px; }
+  .mode-card.memory .mode-label{ color:#B5502E; }
+  .mode-card.intel .mode-label{ color:var(--teal-deep); }
+  .mode-desc{ font-size:12.5px; color:var(--ink); margin-top:12px; line-height:1.6; }
+
+  .leader-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:40px; }
+  @media (max-width:700px){ .leader-grid{ grid-template-columns:1fr; } }
+  .leader-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:24px; text-align:center; }
+  .leader-avatar{ width:60px; height:60px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:20px; margin:0 auto; }
+  .leader-name{ font-family:var(--font-display); font-weight:700; font-size:15px; margin-top:12px; }
+  .leader-role{ font-size:11.5px; color:var(--muted); margin-top:3px; }
+
+  /* ============ VIDEO ============ */
+  .video-wrap{ max-width:520px; margin:36px auto 0; }
+  .yt-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
+  .yt-card:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(10,26,20,.09); }
+  .yt-thumb{ height:220px; background:linear-gradient(135deg,var(--teal-deep),var(--teal)); position:relative; display:flex; align-items:center; justify-content:center; }
+  .yt-thumb::before{ content:""; position:absolute; inset:0; background:repeating-linear-gradient(115deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 2px, transparent 2px, transparent 40px); }
+  .yt-play{ width:54px; height:54px; border-radius:50%; background:rgba(255,255,255,.94); display:flex; align-items:center; justify-content:center; font-size:19px; color:var(--teal-deep); z-index:1; }
+  .yt-badge{ position:absolute; top:13px; right:13px; background:rgba(0,0,0,.5); color:#fff; font-size:9.5px; font-weight:700; padding:3px 9px; border-radius:6px; }
+  .yt-body{ padding:14px 17px; }
+  .yt-title{ font-family:var(--font-display); font-weight:700; font-size:13.5px; }
+  .yt-sub{ font-size:10.5px; color:var(--muted); margin-top:4px; }
+
+  /* ============ OFFICE PHOTO STRIP ============ */
+  .photo-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:36px; }
+  @media (max-width:760px){ .photo-strip{ grid-template-columns:repeat(2,1fr); } }
+  .photo-tile{ aspect-ratio:1; border-radius:14px; background:repeating-linear-gradient(45deg, var(--paper-line), var(--paper-line) 8px, var(--paper) 8px, var(--paper) 16px); border:1.5px dashed var(--paper-line); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; color:var(--muted); }
+  .photo-tile .pt-ic{ font-size:22px; opacity:.5; }
+  .photo-tile .pt-label{ font-size:9.5px; font-weight:700; text-align:center; padding:0 10px; }
+
+  .values-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:40px; }
+  @media (max-width:760px){ .values-grid{ grid-template-columns:1fr; } }
+  .value-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:20px 18px; }
+  .value-ic{ font-size:22px; }
+  .value-title{ font-family:var(--font-display); font-weight:700; font-size:13.5px; margin-top:9px; }
+  .value-desc{ font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.55; }
+
+  #cta{ text-align:center; padding:60px 24px; }
+  #cta h2{ font-family:var(--font-display); font-weight:700; font-size:clamp(22px,3.2vw,28px); }
+  #cta p{ font-size:13px; color:var(--muted); margin-top:10px; max-width:480px; margin-left:auto; margin-right:auto; line-height:1.6; }
+  .cta-btn{ margin-top:22px; background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; border-radius:12px; padding:14px 24px; font-weight:800; font-size:13.5px; cursor:pointer; box-shadow:0 10px 24px rgba(255,107,74,.3); }
+
+  #sitefoot{ background:var(--teal-deep); color:#fff; padding:46px 24px 26px; }
+  .foot-inner{ max-width:1080px; margin:0 auto; display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap; }
+  .foot-brand .brand{ color:#fff; }
+  .foot-tag{ font-size:11.5px; opacity:.7; margin-top:10px; max-width:300px; line-height:1.65; }
+  .foot-contact{ font-size:12px; opacity:.85; margin-top:14px; line-height:1.8; }
+  .foot-cols{ display:flex; gap:50px; flex-wrap:wrap; }
+  .foot-col h4{ font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; opacity:.6; margin-bottom:12px; }
+  .foot-col a{ display:block; font-size:12.5px; opacity:.85; margin-bottom:9px; cursor:pointer; }
+  .foot-col a:hover{ opacity:1; }
+  .foot-bottom{ max-width:1080px; margin:34px auto 0; padding-top:18px; border-top:1px solid rgba(255,255,255,.12); font-size:11px; opacity:.55; text-align:center; }
+</style>
+</head>
+<body>
+
+  <nav id="sitenav">
+    <a href="01_home.html" class="brand"><span class="dot"></span>Merrakii+</a>
+    <div class="nav-links">
+      <a href="02_career_library.html">Library</a>
+      <a href="04_students_parents_info.html">Students &amp; Parents</a>
+      <a href="05_schools_info.html">Schools</a>
+      <a href="06_career_professionals_info.html">Professionals</a>
+      <a href="07_program_partners_info.html">Programs</a>
+      <a href="08_partner_counsellor_info.html">Counsellors</a>
+      <a href="10_contact.html">Contact</a>
+      <a href="11_login.html">Login</a>
+    </div>
+    <button class="nav-cta" onclick="window.location.href='01_home.html#discover'">Get My Free Career Map</button>
+  </nav>
+
+  <section id="hero">
+    <div class="eyebrow">About Merrakii+</div>
+    <h1>Career decisions shouldn't be <span>guesses</span>.</h1>
+    <p class="hero-lede">Merrakii+ is a Decision Enabling Student Success System — built because most students in India choose a career the way they choose most things at sixteen: reacting to whoever spoke last, not deciding from a place of genuine understanding.</p>
+  </section>
+
+  <section id="story">
+    <div class="section">
+      <div class="section-eyebrow">Our Story</div>
+      <h2 class="section-title">Why this exists</h2>
+      <div class="story-box">
+        <p>Every year, millions of Indian families make one of the most consequential financial and life decisions they will ever face — choosing a career for their child — with almost no structured support. Schools are stretched thin. Coaching institutes have their own programme to sell. Well-meaning relatives repeat what worked for them, whether or not it fits.</p>
+        <p>Merrakii+ was built to close that gap — not by replacing the people already trying to help (schools, counsellors, working professionals), but by giving all of them a shared, structured system: a real journey map from Class 9 to Career Entry, real conversations with people who actually work in the field, and real documentation of every decision made along the way.</p>
+        <p>We're based in Gurugram, Haryana, and built by Munjal Universal Consultancy Private Limited.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">Our Philosophy</div>
+    <h2 class="section-title">From Memory Mode to Intelligence Mode</h2>
+    <p class="section-sub">The idea underneath every product decision we make.</p>
+    <div class="mode-grid">
+      <div class="mode-card memory">
+        <div class="mode-label">🌀 Memory Mode</div>
+        <div class="mode-desc">Reacting to whoever spoke last. Choosing a stream because a friend did. Panic-researching colleges the month before applications close.</div>
+      </div>
+      <div class="mode-card intel">
+        <div class="mode-label">🧭 Intelligence Mode</div>
+        <div class="mode-desc">Responding from a plan built on your own profile. Understanding why a decision fits you. Knowing your timeline months in advance.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="section">
+      <div class="section-eyebrow">Leadership</div>
+      <h2 class="section-title">Who's behind Merrakii+</h2>
+      <div class="leader-grid">
+        <div class="leader-card">
+          <div class="leader-avatar">AM</div>
+          <div class="leader-name">Amol Munjal</div>
+          <div class="leader-role">Founder</div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-avatar">AE</div>
+          <div class="leader-name">Aboubakr Elhassan</div>
+          <div class="leader-role">Chief Executive Officer</div>
+        </div>
+      </div>
+
+      <div class="video-wrap">
+        <div class="yt-card" onclick="alert('This would open the video in a new tab.')">
+          <div class="yt-thumb"><span class="yt-badge">▶ 2:40</span><div class="yt-play">▶</div></div>
+          <div class="yt-body"><div class="yt-title">Why We Built Merrakii+</div><div class="yt-sub">A message from Founder Amol Munjal</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">What We Believe</div>
+    <h2 class="section-title">Three things we don't compromise on</h2>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-ic">🎯</div>
+        <div class="value-title">Decisions, not just information</div>
+        <div class="value-desc">Every stakeholder on Merrakii+ — student, counsellor, professional, partner — is measured by decisions enabled, not clicks, signups, or revenue.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-ic">👨‍👩‍👧</div>
+        <div class="value-title">Family, not just the student</div>
+        <div class="value-desc">A career decision rarely belongs to one person. Every stage involves the parent, documented — not assumed.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-ic">✓</div>
+        <div class="value-title">Validated, not guessed</div>
+        <div class="value-desc">Career content is reviewed by working professionals before it reaches a student. Nothing is published on assumption alone.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-eyebrow">Where We Work From</div>
+    <h2 class="section-title">Our Gurugram Office</h2>
+    <div class="photo-strip">
+      <div class="photo-tile"><div class="pt-ic">📷</div><div class="pt-label">Office — Exterior</div></div>
+      <div class="photo-tile"><div class="pt-ic">📷</div><div class="pt-label">Team at Work</div></div>
+      <div class="photo-tile"><div class="pt-ic">📷</div><div class="pt-label">Foundation Residential Training</div></div>
+      <div class="photo-tile"><div class="pt-ic">📷</div><div class="pt-label">Annual Career Professionals Forum</div></div>
+    </div>
+  </section>
+
+  <section id="cta">
+    <h2>See it for yourself</h2>
+    <p>The best way to understand Merrakii+ is to see your own free career route — two taps, no signup.</p>
+    <button class="cta-btn" onclick="window.location.href='01_home.html#discover'">🎯 Get My Free Career Map</button>
+  </section>
+
+  <footer id="sitefoot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <div class="brand"><span class="dot"></span>Merrakii+</div>
+        <p class="foot-tag">Decision Enabling Student Success System — helping students move from Class 9 to Career Entry with real decisions, not just information.</p>
+        <div class="foot-contact">info@merrakii.co.in<br>merrakii.co.in<br>Gurugram, Haryana, India</div>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Platform</h4>
+          <a href="02_career_library.html">Career Library</a>
+          <a href="01_home.html#how-it-works">How it Works</a>
+          <a href="01_home.html#philosophy">Our Philosophy</a>
+        </div>
+        <div class="foot-col">
+          <h4>For You</h4>
+          <a href="04_students_parents_info.html">Students &amp; Parents</a>
+          <a href="05_schools_info.html">Schools</a>
+        </div>
+        <div class="foot-col">
+          <h4>Partners</h4>
+          <a href="06_career_professionals_info.html">Career Professionals</a>
+          <a href="07_program_partners_info.html">Program Partners</a>
+          <a href="08_partner_counsellor_info.html">Partner Counsellors</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="09_about.html">About Us</a>
+          <a href="10_contact.html">Contact</a>
+          <a href="11_login.html">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 Munjal Universal Consultancy Private Limited · Merrakii+</div>
+  </footer>
+
+</body>
+</html>

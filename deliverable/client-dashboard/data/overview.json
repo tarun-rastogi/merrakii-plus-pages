@@ -1,0 +1,125 @@
+{
+  "updatedAt": "2026-08-06",
+  "startDate": "30 Jul 2026",
+  "goLiveDate": "7 Oct 2026",
+  "summary": "Phase 1 delivery for Merrakii+ DESSS — five milestones over ten weeks.",
+  "productOverview": {
+    "title": "Summary",
+    "body": "Maple AI is building Merrakii+ as one responsive web application (mobile through desktop) that helps students explore careers, understand their journey, and take the next step — while giving Merrakii an admin console to manage content, users, courses, resources, and financials. Phase 1 covers the scoped pages and backend in Statement of Work V2 (aligned to Merrakii_pages_inscope.xlsx): about 40 in-scope items across student-facing pages, admin panel, and platform/backend — including search and career journey, deep profiling, payments (Razorpay), student dashboard, and AWS deployment through go-live.",
+    "pillars": [
+      {
+        "name": "Student-facing experience",
+        "detail": "Home search, career journey map, deep profiling, journey payment, student dashboard (overview, my journey, journey report, courses, resources, notifications), course detail/enrolment/payment, and support pages (About, Contact, FAQs, policies)."
+      },
+      {
+        "name": "Admin portal",
+        "detail": "Career library CMS, user management, service knowledge, courses, resources, and financials overview — so Merrakii can operate the product without engineering for every content change."
+      },
+      {
+        "name": "Backend & go-live",
+        "detail": "Platform APIs, access and security, search and personalisation foundations, Razorpay integration, AWS staging and production, testing/UAT, and handover runbooks."
+      }
+    ]
+  },
+  "timeline": {
+    "label": "Programme timeline",
+    "overallPercent": 12,
+    "overallLabel": "User journey in progress · week 2 of 3",
+    "milestones": [
+      {
+        "name": "User journey",
+        "detail": "Clickable student-facing flow: search → career library → journey map → profiling → signup → journey report → dashboard",
+        "duration": "3 weeks",
+        "due": "19 Aug 2026",
+        "status": "in_progress"
+      },
+      {
+        "name": "Admin portal",
+        "detail": "Clickable admin CMS: career library, users, services, courses, resources, financials overview",
+        "duration": "2 weeks",
+        "due": "2 Sep 2026",
+        "status": "upcoming"
+      },
+      {
+        "name": "Complete Dev",
+        "detail": "Full Phase 1 website + admin build, backend platform, Razorpay, responsive UI",
+        "duration": "2 weeks",
+        "due": "16 Sep 2026",
+        "status": "upcoming"
+      },
+      {
+        "name": "Testing",
+        "detail": "Staging deploy, end-to-end tests, defect fixes, UAT support and written approval",
+        "duration": "2 weeks",
+        "due": "30 Sep 2026",
+        "status": "upcoming"
+      },
+      {
+        "name": "Go-live",
+        "detail": "AWS production, hypercare, handover runbooks and environment guides",
+        "duration": "1 week",
+        "due": "7 Oct 2026",
+        "status": "upcoming"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "name": "Merrakii updated scope workbook",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/Scope/Merrakii%20updated%20scope%20(1).xlsx",
+      "urlNote": "",
+      "owner": "Merrakii",
+      "dateShared": "22 Jul 2026",
+      "status": "Archived"
+    },
+    {
+      "name": "Statement of Work V1 (archived baseline)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/statement-of-work/Merrakii_plus_statement_of_work_v1.html",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "8 Jul 2026",
+      "status": "Archived"
+    },
+    {
+      "name": "Statement of Work V2 (active — scoped pages)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/statement-of-work/Merrakii_plus_statement_of_work_v2.html",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Scoped pages inventory (Merrakii_pages_inscope.xlsx)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/client-dashboard/data/Merrakii_pages_inscope.xlsx",
+      "urlNote": "",
+      "owner": "Merrakii",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Merrakii+ Build Blueprint (Levels 1–6)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/blueprint/Merrakii_plus_build_blueprint.html",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "7 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "HTML sample pages pack (01–23)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/client-dashboard/#samples",
+      "urlNote": "",
+      "owner": "Merrakii",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Merrakii+ application preview (GitHub Pages)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    }
+  ],
+  "savedAt": "2026-08-06T18:11:27.630Z"
+}

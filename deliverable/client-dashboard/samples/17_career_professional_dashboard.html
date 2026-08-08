@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Career Professional Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ font-family:var(--font-body); background:var(--paper); color:var(--ink); overflow-x:hidden; }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  button{ font-family:inherit; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ============ TOPBAR ============ */
+  #topbar{
+    position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff;
+    box-shadow:0 3px 14px rgba(10,78,62,.18);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:19px; display:flex; align-items:center; gap:10px; }
+  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--coral); box-shadow:0 0 0 4px rgba(255,107,74,.28); }
+  .brand small{ display:block; font-family:var(--font-body); font-weight:500; font-size:10px; letter-spacing:.13em; text-transform:uppercase; opacity:.78; margin-top:1px; }
+  .tb-right{ display:flex; align-items:center; gap:16px; }
+  .tb-bell{ position:relative; font-size:17px; cursor:pointer; opacity:.9; }
+  .tb-bell .dotbadge{ position:absolute; top:-3px; right:-4px; width:8px; height:8px; border-radius:50%; background:var(--coral); border:1.5px solid var(--teal-deep); }
+  .tb-user{ display:flex; align-items:center; gap:9px; }
+  .tb-avatar{ width:32px; height:32px; border-radius:50%; background:var(--gold-light); color:var(--gold-deep); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12.5px; font-family:var(--font-display); }
+  .tb-name{ font-size:12.5px; font-weight:700; line-height:1.2; }
+  .tb-sub{ font-size:9.5px; opacity:.8; font-weight:600; }
+
+  /* ============ SHELL ============ */
+  #shell{ display:flex; min-height:calc(100vh - 60px); }
+  #sidenav{ width:212px; flex-shrink:0; background:var(--white); border-right:1px solid var(--paper-line); padding:18px 12px; display:flex; flex-direction:column; gap:4px; }
+  .nav-item{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:600; color:var(--muted); transition:all .15s; border:none; background:none; width:100%; text-align:left; }
+  .nav-item .ic{ font-size:15px; width:18px; text-align:center; }
+  .nav-item:hover{ background:var(--paper); color:var(--ink); }
+  .nav-item.active{ background:var(--teal-light); color:var(--teal-deep); }
+  .nav-item .badge-count{ margin-left:auto; background:var(--coral); color:#fff; font-size:9px; font-weight:800; padding:2px 7px; border-radius:20px; }
+  .sidenav-spacer{ flex:1; }
+
+  .verified-card{ background:linear-gradient(150deg,var(--gold-light),#fff); border:1px solid #EAD9A8; border-radius:14px; padding:14px; text-align:center; }
+  .verified-card .vc-badge{ font-size:24px; }
+  .verified-card .vc-label{ font-family:var(--font-display); font-weight:700; font-size:12px; color:var(--gold-deep); margin-top:4px; }
+  .verified-card .vc-sub{ font-size:9px; color:var(--muted); margin-top:3px; line-height:1.4; }
+
+  #content{ flex:1; padding:24px 28px 50px; max-width:1180px; }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; animation:rise .2s ease; }
+  @keyframes rise{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+  .page-head{ margin-bottom:20px; }
+  .page-head h1{ font-family:var(--font-display); font-weight:700; font-size:23px; }
+  .page-head p{ font-size:12.5px; color:var(--muted); margin-top:4px; max-width:600px; }
+
+  /* ============ NORTH STAR (ripple framing) ============ */
+  .northstar{
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; border-radius:18px;
+    padding:22px 26px; margin-bottom:20px; box-shadow:0 14px 34px rgba(10,78,62,.18);
+  }
+  .ns-label{ font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.75; }
+  .ns-value{ font-family:var(--font-display); font-weight:800; font-size:38px; margin-top:6px; display:flex; align-items:baseline; gap:9px; }
+  .ns-value span{ font-family:var(--font-body); font-weight:700; font-size:15px; opacity:.9; }
+  .ns-sub{ font-size:11.5px; opacity:.82; margin-top:6px; max-width:440px; line-height:1.55; }
+  .ns-right{ display:flex; gap:20px; flex-shrink:0; }
+  .ns-stat{ text-align:center; }
+  .ns-stat b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:19px; }
+  .ns-stat span{ font-size:9px; opacity:.78; text-transform:uppercase; letter-spacing:.05em; font-weight:700; }
+
+  /* ============ STAT STRIP ============ */
+  .stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
+  @media (max-width:920px){ .stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .stat-tile{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 16px; }
+  .stat-tile .st-label{ font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+  .stat-tile .st-val{ font-family:var(--font-mono); font-weight:500; font-size:23px; margin-top:6px; color:var(--ink); }
+  .stat-tile .st-sub{ font-size:10px; color:var(--teal); margin-top:3px; font-weight:600; }
+
+  /* ============ PENDING ALERT ============ */
+  .alert-card{
+    display:flex; align-items:center; gap:16px; background:var(--coral-light); border:1px solid #FFD4C4;
+    border-radius:14px; padding:15px 20px; margin-bottom:22px;
+  }
+  .alert-card .ac-ic{ font-size:22px; flex-shrink:0; }
+  .alert-card .ac-txt{ flex:1; font-size:12.5px; color:#9A3B22; }
+  .alert-card .ac-txt b{ color:#7a2c18; }
+  .alert-card button{ flex-shrink:0; background:#fff; border:1px solid #FFD4C4; color:#9A3B22; border-radius:9px; padding:9px 15px; font-weight:700; font-size:11.5px; cursor:pointer; }
+
+  /* ============ TWO COL ============ */
+  .two-col{ display:grid; grid-template-columns:1.2fr 1fr; gap:16px; }
+  @media (max-width:920px){ .two-col{ grid-template-columns:1fr; } }
+  .panel-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; }
+  .panel-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:10px; }
+  .timeline{ display:flex; flex-direction:column; }
+  .tl-item{ display:flex; gap:12px; padding:9px 0; border-bottom:1px solid var(--paper-line); }
+  .tl-item:last-child{ border-bottom:none; }
+  .tl-dot{ width:8px; height:8px; border-radius:50%; background:var(--teal); margin-top:5px; flex-shrink:0; }
+  .tl-dot.gold{ background:var(--gold); }
+  .tl-txt{ font-size:12px; color:var(--ink); }
+  .tl-date{ font-size:10px; color:var(--muted); margin-top:2px; }
+
+  .session-row{ display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--paper-line); }
+  .session-row:last-child{ border-bottom:none; }
+  .session-date{ width:44px; text-align:center; flex-shrink:0; }
+  .session-date b{ display:block; font-family:var(--font-display); font-size:16px; color:var(--teal-deep); }
+  .session-date span{ font-size:8.5px; color:var(--muted); text-transform:uppercase; }
+  .session-txt{ font-size:12px; font-weight:600; }
+  .session-sub{ font-size:10.5px; color:var(--muted); }
+
+  /* ============ SESSIONS TAB ============ */
+  .filter-row{ display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fchip{ padding:7px 14px; border-radius:20px; border:1px solid var(--paper-line); background:var(--white); font-size:11.5px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .15s; }
+  .fchip:hover{ border-color:var(--teal); }
+  .fchip.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
+
+  .sess-card{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:14px 18px; margin-bottom:9px; }
+  .sess-avatar{ width:38px; height:38px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--teal-deep); flex-shrink:0; }
+  .sess-main{ flex:1; min-width:0; }
+  .sess-name{ font-size:13px; font-weight:700; }
+  .sess-meta{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .sess-type{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; background:var(--teal-light); color:var(--teal-deep); flex-shrink:0; white-space:nowrap; }
+  .sess-type.group{ background:var(--gold-light); color:var(--gold-deep); }
+  .sess-type.paid{ background:var(--coral-light); color:#c4451f; }
+  .sess-price{ font-family:var(--font-mono); font-weight:500; font-size:11px; color:var(--gold-deep); flex-shrink:0; min-width:60px; text-align:right; }
+
+  .listing-card{ background:var(--white); border:1px solid var(--paper-line); border-left:4px solid var(--gold); border-radius:14px; padding:16px 20px; margin-bottom:20px; }
+  .listing-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:10px; }
+  .listing-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--paper-line); font-size:12px; }
+  .listing-row:last-of-type{ border-bottom:none; }
+  .listing-row .ll{ color:var(--muted); }
+  .listing-row .lv{ font-family:var(--font-mono); font-weight:500; color:var(--gold-deep); }
+  .listing-toggle{ display:flex; align-items:center; justify-content:space-between; margin-top:10px; }
+  .listing-toggle button{ background:var(--teal); color:#fff; border:none; border-radius:9px; padding:9px 15px; font-weight:700; font-size:11.5px; cursor:pointer; }
+  .sess-when{ flex-shrink:0; text-align:right; font-size:10.5px; color:var(--muted); min-width:90px; }
+  .sess-when b{ display:block; color:var(--ink); font-size:11px; }
+  .sess-actions{ flex-shrink:0; display:flex; gap:6px; }
+  .sess-actions button{ padding:8px 12px; border-radius:8px; border:1px solid var(--paper-line); background:var(--paper); font-size:10.5px; font-weight:700; cursor:pointer; }
+  .sess-actions button.primary{ background:var(--teal); color:#fff; border:none; }
+
+  /* ============ VALIDATION TAB ============ */
+  .val-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; margin-bottom:10px; }
+  .val-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .val-title{ font-size:13.5px; font-weight:700; }
+  .val-meta{ font-size:11px; color:var(--muted); margin-top:3px; }
+  .val-status{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; flex-shrink:0; }
+  .val-status.pending{ background:var(--coral-light); color:#c4451f; }
+  .val-status.done{ background:var(--teal-light); color:var(--teal-deep); }
+  .val-desc{ font-size:12px; color:var(--muted); margin-top:10px; line-height:1.55; }
+  .val-actions{ display:flex; gap:8px; margin-top:12px; }
+  .val-actions button{ padding:9px 15px; border-radius:9px; border:1px solid var(--paper-line); background:var(--paper); font-size:11.5px; font-weight:700; cursor:pointer; }
+  .val-actions button.approve{ background:var(--teal); color:#fff; border:none; }
+  .val-actions button.changes{ color:#c4451f; }
+
+  /* ============ PROFILE TAB ============ */
+  .profile-preview{ background:var(--white); border:1px solid var(--paper-line); border-radius:18px; padding:30px; text-align:center; margin-bottom:22px; }
+  .pf-avatar{ width:72px; height:72px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:26px; margin:0 auto; }
+  .pf-name{ font-family:var(--font-display); font-weight:700; font-size:19px; margin-top:12px; }
+  .pf-role{ font-size:12.5px; color:var(--muted); margin-top:3px; }
+  .pf-badge{ font-size:10px; font-weight:800; color:var(--gold-deep); background:var(--gold-light); padding:4px 12px; border-radius:20px; margin-top:10px; display:inline-block; }
+  .pf-stats{ display:flex; justify-content:center; gap:26px; margin-top:18px; }
+  .pf-stats div b{ display:block; font-family:var(--font-mono); font-size:17px; color:var(--teal-deep); }
+  .pf-stats div span{ font-size:9px; color:var(--muted); text-transform:uppercase; }
+
+  .edit-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:700px){ .edit-grid{ grid-template-columns:1fr; } }
+  .ef{ margin-bottom:4px; }
+  .ef label{ font-size:11px; font-weight:700; display:block; margin-bottom:6px; }
+  .ef input, .ef textarea, .ef select{ width:100%; padding:10px 12px; border:1px solid var(--paper-line); border-radius:9px; font-family:inherit; font-size:12.5px; }
+  .ef textarea{ resize:vertical; min-height:70px; }
+  .save-btn{ margin-top:16px; background:var(--teal); color:#fff; border:none; border-radius:10px; padding:11px 20px; font-weight:700; font-size:12.5px; cursor:pointer; }
+
+  /* ============ RECOGNITION TAB ============ */
+  .event-card{ display:flex; gap:16px; align-items:center; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; border-radius:16px; padding:22px; margin-bottom:22px; }
+  .event-date-badge{ width:56px; height:56px; border-radius:12px; background:rgba(255,255,255,.16); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+  .event-date-badge b{ font-family:var(--font-display); font-size:18px; }
+  .event-date-badge span{ font-size:9px; text-transform:uppercase; }
+  .event-txt{ flex:1; }
+  .event-title{ font-family:var(--font-display); font-weight:700; font-size:15px; }
+  .event-sub{ font-size:11.5px; opacity:.85; margin-top:3px; }
+  .event-card button{ flex-shrink:0; background:#fff; color:var(--teal-deep); border:none; border-radius:9px; padding:10px 16px; font-weight:700; font-size:11.5px; cursor:pointer; }
+
+  .rw-list{ display:flex; flex-direction:column; gap:8px; }
+  .rw-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:12px 16px; }
+  .rw-row.me{ border-color:var(--teal); background:var(--teal-light); }
+  .rw-rank{ width:28px; font-family:var(--font-display); font-weight:700; font-size:14px; color:var(--muted); text-align:center; }
+  .rw-avatar{ width:32px; height:32px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:11px; color:var(--teal-deep); }
+  .rw-main{ flex:1; }
+  .rw-name{ font-size:12.5px; font-weight:700; }
+  .rw-domain{ font-size:10px; color:var(--muted); }
+  .rw-score{ font-family:var(--font-mono); font-weight:500; font-size:13px; color:var(--teal-deep); min-width:80px; text-align:right; }
+
+  /* ============ RESOURCES ============ */
+  .res-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:820px){ .res-grid{ grid-template-columns:1fr; } }
+  .res-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; }
+  .res-card h4{ font-family:var(--font-display); font-size:13.5px; margin-bottom:6px; }
+  .res-card p{ font-size:11.5px; color:var(--muted); line-height:1.5; margin-bottom:10px; }
+  .res-dl{ display:inline-flex; align-items:center; gap:7px; font-size:11.5px; font-weight:700; color:var(--teal-deep); background:var(--teal-light); padding:8px 13px; border-radius:9px; cursor:pointer; border:none; }
+
+  .acc-item{ background:var(--white); border:1px solid var(--paper-line); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .acc-head{ display:flex; align-items:center; justify-content:space-between; padding:13px 16px; cursor:pointer; font-size:12.5px; font-weight:700; }
+  .acc-head .chev{ transition:transform .2s; color:var(--muted); }
+  .acc-item.open .chev{ transform:rotate(180deg); }
+  .acc-body{ display:none; padding:0 16px 15px; font-size:12px; color:var(--muted); line-height:1.6; }
+  .acc-item.open .acc-body{ display:block; }
+
+  /* ============ EARNINGS: passbook ============ */
+  .earn-top{ display:grid; grid-template-columns:1.3fr 1fr; gap:16px; margin-bottom:22px; }
+  @media (max-width:920px){ .earn-top{ grid-template-columns:1fr; } }
+  .passbook{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(10,26,20,.05); }
+  .pb-head{ padding:16px 22px; background:linear-gradient(120deg,var(--gold-deep),var(--gold)); color:#fff; }
+  .pb-head .pb-eyebrow{ font-size:9.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; opacity:.85; }
+  .pb-head .pb-bal{ font-family:var(--font-mono); font-weight:500; font-size:26px; margin-top:5px; }
+  .pb-head .pb-sub{ font-size:10.5px; opacity:.85; margin-top:3px; }
+  .pb-body{ padding:4px 0; }
+  .pb-row{ display:flex; align-items:center; justify-content:space-between; padding:11px 22px; border-bottom:1px dashed var(--paper-line); font-size:12px; }
+  .pb-row:last-child{ border-bottom:none; }
+  .pb-row .pb-desc{ color:var(--ink); font-weight:600; }
+  .pb-row .pb-date{ display:block; font-size:9.5px; color:var(--muted); font-weight:500; margin-top:1px; }
+  .pb-row .pb-amt{ font-family:var(--font-mono); font-weight:500; color:var(--teal-deep); }
+  .pb-row .pb-amt.pending{ color:var(--muted); }
+
+  .payout-strip{ display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 18px; margin-bottom:22px; }
+  .payout-strip .ps-ic{ font-size:18px; }
+  .payout-strip .ps-txt{ font-size:11.5px; color:var(--muted); }
+  .payout-strip .ps-txt b{ color:var(--ink); }
+
+  .no-earn-note{ margin-top:16px; display:flex; gap:10px; background:var(--teal-light); border:1px solid #CFEAE0; border-radius:12px; padding:13px 15px; font-size:11.5px; color:#204338; line-height:1.55; }
+
+  .commission-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:10px; }
+  .comm-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--paper-line); font-size:11.5px; }
+  .comm-row:last-child{ border-bottom:none; }
+  .comm-row .cl{ color:var(--muted); }
+  .comm-row .cv{ font-family:var(--font-mono); font-weight:500; color:var(--gold-deep); }
+
+  /* ============ PORTFOLIO TAB ============ */
+  .portfolio-preview{ background:linear-gradient(150deg,#fff,var(--paper)); border:1px solid var(--paper-line); border-radius:18px; padding:4px; margin-bottom:22px; box-shadow:0 14px 34px rgba(10,26,20,.06); }
+  .pp-browser-bar{ display:flex; align-items:center; gap:6px; padding:10px 14px; border-bottom:1px solid var(--paper-line); }
+  .pp-dot{ width:8px; height:8px; border-radius:50%; background:var(--paper-line); }
+  .pp-url{ flex:1; text-align:center; font-size:10px; color:var(--muted); font-family:var(--font-mono); }
+  .pp-inner{ padding:26px; text-align:center; }
+  .pp-avatar{ width:56px; height:56px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:20px; margin:0 auto; }
+  .pp-name{ font-family:var(--font-display); font-weight:700; font-size:18px; margin-top:10px; }
+  .pp-tag{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .pp-stats{ display:flex; justify-content:center; gap:22px; margin-top:14px; flex-wrap:wrap; }
+  .pp-stats div b{ display:block; font-family:var(--font-mono); font-size:16px; color:var(--teal-deep); }
+  .pp-stats div span{ font-size:9px; color:var(--muted); text-transform:uppercase; }
+  .pp-note{ font-size:10.5px; color:var(--muted); margin-top:16px; }
+
+  .share-row{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+  .share-btn{ display:flex; align-items:center; gap:8px; padding:11px 16px; border-radius:10px; border:1px solid var(--paper-line); background:var(--white); font-weight:700; font-size:12px; cursor:pointer; transition:all .15s; }
+  .share-btn:hover{ border-color:var(--teal); }
+  .share-btn.primary{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; }
+
+  .field-source{ font-size:9px; font-weight:800; padding:2px 8px; border-radius:20px; margin-left:8px; vertical-align:middle; }
+  .field-source.editable{ background:var(--teal-light); color:var(--teal-deep); }
+  .field-source.auto{ background:var(--gold-light); color:var(--gold-deep); }
+
+  .auto-stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px; }
+  @media (max-width:700px){ .auto-stat-grid{ grid-template-columns:repeat(2,1fr); } }
+  .auto-stat{ background:var(--gold-light); border:1px solid #EAD9A8; border-radius:10px; padding:11px 13px; text-align:center; }
+  .auto-stat b{ display:block; font-family:var(--font-mono); font-size:17px; color:var(--gold-deep); }
+  .auto-stat span{ font-size:9px; color:var(--gold-deep); text-transform:uppercase; letter-spacing:.03em; font-weight:700; }
+
+  .video-row{ display:flex; align-items:center; gap:12px; background:var(--paper); border:1px solid var(--paper-line); border-radius:10px; padding:10px 12px; margin-bottom:9px; }
+  .video-thumb{ width:56px; height:36px; border-radius:6px; background:linear-gradient(135deg,var(--teal-deep),var(--teal)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; flex-shrink:0; }
+  .video-info{ flex:1; min-width:0; }
+  .video-info input{ width:100%; border:none; background:none; font-size:12.5px; font-weight:600; padding:2px 0; outline:none; }
+  .video-info .video-url{ font-size:10px; color:var(--muted); }
+  .video-remove{ background:none; border:none; color:var(--coral); cursor:pointer; font-size:14px; flex-shrink:0; }
+  .add-video-btn{ width:100%; padding:11px; border:1.5px dashed var(--paper-line); border-radius:10px; background:none; color:var(--muted); font-weight:700; font-size:12px; cursor:pointer; margin-top:4px; }
+  .add-video-btn:hover{ border-color:var(--teal); color:var(--teal); }
+  .content-status{ font-size:8.5px; font-weight:800; padding:2px 8px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .content-status.live{ background:var(--teal-light); color:var(--teal-deep); }
+  .content-status.pending{ background:#FFF3D6; color:#a56b00; }
+  .social-row{ display:flex; align-items:center; gap:12px; background:var(--paper); border:1px solid var(--paper-line); border-radius:10px; padding:10px 12px; margin-bottom:9px; }
+  .social-ic{ width:32px; height:32px; border-radius:8px; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+  .social-info{ flex:1; min-width:0; }
+  .social-info input{ width:100%; border:none; background:none; font-size:12.5px; font-weight:600; padding:2px 0; outline:none; }
+  .add-social-row{ display:flex; gap:8px; margin-top:4px; }
+  .add-social-row select{ flex:0 0 130px; padding:9px 10px; border:1px solid var(--paper-line); border-radius:8px; font-family:inherit; font-size:12px; }
+  .add-social-row input{ flex:1; padding:9px 10px; border:1px solid var(--paper-line); border-radius:8px; font-family:inherit; font-size:12px; }
+  .add-social-row button{ background:var(--teal); color:#fff; border:none; border-radius:8px; padding:9px 14px; font-weight:700; font-size:11.5px; cursor:pointer; white-space:nowrap; }
+  .approval-note{ margin-top:10px; display:flex; gap:9px; background:var(--teal-light); border:1px solid #CFEAE0; border-radius:10px; padding:11px 13px; font-size:11px; color:#204338; line-height:1.5; }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <a href="01_home.html" class="brand" title="Back to Merrakii+"><span class="dot"></span>Merrakii<small>Career Professional Portal</small></a>
+    <div class="tb-right"><a href="01_home.html" style="font-size:11.5px; font-weight:700; opacity:.85; margin-right:4px;">Log Out</a>
+      <div class="tb-bell">🔔<span class="dotbadge"></span></div>
+      <div class="tb-user">
+        <div class="tb-avatar">PM</div>
+        <div><div class="tb-name">Priya Mehta</div><div class="tb-sub">Design &amp; Creative Industries</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shell">
+    <nav id="sidenav">
+      <button class="nav-item active" data-tab="overview"><span class="ic">🏠</span> Overview</button>
+      <button class="nav-item" data-tab="sessions"><span class="ic">🎙️</span> My Sessions</button>
+      <button class="nav-item" data-tab="validate"><span class="ic">✅</span> Validate Journeys<span class="badge-count">3</span></button>
+      <button class="nav-item" data-tab="earnings"><span class="ic">💰</span> Earnings</button>
+      <button class="nav-item" data-tab="portfolio"><span class="ic">🔗</span> My Portfolio</button>
+      <button class="nav-item" data-tab="recognition"><span class="ic">🏆</span> Recognition</button>
+      <button class="nav-item" data-tab="resources"><span class="ic">📚</span> Resources</button>
+      <div class="sidenav-spacer"></div>
+      <div class="verified-card">
+        <div class="vc-badge">✓</div>
+        <div class="vc-label">Verified Professional</div>
+        <div class="vc-sub">Since Aug 2024 · Design &amp; Creative Industries</div>
+      </div>
+    </nav>
+
+    <main id="content">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="tab-panel active" id="tab-overview">
+        <div class="page-head">
+          <h1>Welcome back, Priya 👋</h1>
+          <p>Here's the ripple effect of what you've been giving students — measured honestly, not oversold.</p>
+        </div>
+
+        <div class="northstar">
+          <div class="ns-left">
+            <div class="ns-label">Downstream Decisions</div>
+            <div class="ns-value">18 <span>students who moved forward after speaking with you</span></div>
+            <div class="ns-sub">Students you've spoken with who went on to confirm a real decision — a stream, a direction, a shortlist — within 60 days. Not a claim that you caused it alone. Just visibility into your ripple.</div>
+          </div>
+          <div class="ns-right">
+            <div class="ns-stat"><b>34</b><span>Sessions Given</span></div>
+            <div class="ns-stat"><b>41</b><span>Students Reached</span></div>
+            <div class="ns-stat"><b>6</b><span>Journeys Validated</span></div>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat-tile"><div class="st-label">Sessions This Month</div><div class="st-val">5</div><div class="st-sub">2 upcoming this week</div></div>
+          <div class="stat-tile"><div class="st-label">Avg. Student Rating</div><div class="st-val">4.9</div><div class="st-sub">Across 34 sessions</div></div>
+          <div class="stat-tile"><div class="st-label">Pending Validations</div><div class="st-val">3</div><div class="st-sub">Awaiting your review</div></div>
+          <div class="stat-tile"><div class="st-label">Earnings This Month</div><div class="st-val" style="color:var(--gold-deep);">₹6,200</div><div class="st-sub">From 3 Premium Sessions</div></div>
+        </div>
+
+        <div class="alert-card">
+          <div class="ac-ic">📋</div>
+          <div class="ac-txt"><b>3 career journey sections are waiting on your validation.</b> Nothing publishes to students in your domain until you've reviewed it.</div>
+          <button onclick="switchTab('validate')">Review Now</button>
+        </div>
+
+        <div class="two-col">
+          <div class="panel-card">
+            <h3>Recent Activity</h3>
+            <div class="timeline">
+              <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">Session with Simran Kaur — Career Professional Interaction</div><div class="tl-date">10 Jul 2026</div></div></div>
+              <div class="tl-item"><div class="tl-dot gold"></div><div><div class="tl-txt">✓ Validated: "Domain Skill Programme" (Design track)</div><div class="tl-date">6 Jul 2026</div></div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">Group panel session — 4 students, Class 10</div><div class="tl-date">2 Jul 2026</div></div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">Session with Arjun Nair — Portfolio Expectations Deep Dive</div><div class="tl-date">28 Jun 2026</div></div></div>
+              <div class="tl-item"><div class="tl-dot gold"></div><div><div class="tl-txt">✓ Validated: "Portfolio Roadmap Planning"</div><div class="tl-date">20 Jun 2026</div></div></div>
+            </div>
+          </div>
+          <div class="panel-card">
+            <h3>Upcoming Sessions</h3>
+            <div class="session-row">
+              <div class="session-date"><b>16</b><span>Jul</span></div>
+              <div><div class="session-txt">Ananya Gupta — Career Exploration Follow-up</div><div class="session-sub">Class 10 · Video call · 4:00 PM</div></div>
+            </div>
+            <div class="session-row">
+              <div class="session-date"><b>19</b><span>Jul</span></div>
+              <div><div class="session-txt">Group Panel — 5 students, Class 10</div><div class="session-sub">Video call · 5:30 PM</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MY SESSIONS ============ -->
+      <section class="tab-panel" id="tab-sessions">
+        <div class="page-head">
+          <h1>My Sessions</h1>
+          <p>Every conversation you've given or scheduled — free network sessions and paid Premium Sessions, side by side.</p>
+        </div>
+
+        <div class="listing-card">
+          <h3>Your Premium Session Listing</h3>
+          <div class="listing-row"><span class="ll">1-on-1 Portfolio Review (45 min)</span><span class="lv">₹2,000</span></div>
+          <div class="listing-row"><span class="ll">Small Group Session (up to 5 students)</span><span class="lv">₹800 / student</span></div>
+          <div class="listing-row"><span class="ll">Your share of each booking</span><span class="lv">75%</span></div>
+          <div class="listing-toggle">
+            <span style="font-size:11px; color:var(--muted);">🟢 Listing is live — students and schools can book you directly</span>
+            <button onclick="alert('This would open your listing settings — pricing, availability, and format.')">Edit Listing</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <button class="fchip active">All</button>
+          <button class="fchip">Free Network Sessions</button>
+          <button class="fchip">Paid Premium Sessions</button>
+          <button class="fchip">Upcoming</button>
+          <button class="fchip">Completed</button>
+        </div>
+
+        <div class="sess-card">
+          <div class="sess-avatar">AG</div>
+          <div class="sess-main"><div class="sess-name">Ananya Gupta</div><div class="sess-meta">Class 10 · Exploring Design · Free network session</div></div>
+          <span class="sess-type">1-on-1</span>
+          <div class="sess-price">—</div>
+          <div class="sess-when">Upcoming<b>16 Jul, 4:00 PM</b></div>
+          <div class="sess-actions"><button class="primary">Join</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">KM</div>
+          <div class="sess-main"><div class="sess-name">Karan Mehta</div><div class="sess-meta">Class 12 · Paid Portfolio Review, booked by student</div></div>
+          <span class="sess-type paid">Premium · 1-on-1</span>
+          <div class="sess-price">₹2,000</div>
+          <div class="sess-when">Upcoming<b>18 Jul, 6:00 PM</b></div>
+          <div class="sess-actions"><button class="primary">Join</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">GP</div>
+          <div class="sess-main"><div class="sess-name">Group Panel — 5 students</div><div class="sess-meta">Class 10 · Free network session</div></div>
+          <span class="sess-type group">Group Panel</span>
+          <div class="sess-price">—</div>
+          <div class="sess-when">Upcoming<b>19 Jul, 5:30 PM</b></div>
+          <div class="sess-actions"><button class="primary">Join</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">SK</div>
+          <div class="sess-main"><div class="sess-name">Simran Kaur</div><div class="sess-meta">Class 11 · Career Professional Interaction · Free network session</div></div>
+          <span class="sess-type">1-on-1</span>
+          <div class="sess-price">—</div>
+          <div class="sess-when">Completed<b>10 Jul 2026</b></div>
+          <div class="sess-actions"><button>View Notes</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">AN</div>
+          <div class="sess-main"><div class="sess-name">Arjun Nair</div><div class="sess-meta">Class 12 · Paid Portfolio Review, booked by student</div></div>
+          <span class="sess-type paid">Premium · 1-on-1</span>
+          <div class="sess-price">₹2,000</div>
+          <div class="sess-when">Completed<b>5 Jul 2026</b></div>
+          <div class="sess-actions"><button>View Notes</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">DFA</div>
+          <div class="sess-main"><div class="sess-name">Design Foundry Academy — Cohort Workshop</div><div class="sess-meta">12 students · Paid, booked by school</div></div>
+          <span class="sess-type paid">Premium · Group</span>
+          <div class="sess-price">₹10,000</div>
+          <div class="sess-when">Completed<b>2 Jul 2026</b></div>
+          <div class="sess-actions"><button>View Notes</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">GP</div>
+          <div class="sess-main"><div class="sess-name">Group Panel — 4 students</div><div class="sess-meta">Class 10 · Free network session</div></div>
+          <span class="sess-type group">Group Panel</span>
+          <div class="sess-price">—</div>
+          <div class="sess-when">Completed<b>2 Jul 2026</b></div>
+          <div class="sess-actions"><button>View Notes</button></div>
+        </div>
+        <div class="sess-card">
+          <div class="sess-avatar">RP</div>
+          <div class="sess-main"><div class="sess-name">Reyansh Pillai</div><div class="sess-meta">Class 9 · Career Exploration · Free network session</div></div>
+          <span class="sess-type">1-on-1</span>
+          <div class="sess-price">—</div>
+          <div class="sess-when">Completed<b>15 Jun 2026</b></div>
+          <div class="sess-actions"><button>View Notes</button></div>
+        </div>
+      </section>
+
+      <!-- ============ VALIDATE JOURNEYS ============ -->
+      <section class="tab-panel" id="tab-validate">
+        <div class="page-head">
+          <h1>Validate Journeys</h1>
+          <p>Nothing in your domain reaches a student until a verified professional confirms it reflects reality.</p>
+        </div>
+
+        <div class="val-card">
+          <div class="val-head">
+            <div><div class="val-title">Domain Skill Programme — Course Catalog Update</div><div class="val-meta">Class 11 · Build Year One · Submitted 8 Jul 2026</div></div>
+            <span class="val-status pending">Pending Review</span>
+          </div>
+          <p class="val-desc">Two new course listings added to the Domain Skill Programme catalog — a digital illustration track and an updated UX fundamentals course. Review for accuracy against current industry practice.</p>
+          <div class="val-actions">
+            <button class="approve">✓ Approve</button>
+            <button class="changes">Request Changes</button>
+            <button>View Full Content</button>
+          </div>
+        </div>
+
+        <div class="val-card">
+          <div class="val-head">
+            <div><div class="val-title">Career Professional Interaction — Question Set Refresh</div><div class="val-meta">Class 10 · Direction · Submitted 5 Jul 2026</div></div>
+            <span class="val-status pending">Pending Review</span>
+          </div>
+          <p class="val-desc">Updated structured question set for 1-on-1 mentor sessions, reflecting current entry pathways into design roles. Please confirm the pathway descriptions still hold.</p>
+          <div class="val-actions">
+            <button class="approve">✓ Approve</button>
+            <button class="changes">Request Changes</button>
+            <button>View Full Content</button>
+          </div>
+        </div>
+
+        <div class="val-card">
+          <div class="val-head">
+            <div><div class="val-title">Portfolio Roadmap Planning — Competition Calendar</div><div class="val-meta">Class 11 · Build Year One · Submitted 1 Jul 2026</div></div>
+            <span class="val-status pending">Pending Review</span>
+          </div>
+          <p class="val-desc">Refreshed list of live student design competitions for the upcoming season. Confirm these are still active and genuinely worth a student's time.</p>
+          <div class="val-actions">
+            <button class="approve">✓ Approve</button>
+            <button class="changes">Request Changes</button>
+            <button>View Full Content</button>
+          </div>
+        </div>
+
+        <div class="val-card">
+          <div class="val-head">
+            <div><div class="val-title">Portfolio Expectations Deep Dive — Session Guide</div><div class="val-meta">Class 11 · Build Year One · Validated 20 Jun 2026</div></div>
+            <span class="val-status done">✓ Validated</span>
+          </div>
+          <p class="val-desc">Structured conversation guide for portfolio-stage mentor sessions. Confirmed accurate and ready for use across the network.</p>
+        </div>
+
+        <div class="val-card">
+          <div class="val-head">
+            <div><div class="val-title">Domain Skill Programme — Initial Catalog</div><div class="val-meta">Class 11 · Build Year One · Validated 15 May 2026</div></div>
+            <span class="val-status done">✓ Validated</span>
+          </div>
+          <p class="val-desc">Original course catalog for the Domain Skill Programme, Design track. Confirmed accurate at time of review.</p>
+        </div>
+      </section>
+
+      <!-- ============ EARNINGS ============ -->
+      <section class="tab-panel" id="tab-earnings">
+        <div class="page-head">
+          <h1>Earnings</h1>
+          <p>Only Premium Sessions generate earnings — your free network sessions (Validate, Speak, Shape) stay recognition-based and don't appear here.</p>
+        </div>
+
+        <div class="payout-strip">
+          <div class="ps-ic">🗓️</div>
+          <div class="ps-txt">Next payout: <b>25 Jul 2026</b> · Pending amount: <b>₹2,000</b> · Paid directly to your registered bank account</div>
+        </div>
+
+        <div class="earn-top">
+          <div class="passbook">
+            <div class="pb-head">
+              <div class="pb-eyebrow">Lifetime Premium Session Earnings</div>
+              <div class="pb-bal">₹28,400</div>
+              <div class="pb-sub">Across 11 Premium Sessions since Feb 2026</div>
+            </div>
+            <div class="pb-body">
+              <div class="pb-row"><div class="pb-desc">Premium Session — Karan Mehta (Portfolio Review)<span class="pb-date">18 Jul 2026 · Pending confirmation</span></div><div class="pb-amt pending">+ ₹1,500</div></div>
+              <div class="pb-row"><div class="pb-desc">Premium Session — Arjun Nair (Portfolio Review)<span class="pb-date">5 Jul 2026</span></div><div class="pb-amt">+ ₹1,500</div></div>
+              <div class="pb-row"><div class="pb-desc">Cohort Workshop — Design Foundry Academy (12 students)<span class="pb-date">2 Jul 2026</span></div><div class="pb-amt">+ ₹7,500</div></div>
+              <div class="pb-row"><div class="pb-desc">Premium Session — Vivaan Joshi (Portfolio Review)<span class="pb-date">14 Jun 2026</span></div><div class="pb-amt">+ ₹1,500</div></div>
+              <div class="pb-row"><div class="pb-desc">Small Group Session — 4 students<span class="pb-date">30 May 2026</span></div><div class="pb-amt">+ ₹2,400</div></div>
+              <div class="pb-row"><div class="pb-desc">Premium Session — Priya Singh (Portfolio Review)<span class="pb-date">18 May 2026</span></div><div class="pb-amt">+ ₹1,500</div></div>
+            </div>
+          </div>
+
+          <div class="commission-card panel-card">
+            <h3>How your earnings work</h3>
+            <div class="comm-row"><span class="cl">1-on-1 Premium Session</span><span class="cv">₹2,000</span></div>
+            <div class="comm-row"><span class="cl">Your share</span><span class="cv">75%</span></div>
+            <div class="comm-row"><span class="cl">Small Group Session (per student)</span><span class="cv">₹800</span></div>
+            <div class="comm-row"><span class="cl">School Cohort Workshop</span><span class="cv">₹8,000–15,000</span></div>
+            <div class="no-earn-note">🔒 Your free Validate, Speak, and Shape sessions are never charged to students and never generate a payout — they build your Recognition standing instead, tracked separately.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MY PORTFOLIO ============ -->
+      <section class="tab-panel" id="tab-portfolio">
+        <div class="page-head">
+          <h1>My Portfolio</h1>
+          <p>A shareable page combining what you choose to show and what Merrakii+ tracks automatically as you work with us — built to post on LinkedIn or share directly with students and schools.</p>
+        </div>
+
+        <div class="portfolio-preview">
+          <div class="pp-browser-bar">
+            <span class="pp-dot"></span><span class="pp-dot"></span><span class="pp-dot"></span>
+            <div class="pp-url">merrakii.co.in/professionals/priya-mehta-9k2f</div>
+          </div>
+          <div class="pp-inner">
+            <div class="pp-avatar">PM</div>
+            <div class="pp-name">Priya Mehta</div>
+            <div class="pp-tag">Senior Designer, Ogilvy · Design &amp; Creative Industries · Verified by Merrakii+</div>
+            <div class="pp-stats">
+              <div><b>34</b><span>Sessions</span></div>
+              <div><b>41</b><span>Students Reached</span></div>
+              <div><b>6</b><span>Validated</span></div>
+              <div><b>2</b><span>Videos</span></div>
+            </div>
+            <div class="pp-note">This is a live preview — the real page updates automatically as you contribute.</div>
+          </div>
+        </div>
+
+        <div class="share-row">
+          <button class="share-btn primary" onclick="window.open('21_career_professional_portfolio_public.html','_blank')">🔗 View Public Portfolio ↗</button>
+          <button class="share-btn" onclick="navigator.clipboard && navigator.clipboard.writeText('merrakii.co.in/professionals/priya-mehta-9k2f')">📋 Copy Link</button>
+          <button class="share-btn" onclick="alert('This would open a LinkedIn share dialog.')">in Share to LinkedIn</button>
+          <button class="share-btn" onclick="alert('This would open an X (Twitter) share dialog.')">𝕏 Share to X</button>
+          <button class="share-btn" onclick="alert('This would generate a downloadable PDF version.')">⬇ Download as PDF</button>
+        </div>
+
+        <div class="panel-card" style="margin-bottom:16px;">
+          <h3>What You Control <span class="field-source editable">EDITABLE</span></h3>
+          <div class="edit-grid">
+            <div class="ef"><label>Full Name</label><input type="text" value="Priya Mehta"></div>
+            <div class="ef"><label>Current Title</label><input type="text" value="Senior Designer"></div>
+            <div class="ef"><label>Organisation</label><input type="text" value="Ogilvy"></div>
+            <div class="ef"><label>LinkedIn URL</label><input type="url" value="https://linkedin.com/in/priyamehta"></div>
+            <div class="ef" style="grid-column:1/-1;"><label>Headline Quote (shown on your public portfolio)</label><input type="text" value="Students don't need another mood board. They need someone to tell them what a Tuesday actually looks like."></div>
+            <div class="ef" style="grid-column:1/-1;"><label>Short Bio</label><textarea>Senior designer with a decade of experience across branding and digital design, mentoring Merrakii+ students exploring design as a direction.</textarea></div>
+          </div>
+
+          <div style="margin-top:6px;">
+            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:8px;">YouTube Videos <span style="font-weight:400; color:var(--muted);">— add videos where you talk about your career</span></label>
+            <div id="videoList">
+              <div class="video-row">
+                <div class="video-thumb">▶</div>
+                <div class="video-info"><input type="text" value="A Day in the Life of a Senior Designer"><div class="video-url">youtube.com/watch?v=dQw4w9WgXcQ</div></div>
+                <span class="content-status live">✓ Live</span>
+                <button class="video-remove" onclick="this.closest('.video-row').remove()">✕</button>
+              </div>
+              <div class="video-row">
+                <div class="video-thumb">▶</div>
+                <div class="video-info"><input type="text" value="What I Wish I Knew Before Design School"><div class="video-url">youtube.com/watch?v=jNQXAC9IVRw</div></div>
+                <span class="content-status live">✓ Live</span>
+                <button class="video-remove" onclick="this.closest('.video-row').remove()">✕</button>
+              </div>
+              <div class="video-row">
+                <div class="video-thumb">▶</div>
+                <div class="video-info"><input type="text" value="How I Review Design Portfolios"><div class="video-url">youtube.com/watch?v=9bZkp7q19f0</div></div>
+                <span class="content-status pending">⏳ Pending Approval</span>
+                <button class="video-remove" onclick="this.closest('.video-row').remove()">✕</button>
+              </div>
+            </div>
+            <button class="add-video-btn" onclick="alert('This would open a field to paste a YouTube video URL — it will be submitted for approval, not published immediately.')">+ Add a YouTube Video</button>
+          </div>
+
+          <div style="margin-top:20px;">
+            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:8px;">Social Media Handles <span style="font-weight:400; color:var(--muted);">— shown as follow links on your public portfolio</span></label>
+            <div id="socialList">
+              <div class="social-row">
+                <div class="social-ic">📸</div>
+                <div class="social-info"><input type="text" value="instagram.com/priyamehta.design"></div>
+                <span class="content-status live">✓ Live</span>
+                <button class="video-remove" onclick="this.closest('.social-row').remove()">✕</button>
+              </div>
+            </div>
+            <div class="add-social-row">
+              <select id="newSocialPlatform"><option>Instagram</option><option>X (Twitter)</option><option>Facebook</option><option>YouTube Channel</option><option>Behance</option><option>Other</option></select>
+              <input type="text" id="newSocialHandle" placeholder="Paste your profile link">
+              <button onclick="alert('This would submit your social handle for approval — it will appear on your public portfolio once reviewed.')">Add</button>
+            </div>
+          </div>
+
+          <div class="approval-note">🕐 New videos and social links are reviewed by the Merrakii+ team before appearing on your public portfolio — usually within 2 working days. Removing existing content doesn't need approval.</div>
+
+          <button class="save-btn">Save Changes</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>What Merrakii+ Tracks <span class="field-source auto">AUTO-UPDATED</span></h3>
+          <p style="font-size:11.5px; color:var(--muted); margin-bottom:4px;">These update automatically as you contribute — not editable, so they stay trustworthy to anyone viewing your portfolio.</p>
+          <div class="auto-stat-grid">
+            <div class="auto-stat"><b>34</b><span>Sessions Given</span></div>
+            <div class="auto-stat"><b>41</b><span>Students Reached</span></div>
+            <div class="auto-stat"><b>6</b><span>Journeys Validated</span></div>
+            <div class="auto-stat"><b>18</b><span>Downstream Decisions</span></div>
+            <div class="auto-stat"><b>2024</b><span>Verified Since</span></div>
+            <div class="auto-stat"><b>4.9★</b><span>Avg. Student Rating</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RECOGNITION ============ -->
+      <section class="tab-panel" id="tab-recognition">
+        <div class="page-head">
+          <h1>Recognition</h1>
+          <p>The community and recognition side of contributing — not a leaderboard about output, a wall about impact.</p>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date-badge"><b>14</b><span>Nov</span></div>
+          <div class="event-txt">
+            <div class="event-title">Career Professionals Forum 2026</div>
+            <div class="event-sub">Annual gathering of the network — Gurugram · In-person &amp; livestreamed</div>
+          </div>
+          <button onclick="alert('This would open the Forum RSVP page.')">RSVP</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>Recognised This Quarter</h3>
+          <div class="rw-list">
+            <div class="rw-row"><div class="rw-rank">1</div><div class="rw-avatar">KR</div><div class="rw-main"><div class="rw-name">Dr. Kavita Reddy</div><div class="rw-domain">Medical &amp; Healthcare</div></div><div class="rw-score">12 sessions</div></div>
+            <div class="rw-row me"><div class="rw-rank">2</div><div class="rw-avatar">PM</div><div class="rw-main"><div class="rw-name">Priya Mehta (You)</div><div class="rw-domain">Design &amp; Creative Industries</div></div><div class="rw-score">9 sessions</div></div>
+            <div class="rw-row"><div class="rw-rank">3</div><div class="rw-avatar">VC</div><div class="rw-main"><div class="rw-name">Vikram Choudhary</div><div class="rw-domain">Law &amp; Public Service</div></div><div class="rw-score">7 sessions</div></div>
+            <div class="rw-row"><div class="rw-rank">4</div><div class="rw-avatar">AS</div><div class="rw-main"><div class="rw-name">Arnav Sethi</div><div class="rw-domain">Technology &amp; Engineering</div></div><div class="rw-score">6 sessions</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ RESOURCES ============ -->
+      <section class="tab-panel" id="tab-resources">
+        <div class="page-head">
+          <h1>Resources</h1>
+          <p>Everything you need to walk into a session or a validation review ready.</p>
+        </div>
+
+        <div class="res-grid">
+          <div class="res-card">
+            <h4>Structured Conversation Guide</h4>
+            <p>The question set used to run a focused, useful 45-minute session — you don't need to prepare beyond this.</p>
+            <button class="res-dl">⬇ Download Guide</button>
+          </div>
+          <div class="res-card">
+            <h4>Validation Review Checklist</h4>
+            <p>What to check for when validating a journey section in your domain — accuracy, currency, and tone.</p>
+            <button class="res-dl">⬇ Download Checklist</button>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <div class="acc-item" data-i="0">
+            <div class="acc-head" onclick="toggleAcc(0)"><span>How is my time commitment tracked?</span><span class="chev">⌄</span></div>
+            <div class="acc-body">Every session and validation you complete is logged automatically once it's marked done — nothing to report manually. Your Overview tab always reflects your actual, current contribution.</div>
+          </div>
+          <div class="acc-item" data-i="1">
+            <div class="acc-head" onclick="toggleAcc(1)"><span>Is this a paid role?</span><span class="chev">⌄</span></div>
+            <div class="acc-body">Your core contribution — Validate, Speak, Shape — stays recognition-based, not paid. What you receive there is a verified public profile, a community of peers, and standing recognition, including at the annual Forum. Alongside that, you can also offer paid Premium Sessions (1-on-1 or group), which students or schools book and pay for directly — Merrakii+ handles billing and pays out your share, tracked in the Earnings tab. The two are separate and you're never required to take part in the paid track.</div>
+          </div>
+          <div class="acc-item" data-i="2">
+            <div class="acc-head" onclick="toggleAcc(2)"><span>What if I need to reschedule a session?</span><span class="chev">⌄</span></div>
+            <div class="acc-body">Use the reschedule option on any upcoming session in My Sessions — Merrakii+ handles notifying the student and finding a new slot. No need to coordinate this yourself.</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+<script>
+  function switchTab(tab){
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('tab-'+tab).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('.nav-item').forEach(btn=>{
+    btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
+  });
+
+  function toggleAcc(i){
+    document.querySelector(`.acc-item[data-i="${i}"]`).classList.toggle('open');
+  }
+</script>
+</body>
+</html>

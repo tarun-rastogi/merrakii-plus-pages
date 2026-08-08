@@ -1,0 +1,522 @@
+{
+  "New Website Pages": [
+    [
+      "Category",
+      "Topic",
+      "Completeness",
+      "Phase 1",
+      "Type of feature",
+      "Effort"
+    ],
+    [
+      "Student Facing",
+      "Home Page- Search Bar",
+      "0.7",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Career Journey Map",
+      "0.7",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Deep Profiling",
+      "0.9",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Journey Payment Page",
+      "0.9",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Student Dashboard - Overview",
+      "0.5",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Student Dashboard - My Journey",
+      "0.5",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Student Dashboard - Career Journey Report",
+      "0.5",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Student Dashboard - Course List Page",
+      "0.5",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Student Dashboard - Resources Overview",
+      "0.5",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Student Dashboard - Resources Details",
+      "0.5",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Student Dashboard - Notifications Page",
+      "0.5",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Student Dashboard - Career Asset",
+      "0.0",
+      "Yes / No",
+      "Page",
+      ""
+    ],
+    [
+      "",
+      "Service Status Page",
+      "0.0",
+      "No",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Course Detail Page",
+      "0.0",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Course Entollment Page",
+      "0.0",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Course Payment Page",
+      "0.9",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Payment Integration",
+      "0.0",
+      "Yes",
+      "Integration",
+      "High"
+    ],
+    [
+      "",
+      "Caontact Us",
+      "0.0",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "About Merrakii",
+      "0.0",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Terms & Conditions",
+      "0.0",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Privacy Policy",
+      "0.0",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Refund Policy",
+      "0.0",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "FAQs",
+      "0.0",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "Admin Panel",
+      "Career Library CMS Overview (Career= Profession + Course + College + Exam)",
+      "",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Add Career Page per category per stream",
+      "",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "User Management - Overview",
+      "",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "User Management - Add Student",
+      "",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Service Knowledge Page Overview",
+      "",
+      "Yes",
+      "Page",
+      "Small"
+    ],
+    [
+      "",
+      "Add Service Knowledge",
+      "",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Exam Overview",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "Exam Add",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "College Overview",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "College Add",
+      "",
+      "",
+      "",
+      ""
+    ],
+    [
+      "",
+      "Courses Overview page",
+      "",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Add Courses per career per service",
+      "",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Counsellor Overview",
+      "",
+      "No",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Add Counsellor",
+      "",
+      "No",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Resources Overview",
+      "",
+      "Yes",
+      "Page",
+      "Medium"
+    ],
+    [
+      "",
+      "Add Resources",
+      "",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Financials overview",
+      "",
+      "Yes",
+      "Page",
+      "High"
+    ],
+    [
+      "",
+      "Add Financials",
+      "",
+      "No",
+      "Page",
+      "High"
+    ],
+    [
+      "Backend",
+      "Access & security",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "Search & personalisation",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "Integrations",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "Responsiveness",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "Data & architecture",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "Business logic / workflows",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "DevOps & reliability",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ],
+    [
+      "",
+      "Compliance & quality (non-UI)",
+      "",
+      "Yes",
+      "Backend",
+      "High"
+    ]
+  ],
+  "Previous Website Pages": [
+    [
+      "Page category",
+      "Page route",
+      "Purpose"
+    ],
+    [
+      "Marketing / entry",
+      "/homepage",
+      "Main landing page for Study Abroad and Study in India."
+    ],
+    [
+      "Discovery / catalogue",
+      "/catalog",
+      "Browse the full catalogue of programmes from contracted institutes."
+    ],
+    [
+      "Discovery / catalogue",
+      "/institutes/[id]",
+      "Institute profile with programmes, details, and enrolment options."
+    ],
+    [
+      "Discovery / catalogue",
+      "/course",
+      "Course/programme detail page for enrolment decisions."
+    ],
+    [
+      "Application / payment",
+      "/apply/[programId]",
+      "Structured application form for a selected programme."
+    ],
+    [
+      "Application / payment",
+      "/cart",
+      "Hold selected courses before checkout/enrolment."
+    ],
+    [
+      "Application / payment",
+      "/payment/[applicationId]",
+      "Pay for a specific application (including UPI/payment options)."
+    ],
+    [
+      "Application / payment",
+      "/payment/checkout",
+      "Final checkout step to complete fee payment."
+    ],
+    [
+      "Application / payment",
+      "/payment/success",
+      "Confirmation screen after successful payment/enrolment."
+    ],
+    [
+      "Student account / auth",
+      "/login",
+      "Student/guardian sign-in (phone OTP)."
+    ],
+    [
+      "Student account / auth",
+      "/account",
+      "Personal account to view applications and enrolment status."
+    ],
+    [
+      "Contact Us",
+      "/contactus",
+      "Contact Us"
+    ],
+    [
+      "Staff admin",
+      "/dashboard",
+      "Staff console home for catalogue and operations."
+    ],
+    [
+      "Staff admin",
+      "/dashboard/login",
+      "Admin sign-in to manage institutes, courses, and catalogue."
+    ],
+    [
+      "Staff admin",
+      "/dashboard/homepage",
+      "Admin control for homepage/content configuration."
+    ],
+    [
+      "Staff admin",
+      "/dashboard/addvendor",
+      "Add a new contracted vendor/institute to the catalogue."
+    ],
+    [
+      "Staff admin",
+      "/dashboard/editvendor",
+      "Edit an existing vendor/institute record."
+    ],
+    [
+      "Staff admin",
+      "/dashboard/courses",
+      "Manage the list of programmes/courses in the catalogue."
+    ],
+    [
+      "Staff admin",
+      "/dashboard/course-detail",
+      "Create or edit a single course’s catalogue details."
+    ]
+  ],
+  "_merges": {
+    "New Website Pages": [
+      {
+        "r": 1,
+        "c": 0,
+        "rowSpan": 23,
+        "colSpan": 1
+      },
+      {
+        "r": 24,
+        "c": 0,
+        "rowSpan": 18,
+        "colSpan": 1
+      }
+    ]
+  }
+}

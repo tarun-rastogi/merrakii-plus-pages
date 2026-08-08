@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Partner Counsellor Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --ledger-line:#E3D9CE; --ledger-margin:#E8B4B0;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  button{ font-family:inherit; }
+
+  /* ================= TOPBAR (unified brand header) ================= */
+  #topbar{
+    position:sticky; top:0; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff;
+    box-shadow:0 3px 14px rgba(10,78,62,.18);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:19px; display:flex; align-items:center; gap:10px; }
+  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--coral); box-shadow:0 0 0 4px rgba(255,107,74,.28); }
+  .brand small{ display:block; font-family:var(--font-body); font-weight:500; font-size:10px; letter-spacing:.13em; text-transform:uppercase; opacity:.78; margin-top:1px; }
+  .tb-right{ display:flex; align-items:center; gap:16px; }
+  .tb-bell{ position:relative; font-size:17px; cursor:pointer; opacity:.9; }
+  .tb-bell .dotbadge{ position:absolute; top:-3px; right:-4px; width:8px; height:8px; border-radius:50%; background:var(--coral); border:1.5px solid var(--teal-deep); }
+  .tb-agent{ display:flex; align-items:center; gap:9px; }
+  .tb-avatar{ width:32px; height:32px; border-radius:50%; background:var(--gold-light); color:var(--gold-deep); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12.5px; font-family:var(--font-display); }
+  .tb-agent-name{ font-size:12.5px; font-weight:700; line-height:1.2; }
+  .tb-agent-tier{ font-size:9.5px; opacity:.8; font-weight:600; }
+
+  /* ================= SHELL: sidenav + content ================= */
+  #shell{ display:flex; min-height:calc(100vh - 60px); }
+
+  #sidenav{
+    width:210px; flex-shrink:0; background:var(--white); border-right:1px solid var(--paper-line);
+    padding:18px 12px; display:flex; flex-direction:column; gap:4px;
+  }
+  .nav-item{
+    display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:10px; cursor:pointer;
+    font-size:13px; font-weight:600; color:var(--muted); transition:all .15s; border:none; background:none; width:100%; text-align:left;
+  }
+  .nav-item .ic{ font-size:15px; width:18px; text-align:center; }
+  .nav-item:hover{ background:var(--paper); color:var(--ink); }
+  .nav-item.active{ background:var(--teal-light); color:var(--teal-deep); }
+
+  .sidenav-spacer{ flex:1; }
+  .tier-card{
+    margin-top:10px; background:linear-gradient(150deg,var(--gold-light),#fff); border:1px solid #EAD9A8; border-radius:14px;
+    padding:14px; text-align:center;
+  }
+  .tier-card .tc-badge{ font-size:26px; }
+  .tier-card .tc-label{ font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--gold-deep); margin-top:4px; }
+  .tier-card .tc-sub{ font-size:9.5px; color:var(--muted); margin-top:2px; line-height:1.4; }
+  .tier-card .tc-bar{ height:5px; background:#EDE0C0; border-radius:6px; margin-top:9px; overflow:hidden; }
+  .tier-card .tc-bar > i{ display:block; height:100%; width:68%; background:var(--gold); border-radius:6px; }
+  .tier-card .tc-next{ font-size:8.5px; color:var(--gold-deep); margin-top:6px; font-weight:700; }
+
+  #content{ flex:1; padding:24px 28px 50px; max-width:1180px; }
+
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; animation:rise .2s ease; }
+  @keyframes rise{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  .page-head{ margin-bottom:20px; }
+  .page-head h1{ font-family:var(--font-display); font-weight:700; font-size:23px; }
+  .page-head p{ font-size:12.5px; color:var(--muted); margin-top:4px; }
+
+  /* ================= OVERVIEW: stat strip ================= */
+  .stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+  @media (max-width:920px){ .stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .stat-tile{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 16px; }
+  .stat-tile .st-label{ font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+  .stat-tile .st-val{ font-family:var(--font-mono); font-weight:500; font-size:23px; margin-top:6px; color:var(--ink); }
+  .stat-tile.money .st-val{ color:var(--gold-deep); }
+  .stat-tile .st-sub{ font-size:10px; color:var(--teal); margin-top:3px; font-weight:600; }
+
+  /* ================= NORTH STAR: Decisions Enabled ================= */
+  .northstar{
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; border-radius:18px;
+    padding:22px 26px; margin-bottom:20px; box-shadow:0 14px 34px rgba(10,78,62,.18);
+  }
+  .ns-label{ font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.75; }
+  .ns-value{ font-family:var(--font-display); font-weight:800; font-size:38px; margin-top:6px; display:flex; align-items:baseline; gap:9px; }
+  .ns-value span{ font-family:var(--font-body); font-weight:700; font-size:15px; opacity:.9; }
+  .ns-sub{ font-size:11.5px; opacity:.82; margin-top:6px; max-width:420px; line-height:1.5; }
+  .ns-right{ display:flex; gap:20px; flex-shrink:0; }
+  .ns-stat{ text-align:center; }
+  .ns-stat b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:19px; }
+  .ns-stat span{ font-size:9px; opacity:.78; text-transform:uppercase; letter-spacing:.05em; font-weight:700; }
+
+  .decision-chip{
+    display:inline-flex; align-items:center; gap:5px; font-size:9.5px; font-weight:700; padding:3px 9px;
+    border-radius:20px; background:var(--gold-light); color:var(--gold-deep); border:1px solid #EAD9A8; margin-left:8px;
+  }
+  .decision-chip.full{ background:var(--teal-light); color:var(--teal-deep); border-color:#CFEAE0; }
+  .decision-chip.na{ background:var(--paper); color:var(--muted); border-color:var(--paper-line); }
+
+  /* ================= SIGNATURE: Today's Register (ledger) ================= */
+  .register{
+    background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(10,26,20,.05); margin-bottom:26px;
+  }
+  .register-head{
+    display:flex; align-items:center; justify-content:space-between; padding:16px 22px;
+    background:var(--teal-light); border-bottom:1px solid #CFEAE0;
+  }
+  .register-head .rh-title{ font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--teal-deep); }
+  .register-head .rh-date{ font-size:11px; color:var(--teal-deep); font-weight:600; opacity:.8; }
+  .register-body{ position:relative; padding:6px 0; }
+  .register-body::before{
+    content:""; position:absolute; left:46px; top:0; bottom:0; width:1.5px; background:var(--ledger-margin);
+  }
+  .reg-row{
+    display:flex; align-items:flex-start; gap:14px; padding:13px 22px 13px 0;
+    border-bottom:1px solid var(--ledger-line); position:relative;
+  }
+  .reg-row:last-child{ border-bottom:none; }
+  .reg-num{ width:46px; flex-shrink:0; text-align:center; font-family:var(--font-mono); font-size:11px; color:var(--muted); padding-top:2px; }
+  .reg-check{
+    width:19px; height:19px; border-radius:5px; border:1.5px solid var(--teal); flex-shrink:0; margin-top:1px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; transition:all .15s; background:#fff;
+  }
+  .reg-check.done{ background:var(--teal); }
+  .reg-main{ flex:1; min-width:0; }
+  .reg-name{ font-size:13px; font-weight:700; color:var(--ink); }
+  .reg-name .src-tag{ font-size:8.5px; font-weight:800; padding:2px 7px; border-radius:20px; margin-left:7px; letter-spacing:.02em; vertical-align:middle; }
+  .src-tag.merrakii{ background:var(--gold-light); color:var(--gold-deep); border:1px solid #EAD9A8; }
+  .src-tag.self{ background:var(--teal-light); color:var(--teal-deep); border:1px solid #CFEAE0; }
+  .reg-task{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .reg-actions{ display:flex; gap:8px; flex-shrink:0; align-items:center; }
+  .reg-btn{
+    width:30px; height:30px; border-radius:8px; border:1px solid var(--paper-line); background:var(--paper);
+    cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; transition:all .15s;
+  }
+  .reg-btn:hover{ border-color:var(--teal); background:var(--teal-light); }
+  .reg-row.done .reg-name, .reg-row.done .reg-task{ opacity:.45; text-decoration:line-through; }
+
+  .register-empty{ padding:30px; text-align:center; font-size:12px; color:var(--muted); }
+
+  /* ================= QUICK ACTIONS ================= */
+  .quick-row{ display:flex; gap:12px; margin-bottom:26px; flex-wrap:wrap; }
+  .qbtn{
+    display:flex; align-items:center; gap:9px; padding:12px 18px; border-radius:12px; border:none; cursor:pointer;
+    font-weight:700; font-size:12.5px; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .qbtn.primary{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; box-shadow:0 8px 18px rgba(255,107,74,.28); }
+  .qbtn.secondary{ background:var(--white); border:1px solid var(--paper-line); color:var(--ink); }
+  .qbtn:hover{ transform:translateY(-1px); }
+
+  /* ================= STUDENTS TAB ================= */
+  .filter-row{ display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .fchip{
+    padding:7px 14px; border-radius:20px; border:1px solid var(--paper-line); background:var(--white);
+    font-size:11.5px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .15s;
+  }
+  .fchip:hover{ border-color:var(--teal); }
+  .fchip.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
+
+  .student-list{ display:flex; flex-direction:column; gap:9px; }
+  .student-row{
+    display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line);
+    border-radius:12px; padding:13px 16px; cursor:pointer; transition:all .15s;
+  }
+  .student-row:hover{ border-color:var(--teal); box-shadow:0 4px 14px rgba(15,110,86,.07); }
+  .sr-avatar{
+    width:38px; height:38px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line);
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700;
+    font-size:13px; color:var(--teal-deep); flex-shrink:0;
+  }
+  .sr-main{ flex:1; min-width:0; }
+  .sr-name-row{ display:flex; align-items:center; gap:8px; }
+  .sr-name{ font-size:13px; font-weight:700; color:var(--ink); }
+  .sr-meta{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .sr-stage{ flex-shrink:0; }
+  .stage-badge{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; letter-spacing:.02em; white-space:nowrap; }
+  .stage-new{ background:#E8EEFB; color:#2b5bd7; }
+  .stage-contacted{ background:#FFF3D6; color:#a56b00; }
+  .stage-meeting{ background:#F0E6FB; color:#6b3fa0; }
+  .stage-interested{ background:var(--coral-light); color:#c4451f; }
+  .stage-signedup{ background:var(--teal-light); color:var(--teal-deep); }
+  .stage-converted{ background:var(--gold-light); color:var(--gold-deep); }
+  .stage-lost{ background:#F1F1EF; color:#8a8a86; }
+  .sr-next{ flex-shrink:0; text-align:right; font-size:10.5px; color:var(--muted); min-width:88px; }
+  .sr-next b{ display:block; color:var(--ink); font-size:11px; }
+
+  /* ================= EARNINGS: passbook (signature) ================= */
+  .earn-top{ display:grid; grid-template-columns:1.3fr 1fr; gap:16px; margin-bottom:22px; }
+  @media (max-width:920px){ .earn-top{ grid-template-columns:1fr; } }
+
+  .passbook{
+    background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(10,26,20,.05);
+  }
+  .pb-head{ padding:16px 22px; background:linear-gradient(120deg,var(--gold-deep),var(--gold)); color:#fff; }
+  .pb-head .pb-eyebrow{ font-size:9.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; opacity:.85; }
+  .pb-head .pb-bal{ font-family:var(--font-mono); font-weight:500; font-size:26px; margin-top:5px; }
+  .pb-head .pb-sub{ font-size:10.5px; opacity:.85; margin-top:3px; }
+  .pb-body{ padding:4px 0; position:relative; }
+  .pb-body::before{ content:""; position:absolute; left:0; right:0; top:0; height:0; }
+  .pb-row{
+    display:flex; align-items:center; justify-content:space-between; padding:11px 22px;
+    border-bottom:1px dashed var(--ledger-line); font-size:12px;
+  }
+  .pb-row:last-child{ border-bottom:none; }
+  .pb-row .pb-desc{ color:var(--ink); font-weight:600; }
+  .pb-row .pb-date{ display:block; font-size:9.5px; color:var(--muted); font-weight:500; margin-top:1px; }
+  .pb-row .pb-amt{ font-family:var(--font-mono); font-weight:500; color:var(--teal-deep); }
+  .pb-row .pb-amt.pending{ color:var(--muted); }
+
+  .earn-side{ display:flex; flex-direction:column; gap:14px; }
+  .commission-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; }
+  .commission-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:10px; }
+  .comm-row{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--paper-line); font-size:11.5px; }
+  .comm-row:last-child{ border-bottom:none; }
+  .comm-row .cl{ color:var(--muted); }
+  .comm-row .cv{ font-family:var(--font-mono); font-weight:500; color:var(--ink); }
+
+  .panel-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; margin-bottom:16px; }
+  .panel-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:10px; }
+  .edit-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:700px){ .edit-grid{ grid-template-columns:1fr; } }
+  .ef{ margin-bottom:4px; }
+  .ef label{ font-size:11px; font-weight:700; display:block; margin-bottom:6px; }
+  .ef input, .ef textarea, .ef select{ width:100%; padding:10px 12px; border:1px solid var(--paper-line); border-radius:9px; font-family:inherit; font-size:12.5px; }
+  .ef textarea{ resize:vertical; min-height:70px; }
+  .save-btn{ margin-top:16px; background:var(--teal); color:#fff; border:none; border-radius:10px; padding:11px 20px; font-weight:700; font-size:12.5px; cursor:pointer; }
+  .video-thumb{ width:56px; height:36px; border-radius:6px; background:linear-gradient(135deg,var(--teal-deep),var(--teal)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; flex-shrink:0; }
+  .video-row{ display:flex; align-items:center; gap:12px; background:var(--paper); border:1px solid var(--paper-line); border-radius:10px; padding:10px 12px; margin-bottom:9px; }
+  .video-info{ flex:1; min-width:0; }
+  .video-info input{ width:100%; border:none; background:none; font-size:12.5px; font-weight:600; padding:2px 0; outline:none; }
+  .video-info .video-url{ font-size:10px; color:var(--muted); }
+  .video-remove{ background:none; border:none; color:var(--coral); cursor:pointer; font-size:14px; flex-shrink:0; }
+  .add-video-btn{ width:100%; padding:11px; border:1.5px dashed var(--paper-line); border-radius:10px; background:none; color:var(--muted); font-weight:700; font-size:12px; cursor:pointer; margin-top:4px; }
+  .add-video-btn:hover{ border-color:var(--teal); color:var(--teal); }
+  .content-status{ font-size:8.5px; font-weight:800; padding:2px 8px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .content-status.live{ background:var(--teal-light); color:var(--teal-deep); }
+  .content-status.pending{ background:#FFF3D6; color:#a56b00; }
+  .social-row{ display:flex; align-items:center; gap:12px; background:var(--paper); border:1px solid var(--paper-line); border-radius:10px; padding:10px 12px; margin-bottom:9px; }
+  .social-ic{ width:32px; height:32px; border-radius:8px; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+  .social-info{ flex:1; min-width:0; }
+  .social-info input{ width:100%; border:none; background:none; font-size:12.5px; font-weight:600; padding:2px 0; outline:none; }
+  .add-social-row{ display:flex; gap:8px; margin-top:4px; }
+  .add-social-row select{ flex:0 0 130px; padding:9px 10px; border:1px solid var(--paper-line); border-radius:8px; font-family:inherit; font-size:12px; }
+  .add-social-row input{ flex:1; padding:9px 10px; border:1px solid var(--paper-line); border-radius:8px; font-family:inherit; font-size:12px; }
+  .add-social-row button{ background:var(--teal); color:#fff; border:none; border-radius:8px; padding:9px 14px; font-weight:700; font-size:11.5px; cursor:pointer; white-space:nowrap; }
+  .approval-note{ margin-top:10px; display:flex; gap:9px; background:var(--teal-light); border:1px solid #CFEAE0; border-radius:10px; padding:11px 13px; font-size:11px; color:#204338; line-height:1.5; }
+
+  .portfolio-preview{ background:linear-gradient(150deg,#fff,var(--paper)); border:1px solid var(--paper-line); border-radius:18px; padding:4px; margin-bottom:22px; box-shadow:0 14px 34px rgba(10,26,20,.06); }
+  .pp-browser-bar{ display:flex; align-items:center; gap:6px; padding:10px 14px; border-bottom:1px solid var(--paper-line); }
+  .pp-dot{ width:8px; height:8px; border-radius:50%; background:var(--paper-line); }
+  .pp-url{ flex:1; text-align:center; font-size:10px; color:var(--muted); font-family:var(--font-mono); }
+  .pp-inner{ padding:26px; text-align:center; }
+  .pp-avatar{ width:56px; height:56px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:20px; margin:0 auto; }
+  .pp-name{ font-family:var(--font-display); font-weight:700; font-size:18px; margin-top:10px; }
+  .pp-tag{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .pp-stats{ display:flex; justify-content:center; gap:22px; margin-top:14px; flex-wrap:wrap; }
+  .pp-stats div b{ display:block; font-family:var(--font-mono); font-size:16px; color:var(--teal-deep); }
+  .pp-stats div span{ font-size:9px; color:var(--muted); text-transform:uppercase; }
+  .pp-note{ font-size:10.5px; color:var(--muted); margin-top:16px; }
+
+  .share-row{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+  .share-btn{ display:flex; align-items:center; gap:8px; padding:11px 16px; border-radius:10px; border:1px solid var(--paper-line); background:var(--white); font-weight:700; font-size:12px; cursor:pointer; transition:all .15s; }
+  .share-btn:hover{ border-color:var(--teal); }
+  .share-btn.primary{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; }
+
+  .field-source{ font-size:9px; font-weight:800; padding:2px 8px; border-radius:20px; margin-left:8px; vertical-align:middle; }
+  .field-source.editable{ background:var(--teal-light); color:var(--teal-deep); }
+  .field-source.auto{ background:var(--gold-light); color:var(--gold-deep); }
+  .auto-stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px; }
+  @media (max-width:700px){ .auto-stat-grid{ grid-template-columns:repeat(2,1fr); } }
+  .auto-stat{ background:var(--gold-light); border:1px solid #EAD9A8; border-radius:10px; padding:11px 13px; text-align:center; }
+  .auto-stat b{ display:block; font-family:var(--font-mono); font-size:17px; color:var(--gold-deep); }
+  .auto-stat span{ font-size:9px; color:var(--gold-deep); text-transform:uppercase; letter-spacing:.03em; font-weight:700; }
+
+  .tier-ladder{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:20px 22px; margin-top:16px; }
+  .tier-ladder h3{ font-family:var(--font-display); font-size:14.5px; font-weight:700; margin-bottom:14px; }
+  .tl-row{ display:flex; align-items:center; gap:14px; padding:13px 14px; border-radius:12px; margin-bottom:8px; border:1px solid var(--paper-line); }
+  .tl-row.current{ background:var(--teal-light); border-color:var(--teal); }
+  .tl-badge{ font-size:22px; flex-shrink:0; }
+  .tl-main{ flex:1; }
+  .tl-name{ font-family:var(--font-display); font-weight:700; font-size:13px; }
+  .tl-range{ font-size:10.5px; color:var(--muted); margin-top:2px; }
+  .tl-income{ font-family:var(--font-mono); font-weight:500; font-size:13px; color:var(--gold-deep); flex-shrink:0; text-align:right; }
+  .tl-current-tag{ font-size:8.5px; font-weight:800; background:var(--teal); color:#fff; padding:3px 8px; border-radius:20px; margin-left:8px; vertical-align:middle; }
+
+  .referral-card{
+    background:linear-gradient(150deg,var(--teal-light),#fff); border:1px solid #CFEAE0; border-radius:14px; padding:16px 18px;
+  }
+  .referral-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; color:var(--teal-deep); }
+  .referral-card p{ font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.55; }
+  .ref-code{
+    margin-top:10px; display:flex; align-items:center; gap:8px; background:#fff; border:1px dashed var(--teal);
+    border-radius:9px; padding:9px 12px; font-family:var(--font-mono); font-size:12px; color:var(--teal-deep); font-weight:500;
+    justify-content:space-between;
+  }
+  .ref-code button{ background:var(--teal); color:#fff; border:none; border-radius:6px; padding:5px 10px; font-size:10px; font-weight:700; cursor:pointer; }
+
+  /* payout status strip */
+  .payout-strip{
+    display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--paper-line);
+    border-radius:12px; padding:13px 18px; margin-bottom:22px;
+  }
+  .payout-strip .ps-ic{ font-size:18px; }
+  .payout-strip .ps-txt{ font-size:11.5px; color:var(--muted); }
+  .payout-strip .ps-txt b{ color:var(--ink); }
+
+  /* ================= LEADERBOARD ================= */
+  .lb-list{ display:flex; flex-direction:column; gap:8px; }
+  .lb-row{
+    display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line);
+    border-radius:12px; padding:12px 16px;
+  }
+  .lb-row.me{ border-color:var(--teal); background:var(--teal-light); }
+  .lb-rank{ width:30px; font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--muted); text-align:center; }
+  .lb-row:nth-child(1) .lb-rank{ color:#D4A017; }
+  .lb-row:nth-child(2) .lb-rank{ color:#8B9199; }
+  .lb-row:nth-child(3) .lb-rank{ color:#B5651D; }
+  .lb-avatar{ width:34px; height:34px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:12px; color:var(--teal-deep); }
+  .lb-main{ flex:1; }
+  .lb-name{ font-size:12.5px; font-weight:700; }
+  .lb-city{ font-size:10px; color:var(--muted); }
+  .lb-tier{ font-size:9px; font-weight:800; padding:3px 8px; border-radius:20px; background:var(--gold-light); color:var(--gold-deep); margin-right:10px; }
+  .lb-score{ font-family:var(--font-mono); font-weight:500; font-size:13px; color:var(--teal-deep); min-width:70px; text-align:right; }
+
+  /* ================= RESOURCES ================= */
+  .res-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:920px){ .res-grid{ grid-template-columns:1fr; } }
+  .acc-item{ background:var(--white); border:1px solid var(--paper-line); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .acc-head{
+    display:flex; align-items:center; justify-content:space-between; padding:13px 16px; cursor:pointer;
+    font-size:12.5px; font-weight:700;
+  }
+  .acc-head .chev{ transition:transform .2s; color:var(--muted); }
+  .acc-item.open .chev{ transform:rotate(180deg); }
+  .acc-body{ display:none; padding:0 16px 15px; font-size:12px; color:var(--muted); line-height:1.6; }
+  .acc-item.open .acc-body{ display:block; }
+  .res-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:16px; }
+  .res-card h4{ font-family:var(--font-display); font-size:13.5px; margin-bottom:6px; }
+  .res-card p{ font-size:11.5px; color:var(--muted); line-height:1.5; margin-bottom:10px; }
+  .res-dl{ display:inline-flex; align-items:center; gap:7px; font-size:11.5px; font-weight:700; color:var(--teal-deep); background:var(--teal-light); padding:8px 13px; border-radius:9px; cursor:pointer; border:none; }
+
+  /* ================= DRAWER (student detail) ================= */
+  #overlay{ position:fixed; inset:0; background:rgba(10,26,20,.42); opacity:0; pointer-events:none; transition:opacity .28s ease; z-index:40; }
+  #overlay.show{ opacity:1; pointer-events:auto; }
+  #drawer{
+    position:fixed; top:0; right:0; height:100%; width:60%; min-width:340px; background:var(--white);
+    box-shadow:-14px 0 40px rgba(10,26,20,.22); transform:translateX(100%); transition:transform .32s cubic-bezier(.2,.9,.25,1);
+    z-index:41; display:flex; flex-direction:column;
+  }
+  #drawer.show{ transform:translateX(0); }
+  @media (max-width:860px){
+    #drawer{ width:100%; top:auto; bottom:0; height:88%; border-radius:18px 18px 0 0; transform:translateY(100%); }
+    #drawer.show{ transform:translateY(0); }
+  }
+  #drawer-head{ padding:20px 24px 16px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; position:relative; flex-shrink:0; }
+  #drawer-close{ position:absolute; top:16px; right:18px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.16); border:none; color:#fff; font-size:16px; cursor:pointer; }
+  #dh-eyebrow{ font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; opacity:.78; }
+  #dh-name{ font-family:var(--font-display); font-weight:700; font-size:20px; margin-top:4px; }
+  #dh-meta{ font-size:11.5px; opacity:.85; margin-top:4px; }
+  #drawer-body{ flex:1; overflow-y:auto; padding:20px 24px 26px; }
+
+  .dp-section-label{ font-size:10px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin:18px 0 8px; }
+  .dp-section-label:first-child{ margin-top:0; }
+  .stage-tracker{ display:flex; gap:5px; flex-wrap:wrap; }
+  .stage-pip{ font-size:9.5px; font-weight:700; padding:5px 10px; border-radius:20px; background:var(--paper); color:var(--muted); border:1px solid var(--paper-line); }
+  .stage-pip.past{ background:var(--teal-light); color:var(--teal-deep); border-color:#CFEAE0; }
+  .stage-pip.cur{ background:var(--teal); color:#fff; border-color:var(--teal); }
+
+  .decision-list{ display:flex; flex-direction:column; gap:7px; }
+  .decision-row{ display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; background:var(--paper); border:1px solid var(--paper-line); }
+  .decision-row.done{ background:var(--gold-light); border-color:#EAD9A8; }
+  .decision-row .dr-check{ width:18px; height:18px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; background:var(--paper-line); }
+  .decision-row.done .dr-check{ background:var(--gold-deep); }
+  .decision-row .dr-txt{ font-size:12px; font-weight:600; color:var(--ink); }
+  .decision-row.done .dr-txt{ color:var(--gold-deep); }
+  .decision-note{ font-size:10.5px; color:var(--muted); margin-top:8px; line-height:1.5; font-style:italic; }
+
+  .timeline{ display:flex; flex-direction:column; gap:0; }
+  .tl-item{ display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--paper-line); }
+  .tl-item:last-child{ border-bottom:none; }
+  .tl-dot{ width:8px; height:8px; border-radius:50%; background:var(--teal); margin-top:5px; flex-shrink:0; }
+  .tl-txt{ font-size:12px; color:var(--ink); }
+  .tl-date{ font-size:10px; color:var(--muted); margin-top:2px; }
+
+  .log-box{ background:var(--paper); border:1px solid var(--paper-line); border-radius:12px; padding:14px; }
+  .log-box textarea{ width:100%; border:1px solid var(--paper-line); border-radius:8px; padding:9px 11px; font-family:inherit; font-size:12px; resize:vertical; min-height:60px; outline:none; }
+  .log-box textarea:focus{ border-color:var(--teal); }
+  .log-row{ display:flex; gap:8px; margin-top:9px; }
+  .log-row select{ flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--paper-line); font-size:11.5px; font-family:inherit; }
+  .log-row button{ background:var(--teal); color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:11.5px; font-weight:700; cursor:pointer; }
+
+  .dp-contact-row{ display:flex; gap:8px; margin-top:4px; }
+  .dp-contact-btn{ flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:10px; border-radius:9px; border:1px solid var(--paper-line); background:var(--white); font-size:11.5px; font-weight:700; cursor:pointer; }
+  .dp-contact-btn.call{ color:var(--teal-deep); }
+  .dp-contact-btn.wa{ color:#1d9e4e; }
+
+  /* ================= Add Lead Modal ================= */
+  .modal-bg{ position:fixed; inset:0; background:rgba(10,26,20,.42); display:none; align-items:center; justify-content:center; z-index:50; padding:20px; }
+  .modal-bg.show{ display:flex; }
+  .modal-card{ background:#fff; border-radius:16px; width:100%; max-width:420px; padding:22px; }
+  .modal-card h3{ font-family:var(--font-display); font-size:17px; margin-bottom:14px; }
+  .mf{ margin-bottom:11px; }
+  .mf label{ font-size:11px; font-weight:700; display:block; margin-bottom:5px; }
+  .mf input, .mf select{ width:100%; padding:9px 11px; border:1px solid var(--paper-line); border-radius:8px; font-family:inherit; font-size:12.5px; }
+  .modal-actions{ display:flex; gap:8px; margin-top:16px; }
+  .modal-actions button{ flex:1; padding:11px; border-radius:9px; border:none; font-weight:700; font-size:12.5px; cursor:pointer; }
+  .modal-actions .cancel{ background:var(--paper); color:var(--muted); }
+  .modal-actions .save{ background:var(--teal); color:#fff; }
+
+  .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <a href="01_home.html" class="brand" title="Back to Merrakii+"><span class="dot"></span>Merrakii<small>Partner Counsellor Portal</small></a>
+    <div class="tb-right"><a href="01_home.html" style="font-size:11.5px; font-weight:700; opacity:.85; margin-right:4px;">Log Out</a>
+      <div class="tb-bell">🔔<span class="dotbadge"></span></div>
+      <div class="tb-agent">
+        <div class="tb-avatar">SV</div>
+        <div>
+          <div class="tb-agent-name">Sunita Verma</div>
+          <div class="tb-agent-tier">🌱 Associate Partner Counsellor · Jaipur</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="shell">
+    <nav id="sidenav">
+      <button class="nav-item active" data-tab="overview"><span class="ic">🏠</span> Overview</button>
+      <button class="nav-item" data-tab="students"><span class="ic">🧑‍🎓</span> My Students</button>
+      <button class="nav-item" data-tab="earnings"><span class="ic">💰</span> Earnings</button>
+      <button class="nav-item" data-tab="portfolio"><span class="ic">🔗</span> My Portfolio</button>
+      <button class="nav-item" data-tab="leaderboard"><span class="ic">🏆</span> Leaderboard</button>
+      <button class="nav-item" data-tab="resources"><span class="ic">📚</span> Resources</button>
+      <div class="sidenav-spacer"></div>
+      <div class="tier-card">
+        <div class="tc-badge">🌱</div>
+        <div class="tc-label">Associate Partner</div>
+        <div class="tc-sub">439 more decisions enabled to reach Partner tier</div>
+        <div class="tc-bar"><i style="width:12%;"></i></div>
+        <div class="tc-next">62 / 500 lifetime decisions enabled</div>
+      </div>
+    </nav>
+
+    <main id="content">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="tab-panel active" id="tab-overview">
+        <div class="page-head">
+          <h1>Good morning, Sunita 👋</h1>
+          <p>In Merrakii+, success is measured one way: Decisions Enabled. Everything else on this page follows from that.</p>
+        </div>
+
+        <div class="northstar">
+          <div class="ns-left">
+            <div class="ns-label">Your North Star Metric</div>
+            <div class="ns-value">7 <span>Decisions Enabled this month</span></div>
+            <div class="ns-sub">A student choosing a stream, confirming a direction, finalising a college shortlist, or submitting applications — with your help. This is what Merrakii+ measures every stakeholder's success by, not signups or revenue.</div>
+          </div>
+          <div class="ns-right">
+            <div class="ns-stat"><b>62</b><span>Lifetime</span></div>
+            <div class="ns-stat"><b>17</b><span>This Quarter</span></div>
+            <div class="ns-stat"><b>#4</b><span>Your Rank</span></div>
+          </div>
+        </div>
+
+        <div class="stat-strip">
+          <div class="stat-tile"><div class="st-label">Active Students</div><div class="st-val">14</div><div class="st-sub">3 new this week</div></div>
+          <div class="stat-tile"><div class="st-label">Signups This Month</div><div class="st-val">6</div><div class="st-sub">₹99 unlocks</div></div>
+          <div class="stat-tile"><div class="st-label">Programme Enrolments</div><div class="st-val">3</div><div class="st-sub">A downstream result, not the goal</div></div>
+          <div class="stat-tile money"><div class="st-label">Earnings This Month</div><div class="st-val">₹9,850</div><div class="st-sub">₹1,050 of this was decision bonuses</div></div>
+        </div>
+
+        <div class="register">
+          <div class="register-head">
+            <div class="rh-title">📔 Today's Register</div>
+            <div class="rh-date">Monday, 13 July 2026</div>
+          </div>
+          <div class="register-body" id="registerBody"></div>
+        </div>
+
+        <div class="quick-row">
+          <button class="qbtn primary" id="btnAddLead">➕ Add New Enquiry</button>
+          <button class="qbtn secondary" onclick="switchTab('students')">🧑‍🎓 View All Students</button>
+          <button class="qbtn secondary" onclick="switchTab('earnings')">💰 View Earnings</button>
+        </div>
+      </section>
+
+      <!-- ============ STUDENTS ============ -->
+      <section class="tab-panel" id="tab-students">
+        <div class="page-head">
+          <h1>My Students</h1>
+          <p>Everyone in your pipeline, with how many decisions you've helped each one make. Tap anyone to see their full story.</p>
+        </div>
+
+        <div class="filter-row" id="filterRow">
+          <button class="fchip active" data-stage="all">All (14)</button>
+          <button class="fchip" data-stage="new">New Enquiry</button>
+          <button class="fchip" data-stage="contacted">Contacted</button>
+          <button class="fchip" data-stage="meeting">Meeting Set</button>
+          <button class="fchip" data-stage="interested">Interested</button>
+          <button class="fchip" data-stage="signedup">Signed Up</button>
+          <button class="fchip" data-stage="converted">Converted</button>
+        </div>
+
+        <div class="student-list" id="studentList"></div>
+      </section>
+
+      <!-- ============ EARNINGS ============ -->
+      <section class="tab-panel" id="tab-earnings">
+        <div class="page-head">
+          <h1>Earnings</h1>
+          <p>Your passbook — every commission, when it landed, and what's still on its way.</p>
+        </div>
+
+        <div class="payout-strip">
+          <div class="ps-ic">🗓️</div>
+          <div class="ps-txt">Next payout: <b>31 July 2026</b> · Pending amount: <b>₹3,200</b> · Paid directly to your registered bank account</div>
+        </div>
+
+        <div class="earn-top">
+          <div class="passbook">
+            <div class="pb-head">
+              <div class="pb-eyebrow">Lifetime Earnings</div>
+              <div class="pb-bal">₹1,42,600</div>
+              <div class="pb-sub">Behind this: 62 decisions enabled, 38 signups, 21 programme enrolments</div>
+            </div>
+            <div class="pb-body" id="passbookBody"></div>
+          </div>
+
+          <div class="earn-side">
+            <div class="commission-card">
+              <h3>How you get paid</h3>
+              <div class="comm-row"><span class="cl">🎯 Decision Enabled Bonus — any milestone</span><span class="cv">₹150</span></div>
+              <div class="comm-row"><span class="cl">₹99 Signup — Self-sourced</span><span class="cv">₹40</span></div>
+              <div class="comm-row"><span class="cl">₹99 Signup — Merrakii+ assigned</span><span class="cv">₹25</span></div>
+              <div class="comm-row"><span class="cl">Programme enrolment — Self-sourced</span><span class="cv">10%</span></div>
+              <div class="comm-row"><span class="cl">Programme enrolment — Merrakii+ assigned</span><span class="cv">6%</span></div>
+              <div class="decision-note" style="margin-top:10px;">The Decision Enabled Bonus is paid every time, regardless of whether the student has purchased a programme yet — because that decision is the actual job.</div>
+            </div>
+
+            <div class="referral-card">
+              <h3>Bring a fellow teacher onboard</h3>
+              <p>Earn ₹500 the moment someone you refer enables their first 5 student decisions — no cap on how many you refer.</p>
+              <div class="ref-code">
+                SUNITA-JPR-24
+                <button onclick="navigator.clipboard && navigator.clipboard.writeText('SUNITA-JPR-24')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tier-ladder">
+          <h3>Your Tier &amp; Income Path</h3>
+          <div class="tl-row current">
+            <div class="tl-badge">🌱</div>
+            <div class="tl-main"><div class="tl-name">Associate <span class="tl-current-tag">YOU ARE HERE</span></div><div class="tl-range">62 of 500 decisions enabled — 439 to go</div></div>
+            <div class="tl-income">₹5K – 20K/mo</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-badge">🤝</div>
+            <div class="tl-main"><div class="tl-name">Partner</div><div class="tl-range">501 – 1,500 lifetime decisions enabled</div></div>
+            <div class="tl-income">₹20K – 50K/mo</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-badge">🎖️</div>
+            <div class="tl-main"><div class="tl-name">Senior</div><div class="tl-range">1,501 – 3,000 lifetime decisions enabled</div></div>
+            <div class="tl-income">₹50K – 1L/mo</div>
+          </div>
+          <div class="tl-row">
+            <div class="tl-badge">👑</div>
+            <div class="tl-main"><div class="tl-name">Principal</div><div class="tl-range">3,000+ lifetime decisions enabled</div></div>
+            <div class="tl-income">₹1.5L+/mo</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MY PORTFOLIO ============ -->
+      <section class="tab-panel" id="tab-portfolio">
+        <div class="page-head">
+          <h1>My Portfolio</h1>
+          <p>A shareable page for families in your community — built to post on WhatsApp groups, LinkedIn, or send directly. Never shows your income.</p>
+        </div>
+
+        <div class="portfolio-preview">
+          <div class="pp-browser-bar">
+            <span class="pp-dot"></span><span class="pp-dot"></span><span class="pp-dot"></span>
+            <div class="pp-url">merrakii.co.in/counsellors/sunita-verma-7j4d</div>
+          </div>
+          <div class="pp-inner">
+            <div class="pp-avatar">SV</div>
+            <div class="pp-name">Sunita Verma</div>
+            <div class="pp-tag">Associate Partner Counsellor · Jaipur · Verified by Merrakii+</div>
+            <div class="pp-stats">
+              <div><b>62</b><span>Decisions Enabled</span></div>
+              <div><b>14</b><span>Families Guided</span></div>
+              <div><b>2</b><span>Years Active</span></div>
+            </div>
+            <div class="pp-note">This is a live preview — your income and tier progress are never shown publicly.</div>
+          </div>
+        </div>
+
+        <div class="share-row">
+          <button class="share-btn primary" onclick="window.open('22_partner_counsellor_portfolio_public.html','_blank')">🔗 View Public Portfolio ↗</button>
+          <button class="share-btn" onclick="navigator.clipboard && navigator.clipboard.writeText('merrakii.co.in/counsellors/sunita-verma-7j4d')">📋 Copy Link</button>
+          <button class="share-btn" onclick="alert('This would open a WhatsApp share dialog.')">💬 Share via WhatsApp</button>
+          <button class="share-btn" onclick="alert('This would open a LinkedIn share dialog.')">in Share to LinkedIn</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>What You Control <span class="field-source editable">EDITABLE</span></h3>
+          <div class="edit-grid">
+            <div class="ef"><label>Full Name</label><input type="text" value="Sunita Verma"></div>
+            <div class="ef"><label>City / Area Served</label><input type="text" value="Jaipur, Rajasthan"></div>
+            <div class="ef"><label>Domain Specialisation</label>
+              <select><option>Science Careers</option><option>Commerce Careers</option><option selected>Creative Careers</option><option>Government &amp; Public Service Careers</option></select>
+            </div>
+            <div class="ef"><label>Background</label><input type="text" value="Retired school teacher, 18 years"></div>
+            <div class="ef" style="grid-column:1/-1;"><label>Short Bio (shown on your public portfolio)</label><textarea>Former school teacher with 18 years of experience, now helping families in Jaipur navigate career decisions with the same care I gave my own students.</textarea></div>
+          </div>
+
+          <div style="margin-top:16px;">
+            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:8px;">YouTube Videos <span style="font-weight:400; color:var(--muted);">— introduce yourself to families in your area</span></label>
+            <div id="counsellorVideoList">
+              <div class="video-row">
+                <div class="video-thumb">▶</div>
+                <div class="video-info"><input type="text" value="A Day in Sunita's Work — Jaipur"><div class="video-url">youtube.com/watch?v=5NV6Rdv1a3I</div></div>
+                <span class="content-status live">✓ Live</span>
+                <button class="video-remove" onclick="this.closest('.video-row').remove()">✕</button>
+              </div>
+              <div class="video-row">
+                <div class="video-thumb">▶</div>
+                <div class="video-info"><input type="text" value="Why I Became a Partner Counsellor"><div class="video-url">youtube.com/watch?v=2Xc9gXyf2G4</div></div>
+                <span class="content-status pending">⏳ Pending Approval</span>
+                <button class="video-remove" onclick="this.closest('.video-row').remove()">✕</button>
+              </div>
+            </div>
+            <button class="add-video-btn" onclick="alert('This would open a field to paste a YouTube video URL — it will be submitted for approval, not published immediately.')">+ Add a YouTube Video</button>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label style="font-size:11px; font-weight:700; display:block; margin-bottom:8px;">Social Media Handles <span style="font-weight:400; color:var(--muted);">— shown as follow/connect links publicly</span></label>
+            <div id="counsellorSocialList">
+              <div class="social-row">
+                <div class="social-ic">📸</div>
+                <div class="social-info"><input type="text" value="instagram.com/sunitaverma.careers"></div>
+                <span class="content-status pending">⏳ Pending Approval</span>
+                <button class="video-remove" onclick="this.closest('.social-row').remove()">✕</button>
+              </div>
+            </div>
+            <div class="add-social-row">
+              <select><option>Instagram</option><option>X (Twitter)</option><option>Facebook</option><option>YouTube Channel</option><option>Other</option></select>
+              <input type="text" placeholder="Paste your profile link">
+              <button onclick="alert('This would submit your social handle for approval — it will appear on your public portfolio once reviewed.')">Add</button>
+            </div>
+          </div>
+
+          <div class="approval-note">🕐 New videos and social links are reviewed by the Merrakii+ team before appearing on your public portfolio — usually within 2 working days. Removing existing content doesn't need approval.</div>
+
+          <button class="save-btn">Save Changes</button>
+        </div>
+
+        <div class="panel-card">
+          <h3>What Merrakii+ Tracks <span class="field-source auto">AUTO-UPDATED</span></h3>
+          <p style="font-size:11.5px; color:var(--muted); margin-bottom:4px;">These update automatically as you work with families — not editable, so families can trust them.</p>
+          <div class="auto-stat-grid">
+            <div class="auto-stat"><b>62</b><span>Decisions Enabled</span></div>
+            <div class="auto-stat"><b>14</b><span>Families Guided</span></div>
+            <div class="auto-stat"><b>38</b><span>Students Signed Up</span></div>
+            <div class="auto-stat"><b>3</b><span>Active Now</span></div>
+            <div class="auto-stat"><b>2024</b><span>Partner Since</span></div>
+            <div class="auto-stat"><b>✓</b><span>Foundation Trained</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LEADERBOARD ============ -->
+      <section class="tab-panel" id="tab-leaderboard">
+        <div class="page-head">
+          <h1>Leaderboard</h1>
+          <p>Top Partner Counsellors this quarter, by Decisions Enabled — not signups, not revenue. Rankings reset every quarter; the tier badge next to each name reflects lifetime standing and doesn't reset.</p>
+        </div>
+        <div class="lb-list" id="lbList"></div>
+      </section>
+
+      <!-- ============ RESOURCES ============ -->
+      <section class="tab-panel" id="tab-resources">
+        <div class="page-head">
+          <h1>Resources</h1>
+          <p>Scripts, answers, and materials to make every conversation easier.</p>
+        </div>
+
+        <div class="res-grid">
+          <div>
+            <div class="dp-section-label">Conversation Scripts</div>
+            <div id="accordionScripts"></div>
+          </div>
+          <div>
+            <div class="dp-section-label">Materials</div>
+            <div class="res-card" style="margin-bottom:10px;">
+              <h4>Parent Introduction One-Pager</h4>
+              <p>A single page explaining Merrakii+ in plain language — hand this to parents on a first meeting.</p>
+              <button class="res-dl">⬇ Download PDF</button>
+            </div>
+            <div class="res-card" style="margin-bottom:10px;">
+              <h4>Commission Slab Sheet</h4>
+              <p>The full, printable breakdown of every commission rate and bonus slab.</p>
+              <button class="res-dl">⬇ Download PDF</button>
+            </div>
+            <div class="res-card">
+              <h4>WhatsApp Follow-Up Templates</h4>
+              <p>Ready-to-send message templates for each stage of a student's journey.</p>
+              <button class="res-dl">⬇ Download Templates</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="overlay"></div>
+  <div id="drawer" role="dialog" aria-modal="true">
+    <div id="drawer-head">
+      <button id="drawer-close" aria-label="Close">✕</button>
+      <div id="dh-eyebrow">STUDENT PROFILE</div>
+      <div id="dh-name">—</div>
+      <div id="dh-meta">—</div>
+    </div>
+    <div id="drawer-body"></div>
+  </div>
+
+  <div class="modal-bg" id="addLeadModal">
+    <div class="modal-card">
+      <h3>Add New Enquiry</h3>
+      <div class="mf"><label>Student Name</label><input type="text" id="newName" placeholder="Full name"></div>
+      <div class="mf"><label>Class</label>
+        <select id="newClass"><option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option></select>
+      </div>
+      <div class="mf"><label>Target Career</label><input type="text" id="newCareer" placeholder="e.g. Design, Medicine, Law"></div>
+      <div class="mf"><label>Parent Phone Number</label><input type="tel" id="newPhone" placeholder="10-digit mobile number"></div>
+      <div class="modal-actions">
+        <button class="cancel" id="cancelAddLead">Cancel</button>
+        <button class="save" id="saveAddLead">Add Enquiry</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ---------------- Mock data ----------------
+  const stageMeta = {
+    new:{ label:"New Enquiry", cls:"stage-new" },
+    contacted:{ label:"Contacted", cls:"stage-contacted" },
+    meeting:{ label:"Meeting Set", cls:"stage-meeting" },
+    interested:{ label:"Interested", cls:"stage-interested" },
+    signedup:{ label:"Signed Up", cls:"stage-signedup" },
+    converted:{ label:"Converted", cls:"stage-converted" },
+    lost:{ label:"Inactive", cls:"stage-lost" }
+  };
+  const stageOrder = ["new","contacted","meeting","interested","signedup","converted"];
+
+  const DECISION_MILESTONES = ["Stream Selected","Direction Statement Confirmed","College Shortlist Finalized","Applications Submitted"];
+
+  let students = [
+    { id:1, name:"Ananya Gupta", cls:"Class 10", classNum:10, career:"Design", source:"self", stage:"interested", phone:"98290 XXXXX",
+      decisions:[],
+      notes:[{date:"10 Jul",text:"Met at PTM, very interested in design track."},{date:"11 Jul",text:"Shared free journey map link."}],
+      next:"Book Stream Selection Guidance — works toward her 1st decision", nextDate:"Today" },
+    { id:2, name:"Rohit Sharma", cls:"Class 9", classNum:9, career:"Not decided", source:"merrakii", stage:"new", phone:"97290 XXXXX",
+      decisions:[],
+      notes:[{date:"12 Jul",text:"Enquiry received from Merrakii+ school tie-up event."}],
+      next:"First contact call", nextDate:"Today" },
+    { id:3, name:"Priya Singh", cls:"Class 11", classNum:11, career:"Design", source:"self", stage:"signedup", phone:"90290 XXXXX",
+      decisions:["Stream Selected","Direction Statement Confirmed"],
+      notes:[{date:"5 Jul",text:"Signed up for ₹99 report."},{date:"9 Jul",text:"Hasn't started deep profiling yet."}],
+      next:"Nudge profiling — needed before her next decision unlocks", nextDate:"Today" },
+    { id:4, name:"Karan Mehta", cls:"Class 12", classNum:12, career:"Design", source:"self", stage:"converted", phone:"91290 XXXXX",
+      decisions:["Stream Selected","Direction Statement Confirmed","College Shortlist Finalized"],
+      notes:[{date:"1 Jul",text:"Enrolled in Mock Test Series."}],
+      next:"Help him enable his Applications Submitted decision", nextDate:"Today" },
+    { id:5, name:"Ishita Rao", cls:"Class 10", classNum:10, career:"Design", source:"merrakii", stage:"contacted", phone:"93290 XXXXX",
+      decisions:[],
+      notes:[{date:"9 Jul",text:"Called, parents want to discuss with father first."}],
+      next:"Follow-up call toward Stream Selected", nextDate:"Tomorrow" },
+    { id:6, name:"Aditya Kumar", cls:"Class 9", classNum:9, career:"Not decided", source:"self", stage:"meeting", phone:"94290 XXXXX",
+      decisions:[],
+      notes:[{date:"8 Jul",text:"Meeting scheduled at student's home."}],
+      next:"Home visit", nextDate:"14 Jul" },
+    { id:7, name:"Simran Kaur", cls:"Class 11", classNum:11, career:"Design", source:"merrakii", stage:"interested", phone:"95290 XXXXX",
+      decisions:["Stream Selected"],
+      notes:[{date:"7 Jul",text:"Very keen, waiting on father's approval for ₹99."}],
+      next:"Follow-up toward Direction Statement Confirmed", nextDate:"15 Jul" },
+    { id:8, name:"Vivaan Joshi", cls:"Class 12", classNum:12, career:"Design", source:"self", stage:"signedup", phone:"96290 XXXXX",
+      decisions:["Stream Selected","Direction Statement Confirmed","College Shortlist Finalized"],
+      notes:[{date:"3 Jul",text:"Signed up, profiling in progress."}],
+      next:"Push toward Applications Submitted", nextDate:"16 Jul" },
+    { id:9, name:"Meher Kapoor", cls:"Class 10", classNum:10, career:"Design", source:"self", stage:"new", phone:"97390 XXXXX",
+      decisions:[],
+      notes:[{date:"12 Jul",text:"Referred by an existing student's parent."}],
+      next:"First contact call", nextDate:"14 Jul" },
+    { id:10, name:"Yash Malhotra", cls:"Class 9", classNum:9, career:"Not decided", source:"merrakii", stage:"lost", phone:"98390 XXXXX",
+      decisions:[],
+      notes:[{date:"20 Jun",text:"Not responding after 3 attempts."}],
+      next:"Try once more before closing", nextDate:"—" },
+    { id:11, name:"Naina Desai", cls:"Class 11", classNum:11, career:"Design", source:"self", stage:"contacted", phone:"99390 XXXXX",
+      decisions:["Stream Selected"],
+      notes:[{date:"11 Jul",text:"Spoke briefly, will call back with more time."}],
+      next:"Follow-up toward Direction Statement Confirmed", nextDate:"17 Jul" },
+    { id:12, name:"Arjun Nair", cls:"Class 12", classNum:12, career:"Design", source:"self", stage:"converted", phone:"90490 XXXXX",
+      decisions:["Stream Selected","Direction Statement Confirmed","College Shortlist Finalized","Applications Submitted"],
+      notes:[{date:"28 Jun",text:"Enrolled in Portfolio Development Bootcamp."}],
+      next:"All 4 decisions enabled — now supporting his programme", nextDate:"20 Jul" },
+    { id:13, name:"Kiara Bhatt", cls:"Class 10", classNum:10, career:"Design", source:"merrakii", stage:"meeting", phone:"91490 XXXXX",
+      decisions:[],
+      notes:[{date:"10 Jul",text:"Meeting scheduled for this weekend."}],
+      next:"Weekend meeting toward Stream Selected", nextDate:"19 Jul" },
+    { id:14, name:"Reyansh Pillai", cls:"Class 9", classNum:9, career:"Not decided", source:"self", stage:"interested", phone:"92490 XXXXX",
+      decisions:[],
+      notes:[{date:"9 Jul",text:"Keen but parents want a second meeting."}],
+      next:"Second meeting", nextDate:"18 Jul" }
+  ];
+
+  const todayRegister = [1,2,3,4];
+
+  // ---------------- Render: Register ----------------
+  function renderRegister(){
+    const body = document.getElementById('registerBody');
+    if(todayRegister.length === 0){
+      body.innerHTML = `<div class="register-empty">Nothing on today's register. Enjoy the breathing room 🌿</div>`;
+      return;
+    }
+    body.innerHTML = todayRegister.map((id,i)=>{
+      const s = students.find(x=>x.id===id);
+      const srcTag = s.source==='merrakii' ? '<span class="src-tag merrakii">🏢 Merrakii+</span>' : '<span class="src-tag self">🧑‍🤝‍🧑 Self-Sourced</span>';
+      return `
+        <div class="reg-row" data-regid="${s.id}">
+          <div class="reg-num">${String(i+1).padStart(2,'0')}</div>
+          <div class="reg-check" onclick="toggleRegister(${s.id})">✓</div>
+          <div class="reg-main" onclick="openDrawer(${s.id})" style="cursor:pointer;">
+            <div class="reg-name">${s.name}${srcTag}</div>
+            <div class="reg-task">${s.next} · ${s.cls}</div>
+          </div>
+          <div class="reg-actions">
+            <button class="reg-btn" title="Call">📞</button>
+            <button class="reg-btn" title="WhatsApp">💬</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  function toggleRegister(id){
+    const row = document.querySelector(`.reg-row[data-regid="${id}"]`);
+    const check = row.querySelector('.reg-check');
+    row.classList.toggle('done');
+    check.classList.toggle('done');
+  }
+
+  // ---------------- Render: Student list ----------------
+  let currentFilter = 'all';
+  function renderStudents(){
+    const list = document.getElementById('studentList');
+    const filtered = currentFilter==='all' ? students : students.filter(s=>s.stage===currentFilter);
+    list.innerHTML = filtered.map(s=>{
+      const initials = s.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      const meta = stageMeta[s.stage];
+      const srcIcon = s.source==='merrakii' ? '🏢' : '🧑‍🤝‍🧑';
+      let chip;
+      if(s.classNum < 10){
+        chip = `<span class="decision-chip na">Decisions begin Class 10</span>`;
+      } else if(s.decisions.length === DECISION_MILESTONES.length){
+        chip = `<span class="decision-chip full">🎯 ${s.decisions.length}/${DECISION_MILESTONES.length} decisions</span>`;
+      } else {
+        chip = `<span class="decision-chip">🎯 ${s.decisions.length}/${DECISION_MILESTONES.length} decisions</span>`;
+      }
+      return `
+        <div class="student-row" onclick="openDrawer(${s.id})">
+          <div class="sr-avatar">${initials}</div>
+          <div class="sr-main">
+            <div class="sr-name-row"><span class="sr-name">${s.name}</span>${chip}</div>
+            <div class="sr-meta">${s.cls} · ${s.career} · ${srcIcon} ${s.source==='merrakii'?'Merrakii+ Assigned':'Self-Sourced'}</div>
+          </div>
+          <div class="sr-stage"><span class="stage-badge ${meta.cls}">${meta.label}</span></div>
+          <div class="sr-next">Next<b>${s.nextDate}</b></div>
+        </div>
+      `;
+    }).join('') || `<div class="register-empty">No students in this stage yet.</div>`;
+  }
+
+  document.getElementById('filterRow').addEventListener('click',(e)=>{
+    const chip = e.target.closest('.fchip');
+    if(!chip) return;
+    document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    currentFilter = chip.dataset.stage;
+    renderStudents();
+  });
+
+  // ---------------- Render: Passbook ----------------
+  const passbookEntries = [
+    { date:"11 Jul 2026", desc:"🎯 Decision Enabled Bonus — Karan Mehta (College Shortlist Finalized)", amt:"+ ₹150", pending:false },
+    { date:"10 Jul 2026", desc:"Programme commission — Karan Mehta (Mock Test Series)", amt:"+ ₹3,500", pending:false },
+    { date:"9 Jul 2026", desc:"🎯 Decision Enabled Bonus — Priya Singh (Direction Statement Confirmed)", amt:"+ ₹150", pending:false },
+    { date:"8 Jul 2026", desc:"Signup commission — Priya Singh", amt:"+ ₹40", pending:false },
+    { date:"6 Jul 2026", desc:"🎯 Decision Enabled Bonus — Naina Desai (Stream Selected)", amt:"+ ₹150", pending:false },
+    { date:"5 Jul 2026", desc:"Signup commission — Vivaan Joshi", amt:"+ ₹40", pending:false },
+    { date:"1 Jul 2026", desc:"Programme commission — Arjun Nair (Portfolio Bootcamp)", amt:"+ ₹1,200", pending:false },
+    { date:"28 Jun 2026", desc:"Referral bonus — Meenal J. enabled her first 5 decisions", amt:"+ ₹500", pending:false },
+    { date:"20 Jun 2026", desc:"Signup commission — Ishita Rao (Merrakii+ lead)", amt:"+ ₹25", pending:false },
+    { date:"15 Jul 2026", desc:"🎯 Decision Enabled Bonus — Simran Kaur (Direction Statement Confirmed, pending confirmation)", amt:"+ ₹150", pending:true },
+    { date:"14 Jul 2026", desc:"Programme commission — Simran Kaur (pending confirmation)", amt:"+ ₹2,800", pending:true },
+    { date:"13 Jul 2026", desc:"Signup commission — Meher Kapoor (pending confirmation)", amt:"+ ₹40", pending:true }
+  ];
+  function renderPassbook(){
+    document.getElementById('passbookBody').innerHTML = passbookEntries.map(p=>`
+      <div class="pb-row">
+        <div class="pb-desc">${p.desc}<span class="pb-date">${p.date}${p.pending ? ' · Pending' : ''}</span></div>
+        <div class="pb-amt ${p.pending?'pending':''}">${p.amt}</div>
+      </div>
+    `).join('');
+  }
+
+  // ---------------- Render: Leaderboard ----------------
+  const leaderboard = [
+    { name:"Meenal Joshi", city:"Pune", tier:"🎖️ Senior", score:31, me:false },
+    { name:"Farida Sheikh", city:"Lucknow", tier:"🤝 Partner", score:27, me:false },
+    { name:"Ravi Desai", city:"Ahmedabad", tier:"🤝 Partner", score:22, me:false },
+    { name:"Sunita Verma", city:"Jaipur", tier:"🌱 Associate", score:17, me:true },
+    { name:"Kavita Nambiar", city:"Kochi", tier:"🌱 Associate", score:16, me:false },
+    { name:"Deepak Rathi", city:"Indore", tier:"🌱 Associate", score:12, me:false },
+    { name:"Nasreen Ali", city:"Bhopal", tier:"🌱 Associate", score:9, me:false },
+    { name:"Suresh Pillai", city:"Coimbatore", tier:"🌱 Associate", score:6, me:false }
+  ];
+  function renderLeaderboard(){
+    document.getElementById('lbList').innerHTML = leaderboard.map((l,i)=>{
+      const initials = l.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      return `
+        <div class="lb-row ${l.me?'me':''}">
+          <div class="lb-rank">${i+1}</div>
+          <div class="lb-avatar">${initials}</div>
+          <div class="lb-main"><div class="lb-name">${l.name}${l.me?' (You)':''}</div><div class="lb-city">${l.city}</div></div>
+          <span class="lb-tier">${l.tier}</span>
+          <div class="lb-score">${l.score} decisions</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ---------------- Render: Resources accordion ----------------
+  const scripts = [
+    { title:"Opening a First Call", body:"Start by introducing yourself as a Merrakii+ Partner Counsellor, not a salesperson. Ask about the student's current class and what's on their mind about the future before mentioning anything about the platform. Let the free journey map be the first thing you offer — it costs the family nothing and gives you a natural reason for a second conversation." },
+    { title:"Handling \"Is this genuine?\"", body:"Acknowledge the concern directly rather than brushing past it — it's a fair question. Mention that the first step is completely free with no signup required, so there's nothing to lose by just looking. Offer to walk them through the free map together on a call if they're unsure." },
+    { title:"Closing the ₹99 Signup", body:"By this point they've usually seen the free teaser map. Ask what stood out to them, then explain that the ₹99 unlock is what turns that generic map into one built on their actual profile — and that it's a one-time payment, not a subscription. Avoid over-explaining; let their own curiosity from the free map do most of the work." }
+  ];
+  function renderScripts(){
+    document.getElementById('accordionScripts').innerHTML = scripts.map((s,i)=>`
+      <div class="acc-item" data-i="${i}">
+        <div class="acc-head" onclick="toggleAcc(${i})"><span>${s.title}</span><span class="chev">⌄</span></div>
+        <div class="acc-body">${s.body}</div>
+      </div>
+    `).join('');
+  }
+  function toggleAcc(i){
+    document.querySelector(`.acc-item[data-i="${i}"]`).classList.toggle('open');
+  }
+
+  // ---------------- Drawer ----------------
+  function openDrawer(id){
+    const s = students.find(x=>x.id===id);
+    document.getElementById('dh-name').textContent = s.name;
+    document.getElementById('dh-meta').textContent = `${s.cls} · Target: ${s.career} · ${s.phone}`;
+
+    const stageIdx = stageOrder.indexOf(s.stage);
+    const tracker = s.stage === 'lost'
+      ? `<span class="stage-pip" style="background:#F1F1EF;color:#8a8a86;border-color:#e5e5e2;">Inactive</span>`
+      : stageOrder.map((st,i)=>{
+          const cls = i < stageIdx ? 'past' : (i===stageIdx ? 'cur' : '');
+          return `<span class="stage-pip ${cls}">${stageMeta[st].label}</span>`;
+        }).join('');
+
+    const notesHtml = s.notes.slice().reverse().map(n=>`
+      <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">${n.text}</div><div class="tl-date">${n.date}</div></div></div>
+    `).join('');
+
+    let decisionsHtml, decisionsNote;
+    if(s.classNum < 10){
+      decisionsHtml = `<div class="decision-note">Decision milestones start from Class 10 — right now, the goal is simply keeping ${s.name.split(' ')[0]} engaged and moving toward stream selection.</div>`;
+    } else {
+      decisionsHtml = DECISION_MILESTONES.map(d=>{
+        const done = s.decisions.includes(d);
+        return `<div class="decision-row ${done?'done':''}"><div class="dr-check">${done?'✓':''}</div><div class="dr-txt">${d}</div></div>`;
+      }).join('');
+      decisionsNote = `<div class="decision-note">${s.decisions.length} of ${DECISION_MILESTONES.length} decisions enabled so far — this is what counts toward your rank and your decision bonuses, whether or not ${s.name.split(' ')[0]} has purchased a programme yet.</div>`;
+    }
+
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-contact-row">
+        <button class="dp-contact-btn call">📞 Call ${s.name.split(' ')[0]}'s Parent</button>
+        <button class="dp-contact-btn wa">💬 WhatsApp</button>
+      </div>
+
+      <div class="dp-section-label">Decisions Enabled</div>
+      <div class="decision-list">${decisionsHtml}</div>
+      ${decisionsNote || ''}
+
+      <div class="dp-section-label">Pipeline Stage</div>
+      <div class="stage-tracker">${tracker}</div>
+
+      <div class="dp-section-label">Activity Timeline</div>
+      <div class="timeline">${notesHtml}</div>
+
+      <div class="dp-section-label">Log a New Interaction</div>
+      <div class="log-box">
+        <textarea placeholder="What happened in this interaction?"></textarea>
+        <div class="log-row">
+          <select>
+            <option>No stage change</option>
+            <option>Move to: Contacted</option>
+            <option>Move to: Meeting Set</option>
+            <option>Move to: Interested</option>
+            <option>Move to: Signed Up</option>
+            <option>Move to: Converted</option>
+            <option>Move to: Inactive</option>
+          </select>
+          <button onclick="alert('This would save the note and update the stage — wire this up to your backend.')">Save</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('drawer').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  document.getElementById('overlay').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeDrawer(); });
+
+  // ---------------- Add Lead Modal ----------------
+  const addLeadModal = document.getElementById('addLeadModal');
+  document.getElementById('btnAddLead').addEventListener('click', ()=> addLeadModal.classList.add('show'));
+  document.getElementById('cancelAddLead').addEventListener('click', ()=> addLeadModal.classList.remove('show'));
+  document.getElementById('saveAddLead').addEventListener('click', ()=>{
+    const name = document.getElementById('newName').value.trim();
+    if(!name){ alert("Please enter the student's name."); return; }
+    const cls = document.getElementById('newClass').value;
+    const career = document.getElementById('newCareer').value.trim() || 'Not decided';
+    const newId = Math.max(...students.map(s=>s.id)) + 1;
+    students.unshift({ id:newId, name, cls, career, source:'self', stage:'new', phone:'—',
+      notes:[{date:'Today',text:'Enquiry added manually by Partner Counsellor.'}], next:'First contact call', nextDate:'Today' });
+    addLeadModal.classList.remove('show');
+    document.getElementById('newName').value=''; document.getElementById('newCareer').value=''; document.getElementById('newPhone').value='';
+    renderStudents();
+    alert(`${name} added to your student list.`);
+  });
+
+  // ---------------- Tab switching ----------------
+  function switchTab(tab){
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('tab-'+tab).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('.nav-item').forEach(btn=>{
+    btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
+  });
+
+  // ---------------- Init ----------------
+  renderRegister();
+  renderStudents();
+  renderPassbook();
+  renderLeaderboard();
+  renderScripts();
+</script>
+</body>
+</html>

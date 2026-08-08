@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Build Your Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    background-image:radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size:22px 22px;
+    display:flex; flex-direction:column; min-height:100%;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+
+  #topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff;
+    box-shadow:0 3px 14px rgba(10,78,62,.18);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:20px; display:flex; align-items:center; gap:10px; }
+  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--coral); box-shadow:0 0 0 4px rgba(255,107,74,.28); }
+  .brand small{ display:block; font-family:var(--font-body); font-weight:500; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.78; margin-top:1px; }
+  .step-pill{ font-size:11px; font-weight:700; background:rgba(255,255,255,.16); padding:6px 13px; border-radius:20px; letter-spacing:.03em; }
+
+  /* progress rail */
+  #rail{ padding:18px 28px 0; max-width:640px; margin:0 auto; width:100%; }
+  .rail-track{ height:6px; background:var(--paper-line); border-radius:8px; overflow:hidden; }
+  .rail-fill{ height:100%; width:8%; background:linear-gradient(90deg,var(--coral),var(--gold)); border-radius:8px; transition:width .35s ease; }
+  .rail-labels{ display:flex; justify-content:space-between; margin-top:8px; font-size:10px; font-weight:700; color:var(--muted); letter-spacing:.03em; }
+  .rail-labels span.on{ color:var(--teal-deep); }
+
+  #stage{ flex:1; display:flex; align-items:flex-start; justify-content:center; padding:24px 20px 40px; }
+  .card{
+    width:100%; max-width:600px; background:var(--white); border:1px solid var(--paper-line);
+    border-radius:18px; box-shadow:0 14px 40px rgba(10,26,20,.08); padding:30px 30px 26px;
+  }
+  @media (max-width:640px){ .card{ padding:24px 20px 22px; } }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation:rise .25s ease; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(6px);} to{ opacity:1; transform:none; } }
+
+  .p-eyebrow{ font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--coral); }
+  .p-title{ font-family:var(--font-display); font-weight:700; font-size:22px; margin-top:6px; line-height:1.3; }
+  .p-sub{ font-size:12.5px; color:var(--muted); margin-top:6px; line-height:1.5; max-width:460px; }
+
+  .req-tag{ font-size:8.5px; font-weight:800; letter-spacing:.05em; color:#fff; background:var(--coral); padding:2px 7px; border-radius:20px; margin-left:6px; vertical-align:middle; }
+  .opt-tag{ font-size:8.5px; font-weight:800; letter-spacing:.05em; color:var(--muted); background:var(--paper); border:1px solid var(--paper-line); padding:2px 7px; border-radius:20px; margin-left:6px; vertical-align:middle; }
+
+  .qgroup{ margin-top:22px; }
+  .qgroup .qlabel{ font-size:12.5px; font-weight:700; color:var(--ink); }
+  .qgroup .why{ font-size:11px; color:var(--muted); margin-top:3px; line-height:1.5; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .chip{
+    padding:9px 15px; border:1px solid var(--paper-line); border-radius:20px; background:var(--paper);
+    font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer; transition:all .15s; user-select:none;
+  }
+  .chip:hover{ border-color:var(--teal); }
+  .chip.sel{ background:var(--teal); border-color:var(--teal); color:#fff; }
+
+  .field-row{ display:flex; gap:10px; margin-top:10px; }
+  .field-row .field{ flex:1; }
+  .field label{ font-size:11px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px; }
+  .field input, .field select{
+    width:100%; padding:11px 13px; border:1px solid var(--paper-line); border-radius:9px; font-family:var(--font-body);
+    font-size:13px; color:var(--ink); background:var(--paper); outline:none; transition:border-color .15s;
+  }
+  .field input:focus, .field select:focus{ border-color:var(--teal); background:var(--white); }
+
+  .skip-note{
+    margin-top:20px; display:flex; gap:10px; align-items:flex-start; background:var(--teal-light);
+    border:1px solid #CFEAE0; border-radius:12px; padding:12px 14px; font-size:11.5px; color:#204338; line-height:1.5;
+  }
+  .skip-note b{ color:var(--teal-deep); }
+
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; margin-top:26px; gap:12px; }
+  .btn-back{ background:none; border:none; color:var(--muted); font-size:12.5px; font-weight:700; cursor:pointer; padding:8px 4px; }
+  .btn-back:hover{ color:var(--ink); }
+  .btn-back:disabled{ opacity:0; pointer-events:none; }
+
+  .nav-right{ display:flex; align-items:center; gap:14px; }
+  .btn-skip{ background:none; border:none; color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+  .btn-skip:hover{ color:var(--ink); }
+
+  .btn-next{
+    padding:12px 24px; border:none; border-radius:11px; cursor:pointer;
+    background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; font-family:var(--font-body);
+    font-weight:800; font-size:13.5px; box-shadow:0 8px 20px rgba(255,107,74,.3);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-next:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(255,107,74,.4); }
+  .btn-next.teal{ background:linear-gradient(120deg,var(--teal),var(--teal-deep)); box-shadow:0 8px 20px rgba(15,110,86,.28); }
+
+  /* slider */
+  .slider-wrap{ margin-top:12px; }
+  input[type=range]{ width:100%; accent-color:var(--teal); }
+  .slider-val{ text-align:center; font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--teal-deep); margin-top:6px; }
+
+  /* completion */
+  #done{ text-align:center; padding:12px 4px 4px; }
+  #done .badge{
+    width:60px; height:60px; border-radius:50%; background:var(--teal-light); color:var(--teal);
+    display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 16px;
+    animation:pop .4s ease;
+  }
+  @keyframes pop{ from{ transform:scale(.6); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  #done h2{ font-family:var(--font-display); font-size:21px; }
+  #done p{ font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.6; max-width:400px; margin-left:auto; margin-right:auto; }
+  #done .stat-row{ display:flex; gap:10px; margin-top:20px; justify-content:center; flex-wrap:wrap; }
+  #done .stat{ background:var(--paper); border:1px solid var(--paper-line); border-radius:10px; padding:10px 16px; min-width:110px; }
+  #done .stat b{ display:block; font-family:var(--font-display); font-size:17px; color:var(--teal); }
+  #done .stat span{ font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <div class="brand"><span class="dot"></span>Merrakii<small>Decision Enabling Student Success System</small></div>
+    <div class="step-pill">Step 4 of 5 — Personalize</div>
+  </div>
+
+  <div id="rail">
+    <div class="rail-track"><div class="rail-fill" id="railFill"></div></div>
+    <div class="rail-labels">
+      <span id="lbl1" class="on">Academics</span>
+      <span id="lbl2">About You</span>
+      <span id="lbl3">Family Context</span>
+      <span id="lbl4">Done</span>
+    </div>
+  </div>
+
+  <div id="stage">
+    <div class="card">
+
+      <!-- PANEL 1: Academic snapshot -->
+      <div class="panel active" data-panel="1">
+        <div class="p-eyebrow">You're in — payment confirmed 🎉</div>
+        <div class="p-title">Quick academic snapshot</div>
+        <div class="p-sub">Two taps here recalibrate every stage of your route — this is what turns the generic map into yours.</div>
+
+        <div class="qgroup">
+          <div class="qlabel">Which board are you in? <span class="req-tag">REQUIRED</span></div>
+          <div class="chips" data-group="board">
+            <div class="chip">CBSE</div><div class="chip">ICSE</div><div class="chip">State Board</div><div class="chip">IB</div><div class="chip">Other</div>
+          </div>
+        </div>
+
+        <div class="qgroup">
+          <div class="qlabel">Current stream / stream leaning <span class="opt-tag">OPTIONAL</span></div>
+          <div class="why">Skip this if you haven't picked yet — plenty of students haven't.</div>
+          <div class="chips" data-group="stream">
+            <div class="chip">Science</div><div class="chip">Commerce</div><div class="chip">Humanities</div><div class="chip">Not decided yet</div>
+          </div>
+        </div>
+
+        <div class="qgroup">
+          <div class="qlabel">School name <span class="opt-tag">OPTIONAL</span></div>
+          <div class="field" style="margin-top:10px;"><input type="text" placeholder="Start typing your school's name"></div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn-back" id="back1" disabled>← Back</button>
+          <div class="nav-right">
+            <button class="btn-next" id="next1">Continue →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: About you -->
+      <div class="panel" data-panel="2">
+        <div class="p-eyebrow">Almost there</div>
+        <div class="p-title">A little about you</div>
+        <div class="p-sub">This shapes timelines and nearby opportunities — nothing here is shared outside your report.</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Date of birth <span class="req-tag">REQUIRED</span></label>
+            <input type="date">
+          </div>
+          <div class="field">
+            <label>City <span class="req-tag">REQUIRED</span></label>
+            <input type="text" placeholder="e.g. Jaipur">
+          </div>
+        </div>
+
+        <div class="qgroup">
+          <div class="qlabel">Gender <span class="opt-tag">OPTIONAL</span></div>
+          <div class="chips" data-group="gender">
+            <div class="chip">Female</div><div class="chip">Male</div><div class="chip">Other</div><div class="chip">Prefer not to say</div>
+          </div>
+        </div>
+
+        <div class="nav-row">
+          <button class="btn-back" id="back2">← Back</button>
+          <div class="nav-right">
+            <button class="btn-next" id="next2">Continue →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: Family / financial context -->
+      <div class="panel" data-panel="3">
+        <div class="p-eyebrow">Last step — and it's all optional</div>
+        <div class="p-title">Family &amp; support context</div>
+        <div class="p-sub">Skip anything here freely. What you share only sharpens the financial-planning parts of your route — it never gates access.</div>
+
+        <div class="qgroup">
+          <div class="qlabel">Household income range <span class="opt-tag">OPTIONAL</span></div>
+          <div class="why">Helps surface scholarships and funding routes that actually apply to you.</div>
+          <div class="chips" data-group="income">
+            <div class="chip">Under ₹3L / yr</div><div class="chip">₹3L – ₹8L / yr</div><div class="chip">₹8L – ₹15L / yr</div><div class="chip">Above ₹15L / yr</div><div class="chip">Prefer not to say</div>
+          </div>
+        </div>
+
+        <div class="qgroup">
+          <div class="qlabel">Parent / guardian occupation <span class="opt-tag">OPTIONAL</span></div>
+          <div class="field" style="margin-top:10px;"><input type="text" placeholder="e.g. Teacher, Business owner, Engineer"></div>
+        </div>
+
+        <div class="qgroup">
+          <div class="qlabel">First in the family to pursue this career path? <span class="opt-tag">OPTIONAL</span></div>
+          <div class="chips" data-group="first-gen">
+            <div class="chip">Yes</div><div class="chip">No</div><div class="chip">Not sure</div>
+          </div>
+        </div>
+
+        <div class="skip-note">💬 <span><b>Why we even ask:</b> two students with identical marks can need very different roadmaps once real-world budget enters the picture. This just makes sure yours is realistic, not just ideal.</span></div>
+
+        <div class="nav-row">
+          <button class="btn-back" id="back3">← Back</button>
+          <div class="nav-right">
+            <button class="btn-skip" id="skip3">Skip this step</button>
+            <button class="btn-next teal" id="next3">Build My Report →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: Done -->
+      <div class="panel" data-panel="4">
+        <div id="done">
+          <div class="badge">✓</div>
+          <h2>Your profile is set.</h2>
+          <p>We're weaving everything you shared into your Live Career Journey Report — every stage, every locked insight, now calculated for you specifically.</p>
+          <div class="stat-row">
+            <div class="stat"><b>8/8</b><span>Stages unlocking</span></div>
+            <div class="stat"><b>100%</b><span>Profile-matched</span></div>
+            <div class="stat"><b>Live</b><span>Updates as you grow</span></div>
+          </div>
+          <button class="btn-next teal" id="openReport" style="margin-top:22px;">Open My Full Journey Report →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  const panels = document.querySelectorAll('.panel');
+  const railFill = document.getElementById('railFill');
+  const labels = ['lbl1','lbl2','lbl3','lbl4'].map(id=>document.getElementById(id));
+  const railPct = [8, 38, 68, 100];
+
+  function goTo(n){
+    panels.forEach(p=>p.classList.toggle('active', p.dataset.panel == n));
+    railFill.style.width = railPct[n-1] + '%';
+    labels.forEach((l,i)=> l.classList.toggle('on', i <= n-1));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // chip toggling (single-select per group)
+  document.querySelectorAll('.chips').forEach(group=>{
+    group.addEventListener('click', (e)=>{
+      const chip = e.target.closest('.chip');
+      if(!chip) return;
+      group.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+      chip.classList.add('sel');
+    });
+  });
+
+  document.getElementById('next1').addEventListener('click', ()=>{
+    const boardSel = document.querySelector('[data-group="board"] .chip.sel');
+    if(!boardSel){
+      alert('Quick one — please pick your board to continue. Everything else on this step is optional.');
+      return;
+    }
+    goTo(2);
+  });
+
+  document.getElementById('next2').addEventListener('click', ()=>{
+    const dob = document.querySelectorAll('#stage [data-panel="2"] input[type="date"]')[0].value;
+    const city = document.querySelectorAll('#stage [data-panel="2"] input[type="text"]')[0].value.trim();
+    if(!dob || !city){
+      alert('Just date of birth and city are needed here — everything else is optional.');
+      return;
+    }
+    goTo(3);
+  });
+
+  document.getElementById('next3').addEventListener('click', ()=> goTo(4));
+  document.getElementById('skip3').addEventListener('click', ()=> goTo(4));
+
+  document.getElementById('back2').addEventListener('click', ()=> goTo(1));
+  document.getElementById('back3').addEventListener('click', ()=> goTo(2));
+
+  document.getElementById('openReport').addEventListener('click', ()=>{
+    window.location.href = '15_career_journey_report.html';
+  });
+</script>
+</body>
+</html>

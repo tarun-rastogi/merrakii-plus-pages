@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{ font-family:var(--font-body); background:var(--paper); color:var(--ink); overflow-x:hidden; }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  button{ font-family:inherit; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ============ TOPBAR ============ */
+  #topbar{
+    position:sticky; top:0; z-index:30; display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; background:linear-gradient(120deg,#3a2a1a,#5c3d1f); color:#fff;
+    box-shadow:0 3px 14px rgba(0,0,0,.18);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:19px; display:flex; align-items:center; gap:10px; }
+  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--coral); box-shadow:0 0 0 4px rgba(255,107,74,.28); }
+  .brand small{ display:block; font-family:var(--font-body); font-weight:500; font-size:10px; letter-spacing:.13em; text-transform:uppercase; opacity:.78; margin-top:1px; }
+  .tb-right{ display:flex; align-items:center; gap:16px; }
+  .tb-bell{ position:relative; font-size:17px; cursor:pointer; opacity:.9; }
+  .tb-bell .dotbadge{ position:absolute; top:-3px; right:-4px; width:8px; height:8px; border-radius:50%; background:var(--coral); border:1.5px solid #3a2a1a; }
+  .tb-user{ display:flex; align-items:center; gap:9px; }
+  .tb-avatar{ width:32px; height:32px; border-radius:50%; background:var(--gold-light); color:var(--gold-deep); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12.5px; font-family:var(--font-display); }
+  .tb-name{ font-size:12.5px; font-weight:700; line-height:1.2; }
+  .tb-sub{ font-size:9.5px; opacity:.8; font-weight:600; }
+  .tb-logout{ font-size:11.5px; font-weight:700; opacity:.85; }
+
+  /* ============ SHELL ============ */
+  #shell{ display:flex; min-height:calc(100vh - 60px); }
+  #sidenav{ width:222px; flex-shrink:0; background:var(--white); border-right:1px solid var(--paper-line); padding:18px 12px; display:flex; flex-direction:column; gap:4px; }
+  .nav-item{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:600; color:var(--muted); transition:all .15s; border:none; background:none; width:100%; text-align:left; }
+  .nav-item .ic{ font-size:15px; width:18px; text-align:center; }
+  .nav-item:hover{ background:var(--paper); color:var(--ink); }
+  .nav-item.active{ background:var(--teal-light); color:var(--teal-deep); }
+  .nav-item .badge-count{ margin-left:auto; background:var(--coral); color:#fff; font-size:9px; font-weight:800; padding:2px 7px; border-radius:20px; }
+  .nav-item .soon-tag{ margin-left:auto; font-size:8px; font-weight:800; color:var(--muted); background:var(--paper); border:1px solid var(--paper-line); padding:2px 6px; border-radius:20px; letter-spacing:.02em; }
+  .nav-divider{ height:1px; background:var(--paper-line); margin:10px 4px; }
+  .nav-label{ font-size:9.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding:8px 13px 2px; }
+  .sidenav-spacer{ flex:1; }
+
+  .role-card{ background:linear-gradient(150deg,#F4ECE2,#fff); border:1px solid #E5D5BE; border-radius:14px; padding:13px; text-align:center; }
+  .role-card .rc-badge{ font-size:20px; }
+  .role-card .rc-label{ font-family:var(--font-display); font-weight:700; font-size:11.5px; color:#7a5a2e; margin-top:4px; }
+  .role-card .rc-sub{ font-size:9px; color:var(--muted); margin-top:2px; }
+
+  #content{ flex:1; padding:24px 28px 50px; max-width:1220px; }
+  .tab-panel{ display:none; }
+  .tab-panel.active{ display:block; animation:rise .2s ease; }
+  @keyframes rise{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+  .page-head{ margin-bottom:20px; }
+  .page-head h1{ font-family:var(--font-display); font-weight:700; font-size:23px; }
+  .page-head p{ font-size:12.5px; color:var(--muted); margin-top:4px; max-width:640px; }
+
+  /* ============ NORTH STAR ============ */
+  .northstar{
+    display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; border-radius:18px;
+    padding:22px 26px; margin-bottom:20px; box-shadow:0 14px 34px rgba(10,78,62,.18);
+  }
+  .ns-label{ font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.75; }
+  .ns-value{ font-family:var(--font-display); font-weight:800; font-size:38px; margin-top:6px; display:flex; align-items:baseline; gap:9px; }
+  .ns-value span{ font-family:var(--font-body); font-weight:700; font-size:15px; opacity:.9; }
+  .ns-sub{ font-size:11.5px; opacity:.82; margin-top:6px; max-width:460px; line-height:1.55; }
+  .ns-right{ display:flex; gap:20px; flex-shrink:0; }
+  .ns-stat{ text-align:center; }
+  .ns-stat b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:19px; }
+  .ns-stat span{ font-size:9px; opacity:.78; text-transform:uppercase; letter-spacing:.05em; font-weight:700; }
+
+  /* ============ STAKEHOLDER STRIP ============ */
+  .stake-strip{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:22px; }
+  @media (max-width:1040px){ .stake-strip{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:640px){ .stake-strip{ grid-template-columns:repeat(2,1fr); } }
+  .stake-tile{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 14px; text-align:center; }
+  .stake-ic{ font-size:18px; }
+  .stake-val{ font-family:var(--font-mono); font-weight:500; font-size:20px; margin-top:6px; }
+  .stake-label{ font-size:9.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.02em; margin-top:2px; }
+
+  /* ============ TWO COL ============ */
+  .two-col{ display:grid; grid-template-columns:1.3fr 1fr; gap:16px; margin-bottom:22px; }
+  @media (max-width:960px){ .two-col{ grid-template-columns:1fr; } }
+  .panel-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; }
+  .panel-card h3{ font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:12px; }
+
+  /* ============ FUNNEL ============ */
+  .funnel-row{ display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--paper-line); }
+  .funnel-row:last-child{ border-bottom:none; }
+  .funnel-label{ flex:1; font-size:12px; font-weight:600; }
+  .funnel-bar{ flex:2; height:8px; background:var(--paper); border-radius:6px; overflow:hidden; }
+  .funnel-bar > i{ display:block; height:100%; background:var(--teal); border-radius:6px; }
+  .funnel-val{ width:70px; text-align:right; font-family:var(--font-mono); font-size:11.5px; color:var(--teal-deep); }
+
+  /* ============ ALERT / APPROVALS TEASER ============ */
+  .alert-card{ display:flex; align-items:center; gap:16px; background:var(--coral-light); border:1px solid #FFD4C4; border-radius:14px; padding:15px 20px; margin-bottom:22px; }
+  .alert-card .ac-ic{ font-size:22px; flex-shrink:0; }
+  .alert-card .ac-txt{ flex:1; font-size:12.5px; color:#9A3B22; }
+  .alert-card .ac-txt b{ color:#7a2c18; }
+  .alert-card button{ flex-shrink:0; background:#fff; border:1px solid #FFD4C4; color:#9A3B22; border-radius:9px; padding:9px 15px; font-weight:700; font-size:11.5px; cursor:pointer; }
+
+  /* ============ ACTIVITY TIMELINE ============ */
+  .timeline{ display:flex; flex-direction:column; }
+  .tl-item{ display:flex; gap:12px; padding:9px 0; border-bottom:1px solid var(--paper-line); }
+  .tl-item:last-child{ border-bottom:none; }
+  .tl-dot{ width:8px; height:8px; border-radius:50%; background:var(--teal); margin-top:5px; flex-shrink:0; }
+  .tl-dot.gold{ background:var(--gold); }
+  .tl-dot.coral{ background:var(--coral); }
+  .tl-txt{ font-size:12px; color:var(--ink); }
+  .tl-date{ font-size:10px; color:var(--muted); margin-top:2px; }
+
+  /* ============ FINANCIAL SNAPSHOT ============ */
+  .fin-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:22px; }
+  @media (max-width:820px){ .fin-grid{ grid-template-columns:1fr; } }
+  .fin-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px; }
+  .fin-label{ font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+  .fin-val{ font-family:var(--font-mono); font-weight:500; font-size:22px; margin-top:6px; }
+  .fin-val.in{ color:var(--teal-deep); }
+  .fin-val.out{ color:#c4451f; }
+  .fin-sub{ font-size:10.5px; color:var(--muted); margin-top:4px; }
+
+  /* ============ COMING SOON STUB ============ */
+  .stub-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:70px 24px; background:var(--white); border:1px dashed var(--paper-line); border-radius:16px; }
+  .stub-ic{ font-size:34px; opacity:.4; }
+  .stub-title{ font-family:var(--font-display); font-weight:700; font-size:17px; margin-top:12px; }
+  .stub-desc{ font-size:12.5px; color:var(--muted); margin-top:8px; max-width:460px; line-height:1.6; }
+  .stub-list{ margin-top:18px; text-align:left; display:inline-flex; flex-direction:column; gap:8px; }
+  .stub-list li{ list-style:none; font-size:11.5px; color:var(--ink); display:flex; gap:8px; }
+  .stub-list li::before{ content:"—"; color:var(--paper-line); }
+
+  /* ============ CAREER LIBRARY CMS ============ */
+  .cms-stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  @media (max-width:820px){ .cms-stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .cms-stat{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 16px; text-align:center; }
+  .cms-stat b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:22px; }
+  .cms-stat span{ font-size:9.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.02em; margin-top:4px; display:block; }
+
+  .cl-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 16px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+  .cl-row:hover{ border-color:var(--teal); }
+  .cl-main{ flex:1; min-width:0; }
+  .cl-name{ font-size:13px; font-weight:700; }
+  .cl-path{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .cl-status{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .cl-status.published{ background:var(--teal-light); color:var(--teal-deep); }
+  .cl-status.pending{ background:#FFF3D6; color:#a56b00; }
+  .cl-status.draft{ background:#F0E6FB; color:#6b3fa0; }
+  .cl-status.notstarted{ background:var(--paper); color:var(--muted); border:1px solid var(--paper-line); }
+  .cl-validator{ flex-shrink:0; text-align:right; font-size:10.5px; color:var(--muted); min-width:130px; }
+  .cl-validator b{ display:block; color:var(--ink); font-size:11px; }
+
+  .backlog-note{ text-align:center; font-size:11.5px; color:var(--muted); margin-top:16px; padding:16px; background:var(--white); border:1px dashed var(--paper-line); border-radius:12px; }
+
+  .gate-list{ display:flex; flex-direction:column; gap:9px; }
+  .gate-row{ display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:10px; background:var(--paper); border:1px solid var(--paper-line); }
+  .gate-row.done{ background:var(--teal-light); border-color:#CFEAE0; }
+  .gate-icon{ width:24px; height:24px; border-radius:50%; background:var(--paper-line); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+  .gate-row.done .gate-icon{ background:var(--teal); }
+  .gate-txt{ font-size:12.5px; font-weight:600; flex:1; }
+  .gate-row.done .gate-txt{ color:var(--teal-deep); }
+  .um-search-row{ display:flex; gap:10px; margin-bottom:14px; }
+  .um-search-row input{ flex:1; padding:12px 16px; border:1px solid var(--paper-line); border-radius:10px; font-family:inherit; font-size:13px; outline:none; }
+  .um-search-row input:focus{ border-color:var(--teal); }
+  .filter-row{ display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .fchip{ padding:7px 14px; border-radius:20px; border:1px solid var(--paper-line); background:var(--white); font-size:11.5px; font-weight:700; color:var(--muted); cursor:pointer; transition:all .15s; }
+  .fchip:hover{ border-color:var(--teal); }
+  .fchip.active{ background:var(--teal); border-color:var(--teal); color:#fff; }
+  .um-count{ font-size:11px; color:var(--muted); margin-bottom:14px; }
+
+  .um-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 16px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+  .um-row:hover{ border-color:var(--teal); box-shadow:0 4px 14px rgba(15,110,86,.06); }
+  .um-avatar{ width:38px; height:38px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--teal-deep); flex-shrink:0; }
+  .um-main{ flex:1; min-width:0; }
+  .um-name{ font-size:13px; font-weight:700; }
+  .um-meta{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .um-type{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .um-type.student{ background:var(--teal-light); color:var(--teal-deep); }
+  .um-type.counsellor{ background:var(--gold-light); color:var(--gold-deep); }
+  .um-type.professional{ background:#F0E6FB; color:#6b3fa0; }
+  .um-type.partner{ background:#FFF3D6; color:#a56b00; }
+  .um-type.school{ background:#E8EEFB; color:#2b5bd7; }
+  .um-status{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .um-status.active{ background:var(--teal-light); color:var(--teal-deep); }
+  .um-status.suspended{ background:var(--coral-light); color:#c4451f; }
+  .um-status.pending{ background:#FFF3D6; color:#a56b00; }
+  .um-metric{ flex-shrink:0; text-align:right; font-size:10.5px; color:var(--muted); min-width:100px; }
+  .um-metric b{ display:block; color:var(--ink); font-size:12px; font-family:var(--font-mono); font-weight:500; }
+
+  /* ============ APPROVALS ============ */
+  .app-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:14px 16px; margin-bottom:9px; cursor:pointer; transition:all .15s; }
+  .app-row:hover{ border-color:var(--teal); }
+  .app-avatar{ width:38px; height:38px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--teal-deep); flex-shrink:0; }
+  .app-main{ flex:1; min-width:0; }
+  .app-name{ font-size:13px; font-weight:700; }
+  .app-meta{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .app-cat{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .app-cat.professional{ background:#F0E6FB; color:#6b3fa0; }
+  .app-cat.partner{ background:#FFF3D6; color:#a56b00; }
+  .app-cat.counsellor{ background:var(--gold-light); color:var(--gold-deep); }
+  .app-cat.school{ background:#E8EEFB; color:#2b5bd7; }
+  .app-date{ flex-shrink:0; text-align:right; font-size:10.5px; color:var(--muted); min-width:90px; }
+  .app-date b{ display:block; color:var(--ink); font-size:11px; }
+
+  .school-section{ margin-top:26px; }
+  .school-eyebrow{ font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+
+  .app-detail-row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--paper-line); font-size:12.5px; }
+  .app-detail-row:last-child{ border-bottom:none; }
+  .app-detail-row .adl{ color:var(--muted); }
+  .app-detail-row .adv{ font-weight:700; text-align:right; }
+
+  /* ============ FINANCIAL LEDGER ============ */
+  .fx-stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  @media (max-width:820px){ .fx-stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .fx-stat{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 16px; }
+  .fx-stat .fs-label{ font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); }
+  .fx-stat .fs-val{ font-family:var(--font-mono); font-weight:500; font-size:21px; margin-top:6px; }
+  .fx-stat .fs-val.in{ color:var(--teal-deep); }
+  .fx-stat .fs-val.out{ color:#c4451f; }
+  .fx-stat .fs-sub{ font-size:10px; color:var(--muted); margin-top:3px; }
+
+  .lx-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 16px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+  .lx-row:hover{ border-color:var(--teal); }
+  .lx-ic{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .lx-ic.in{ background:var(--teal-light); color:var(--teal-deep); }
+  .lx-ic.out{ background:var(--coral-light); color:#c4451f; }
+  .lx-main{ flex:1; min-width:0; }
+  .lx-desc{ font-size:12.5px; font-weight:700; }
+  .lx-meta{ font-size:10.5px; color:var(--muted); margin-top:2px; }
+  .lx-amt{ font-family:var(--font-mono); font-weight:500; font-size:14px; flex-shrink:0; text-align:right; min-width:100px; }
+  .lx-amt.in{ color:var(--teal-deep); }
+  .lx-amt.out{ color:#c4451f; }
+  .lx-status{ font-size:9px; font-weight:800; padding:3px 9px; border-radius:20px; flex-shrink:0; }
+  .lx-status.completed{ background:var(--teal-light); color:var(--teal-deep); }
+  .lx-status.pending{ background:#FFF3D6; color:#a56b00; }
+  .lx-status.review{ background:var(--coral-light); color:#c4451f; }
+  /* ============ SESSIONS ============ */
+  .sx-stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  @media (max-width:820px){ .sx-stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .sx-stat{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 16px; text-align:center; }
+  .sx-stat b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:21px; color:var(--ink); }
+  .sx-stat span{ font-size:9.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.02em; margin-top:4px; display:block; }
+
+  .sx-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 16px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+  .sx-row:hover{ border-color:var(--teal); }
+  .sx-date-badge{ width:44px; text-align:center; flex-shrink:0; }
+  .sx-date-badge b{ display:block; font-family:var(--font-display); font-size:16px; color:var(--teal-deep); }
+  .sx-date-badge span{ font-size:8.5px; color:var(--muted); text-transform:uppercase; }
+  .sx-main{ flex:1; min-width:0; }
+  .sx-title{ font-size:13px; font-weight:700; }
+  .sx-title .paid-tag{ font-size:8.5px; font-weight:800; color:var(--gold-deep); background:var(--gold-light); padding:2px 7px; border-radius:20px; margin-left:6px; vertical-align:middle; }
+  .sx-meta{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .sx-with{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; flex-shrink:0; white-space:nowrap; }
+  .sx-with.counsellor{ background:var(--gold-light); color:var(--gold-deep); }
+  .sx-with.professional{ background:#F0E6FB; color:#6b3fa0; }
+  .sx-status{ font-size:9px; font-weight:800; padding:3px 9px; border-radius:20px; flex-shrink:0; }
+  .sx-status.upcoming{ background:#E8EEFB; color:#2b5bd7; }
+  .sx-status.completed{ background:var(--teal-light); color:var(--teal-deep); }
+  .sx-status.noshow{ background:var(--coral-light); color:#c4451f; }
+
+  /* ============ NOTIFICATIONS ============ */
+  .nt-stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+  @media (max-width:820px){ .nt-stat-strip{ grid-template-columns:repeat(2,1fr); } }
+  .nt-stat{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:15px 16px; text-align:center; }
+  .nt-stat b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:21px; color:var(--ink); }
+  .nt-stat span{ font-size:9.5px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.02em; margin-top:4px; display:block; }
+
+  .nt-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 16px; margin-bottom:8px; cursor:pointer; transition:all .15s; }
+  .nt-row:hover{ border-color:var(--teal); }
+  .nt-chan{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .nt-chan.email{ background:#E8EEFB; color:#2b5bd7; }
+  .nt-chan.sms{ background:var(--gold-light); color:var(--gold-deep); }
+  .nt-chan.whatsapp{ background:#DCF8E8; color:#1d9e4e; }
+  .nt-main{ flex:1; min-width:0; }
+  .nt-name{ font-size:13px; font-weight:700; }
+  .nt-meta{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .nt-sent{ flex-shrink:0; text-align:right; font-size:10.5px; color:var(--muted); min-width:90px; }
+  .nt-sent b{ display:block; color:var(--ink); font-size:12px; font-family:var(--font-mono); font-weight:500; }
+  .nt-status{ font-size:9px; font-weight:800; padding:3px 9px; border-radius:20px; flex-shrink:0; }
+  .nt-status.active{ background:var(--teal-light); color:var(--teal-deep); }
+  .nt-status.draft{ background:#F0E6FB; color:#6b3fa0; }
+  .nt-status.paused{ background:var(--paper); color:var(--muted); border:1px solid var(--paper-line); }
+
+  .tpl-preview{ background:var(--paper); border:1px solid var(--paper-line); border-radius:12px; padding:16px 18px; }
+  .tpl-subject{ font-size:12.5px; font-weight:700; padding-bottom:10px; margin-bottom:10px; border-bottom:1px dashed var(--paper-line); }
+  .tpl-body{ font-size:12px; line-height:1.7; color:var(--ink); white-space:pre-line; }
+  .tpl-var{ background:var(--gold-light); color:var(--gold-deep); padding:1px 5px; border-radius:5px; font-family:var(--font-mono); font-size:11px; }
+  .tpl-charcount{ margin-top:10px; font-size:10px; color:var(--muted); }
+
+  /* ============ ANALYTICS & REPORTS ============ */
+  .an-export-row{ display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+  .an-export-btn{ display:flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; border:1px solid var(--paper-line); background:var(--white); font-weight:700; font-size:12px; cursor:pointer; }
+  .an-export-btn:hover{ border-color:var(--teal); }
+
+  .trend-chart{ display:flex; align-items:flex-end; gap:14px; height:150px; padding:10px 6px 0; }
+  .trend-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .trend-bar{ width:100%; max-width:44px; background:linear-gradient(180deg,var(--teal),var(--teal-deep)); border-radius:6px 6px 0 0; position:relative; }
+  .trend-bar.current{ background:linear-gradient(180deg,var(--coral),#e85a35); }
+  .trend-val{ font-family:var(--font-mono); font-size:10px; color:var(--ink); margin-bottom:4px; font-weight:500; }
+  .trend-label{ font-size:9.5px; color:var(--muted); margin-top:8px; font-weight:700; }
+
+  .contrib-row{ display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--paper-line); }
+  .contrib-row:last-child{ border-bottom:none; }
+  .contrib-rank{ width:22px; font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--muted); text-align:center; }
+  .contrib-avatar{ width:30px; height:30px; border-radius:50%; background:var(--paper); border:1px solid var(--paper-line); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:11px; color:var(--teal-deep); }
+  .contrib-main{ flex:1; }
+  .contrib-name{ font-size:12px; font-weight:700; }
+  .contrib-type{ font-size:9.5px; color:var(--muted); }
+  .contrib-val{ font-family:var(--font-mono); font-weight:500; font-size:12.5px; color:var(--teal-deep); }
+
+  .region-table{ width:100%; border-collapse:collapse; }
+  .region-table th{ font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); text-align:left; padding:8px 10px; border-bottom:1.5px solid var(--paper-line); }
+  .region-table td{ font-size:12px; padding:10px; border-bottom:1px solid var(--paper-line); }
+  .region-table td.num{ font-family:var(--font-mono); text-align:right; }
+
+  /* ============ DRAWER ============ */
+  #overlay{ position:fixed; inset:0; background:rgba(10,26,20,.42); opacity:0; pointer-events:none; transition:opacity .28s ease; z-index:50; }
+  #overlay.show{ opacity:1; pointer-events:auto; }
+  #drawer{ position:fixed; top:0; right:0; height:100%; width:60%; min-width:340px; background:var(--white); box-shadow:-14px 0 40px rgba(10,26,20,.22); transform:translateX(100%); transition:transform .32s cubic-bezier(.2,.9,.25,1); z-index:51; display:flex; flex-direction:column; }
+  #drawer.show{ transform:translateX(0); }
+  @media (max-width:860px){ #drawer{ width:100%; top:auto; bottom:0; height:82%; border-radius:18px 18px 0 0; transform:translateY(100%); } #drawer.show{ transform:translateY(0); } }
+  #drawer-head{ padding:22px 26px 18px; background:linear-gradient(120deg,#3a2a1a,#5c3d1f); color:#fff; position:relative; flex-shrink:0; }
+  #drawer-close{ position:absolute; top:16px; right:18px; width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.16); border:none; color:#fff; font-size:16px; cursor:pointer; }
+  #dh-type{ font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.78; }
+  #dh-name{ font-family:var(--font-display); font-weight:700; font-size:22px; margin-top:6px; }
+  #dh-meta{ font-size:11.5px; opacity:.85; margin-top:4px; }
+  #drawer-body{ flex:1; overflow-y:auto; padding:22px 26px 26px; }
+  .dp-section-label{ font-size:10px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin:18px 0 8px; }
+  .dp-section-label:first-child{ margin-top:0; }
+  .dstat-grid{ display:flex; gap:10px; flex-wrap:wrap; }
+  .dstat{ background:var(--paper); border:1px solid var(--paper-line); border-radius:10px; padding:10px 14px; flex:1; min-width:100px; text-align:center; }
+  .dstat b{ display:block; font-family:var(--font-mono); font-size:16px; color:var(--teal-deep); }
+  .dstat span{ font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.02em; }
+  #drawer-foot{ padding:16px 26px 20px; border-top:1px solid var(--paper-line); flex-shrink:0; display:flex; gap:8px; }
+  #drawer-foot button{ flex:1; padding:12px; border-radius:10px; border:1px solid var(--paper-line); background:var(--paper); font-weight:700; font-size:12px; cursor:pointer; }
+  #drawer-foot button.danger{ color:#c4451f; }
+  #drawer-foot button.primary{ background:var(--teal); color:#fff; border:none; }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <div class="brand"><span class="dot"></span>Merrakii<small>Admin Panel — Internal</small></div>
+    <div class="tb-right">
+      <div class="tb-bell">🔔<span class="dotbadge"></span></div>
+      <div class="tb-user">
+        <div class="tb-avatar">PG</div>
+        <div><div class="tb-name">Prashant Gupta</div><div class="tb-sub">Project Manager</div></div>
+      </div>
+      <a href="01_home.html" class="tb-logout">Log Out</a>
+    </div>
+  </div>
+
+  <div id="shell">
+    <nav id="sidenav">
+      <button class="nav-item active" data-tab="overview"><span class="ic">🏠</span> Overview</button>
+
+      <div class="nav-label">Insights</div>
+      <button class="nav-item" data-tab="analytics"><span class="ic">📈</span> Analytics &amp; Reports</button>
+
+      <div class="nav-label">Manage</div>
+      <button class="nav-item" data-tab="users"><span class="ic">👥</span> User Management</button>
+      <button class="nav-item" data-tab="library"><span class="ic">📚</span> Career Library CMS</button>
+      <button class="nav-item" data-tab="approvals"><span class="ic">✅</span> Approvals<span class="badge-count">7</span></button>
+
+      <div class="nav-label">Operations</div>
+      <button class="nav-item" data-tab="financial"><span class="ic">💳</span> Financial</button>
+      <button class="nav-item" data-tab="sessions"><span class="ic">📅</span> Sessions</button>
+      <button class="nav-item" data-tab="notifications"><span class="ic">✉️</span> Notifications</button>
+
+      <div class="sidenav-spacer"></div>
+      <div class="role-card">
+        <div class="rc-badge">🔐</div>
+        <div class="rc-label">Super Admin Access</div>
+        <div class="rc-sub">Internal team only</div>
+      </div>
+    </nav>
+
+    <main id="content">
+
+      <!-- ============ OVERVIEW (fully built) ============ -->
+      <section class="tab-panel active" id="tab-overview">
+        <div class="page-head">
+          <h1>Good morning, Prashant 👋</h1>
+          <p>The whole system, measured the one way it's supposed to be — by decisions, not signups or revenue.</p>
+        </div>
+
+        <div class="northstar">
+          <div class="ns-left">
+            <div class="ns-label">Decisions Enabled — All Time</div>
+            <div class="ns-value">28,412 <span>across every student, every stakeholder</span></div>
+            <div class="ns-sub">This number is the single source of truth for whether Merrakii+ is working. Every dashboard in the system — student, counsellor, professional, partner — rolls up into this one figure.</div>
+          </div>
+          <div class="ns-right">
+            <div class="ns-stat"><b>1,840</b><span>This Month</span></div>
+            <div class="ns-stat"><b>+12%</b><span>vs Last Month</span></div>
+            <div class="ns-stat"><b>62</b><span>Avg / Counsellor</span></div>
+          </div>
+        </div>
+
+        <div class="stake-strip">
+          <div class="stake-tile"><div class="stake-ic">🎓</div><div class="stake-val">12,140</div><div class="stake-label">Students</div></div>
+          <div class="stake-tile"><div class="stake-ic">🧑‍🏫</div><div class="stake-val">342</div><div class="stake-label">Partner Counsellors</div></div>
+          <div class="stake-tile"><div class="stake-ic">🎙️</div><div class="stake-val">58</div><div class="stake-label">Career Professionals</div></div>
+          <div class="stake-tile"><div class="stake-ic">📋</div><div class="stake-val">24</div><div class="stake-label">Program Partners</div></div>
+          <div class="stake-tile"><div class="stake-ic">🏫</div><div class="stake-val">61</div><div class="stake-label">Partner Schools</div></div>
+        </div>
+
+        <div class="alert-card">
+          <div class="ac-ic">📋</div>
+          <div class="ac-txt"><b>7 applications are waiting on review</b> — 3 Career Professionals, 2 Program Partners, 2 Partner Counsellors. Nothing goes live until Admin approves it.</div>
+          <button onclick="switchTab('approvals')">Review Now</button>
+        </div>
+
+        <div class="fin-grid">
+          <div class="fin-card">
+            <div class="fin-label">₹99 Signups This Month</div>
+            <div class="fin-val in">₹4,18,700</div>
+            <div class="fin-sub">4,229 unlocks</div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-label">Commission Collected (Program Partners)</div>
+            <div class="fin-val in">₹6,82,400</div>
+            <div class="fin-sub">From 340 programme enrolments</div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-label">Payouts Due (Counsellors + Professionals)</div>
+            <div class="fin-val out">₹9,14,200</div>
+            <div class="fin-sub">Across 342 counsellors, 58 professionals</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel-card">
+            <h3>Funnel Snapshot — This Month</h3>
+            <div class="funnel-row"><div class="funnel-label">Free Route Generated</div><div class="funnel-bar"><i style="width:100%;"></i></div><div class="funnel-val">38,200</div></div>
+            <div class="funnel-row"><div class="funnel-label">₹99 Signup</div><div class="funnel-bar"><i style="width:11%;"></i></div><div class="funnel-val">4,229</div></div>
+            <div class="funnel-row"><div class="funnel-label">Deep Profiling Completed</div><div class="funnel-bar"><i style="width:8%;"></i></div><div class="funnel-val">3,105</div></div>
+            <div class="funnel-row"><div class="funnel-label">Programme Enrolled</div><div class="funnel-bar"><i style="width:2.5%;"></i></div><div class="funnel-val">964</div></div>
+          </div>
+          <div class="panel-card">
+            <h3>Recent System Activity</h3>
+            <div class="timeline">
+              <div class="tl-item"><div class="tl-dot gold"></div><div><div class="tl-txt">New Career Professional application — Rohit Malhotra, Finance</div><div class="tl-date">2 hours ago</div></div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">School pilot request — DPS Sector 45, Gurugram</div><div class="tl-date">5 hours ago</div></div></div>
+              <div class="tl-item"><div class="tl-dot coral"></div><div><div class="tl-txt">Payout batch processed — ₹3,42,000 to 128 counsellors</div><div class="tl-date">Yesterday</div></div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">Career Library: "Actuary" validated by Rohit Malhotra</div><div class="tl-date">Yesterday</div></div></div>
+              <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-txt">Program Partner application — ScholarBridge Tutoring</div><div class="tl-date">2 days ago</div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ANALYTICS & REPORTS ============ -->
+      <section class="tab-panel" id="tab-analytics">
+        <div class="page-head"><h1>Analytics &amp; Reports</h1><p>The trend behind the Overview snapshot — where Decisions Enabled is actually coming from, and where the funnel is leaking.</p></div>
+
+        <div class="an-export-row">
+          <button class="an-export-btn" onclick="alert('This would export the current view as a CSV.')">⬇ Export CSV</button>
+          <button class="an-export-btn" onclick="alert('This would generate a board-ready PDF report.')">📄 Download Board Report (PDF)</button>
+        </div>
+
+        <div class="panel-card" style="margin-bottom:16px;">
+          <h3>Decisions Enabled — Last 6 Months</h3>
+          <div class="trend-chart">
+            <div class="trend-col"><div class="trend-val">1,120</div><div class="trend-bar" style="height:61%;"></div><div class="trend-label">Feb</div></div>
+            <div class="trend-col"><div class="trend-val">1,340</div><div class="trend-bar" style="height:73%;"></div><div class="trend-label">Mar</div></div>
+            <div class="trend-col"><div class="trend-val">1,410</div><div class="trend-bar" style="height:77%;"></div><div class="trend-label">Apr</div></div>
+            <div class="trend-col"><div class="trend-val">1,520</div><div class="trend-bar" style="height:83%;"></div><div class="trend-label">May</div></div>
+            <div class="trend-col"><div class="trend-val">1,640</div><div class="trend-bar" style="height:89%;"></div><div class="trend-label">Jun</div></div>
+            <div class="trend-col"><div class="trend-val">1,840</div><div class="trend-bar current" style="height:100%;"></div><div class="trend-label">Jul</div></div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="panel-card">
+            <h3>Top Contributors This Quarter</h3>
+            <div class="contrib-row"><div class="contrib-rank">1</div><div class="contrib-avatar">MJ</div><div class="contrib-main"><div class="contrib-name">Meenal Joshi</div><div class="contrib-type">Partner Counsellor · Pune</div></div><div class="contrib-val">312 decisions</div></div>
+            <div class="contrib-row"><div class="contrib-rank">2</div><div class="contrib-avatar">FS</div><div class="contrib-main"><div class="contrib-name">Farida Sheikh</div><div class="contrib-type">Partner Counsellor · Lucknow</div></div><div class="contrib-val">198 decisions</div></div>
+            <div class="contrib-row"><div class="contrib-rank">3</div><div class="contrib-avatar">KR</div><div class="contrib-main"><div class="contrib-name">Dr. Kavita Reddy</div><div class="contrib-type">Career Professional · Medical</div></div><div class="contrib-val">61 downstream</div></div>
+            <div class="contrib-row"><div class="contrib-rank">4</div><div class="contrib-avatar">PM</div><div class="contrib-main"><div class="contrib-name">Priya Mehta</div><div class="contrib-type">Career Professional · Design</div></div><div class="contrib-val">54 downstream</div></div>
+            <div class="contrib-row"><div class="contrib-rank">5</div><div class="contrib-avatar">SV</div><div class="contrib-main"><div class="contrib-name">Sunita Verma</div><div class="contrib-type">Partner Counsellor · Jaipur</div></div><div class="contrib-val">62 decisions</div></div>
+          </div>
+          <div class="panel-card">
+            <h3>Funnel Conversion — 3 Month Trend</h3>
+            <div class="funnel-row"><div class="funnel-label">Free → ₹99 Signup</div><div class="funnel-bar"><i style="width:11%;"></i></div><div class="funnel-val">11.0%</div></div>
+            <div class="funnel-row"><div class="funnel-label">Free → ₹99 Signup (May)</div><div class="funnel-bar"><i style="width:9%;"></i></div><div class="funnel-val">9.2%</div></div>
+            <div class="funnel-row"><div class="funnel-label">₹99 → Programme Enrolled</div><div class="funnel-bar"><i style="width:23%;"></i></div><div class="funnel-val">22.8%</div></div>
+            <div class="funnel-row"><div class="funnel-label">₹99 → Programme Enrolled (May)</div><div class="funnel-bar"><i style="width:19%;"></i></div><div class="funnel-val">19.4%</div></div>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <h3>Decisions Enabled by Region</h3>
+          <table class="region-table">
+            <tr><th>City / Region</th><th style="text-align:right;">Students</th><th style="text-align:right;">Decisions Enabled</th><th style="text-align:right;">Avg. per Student</th></tr>
+            <tr><td>Jaipur</td><td class="num">1,240</td><td class="num">2,860</td><td class="num">2.3</td></tr>
+            <tr><td>Pune</td><td class="num">1,680</td><td class="num">4,910</td><td class="num">2.9</td></tr>
+            <tr><td>Lucknow</td><td class="num">960</td><td class="num">1,780</td><td class="num">1.9</td></tr>
+            <tr><td>Gurugram</td><td class="num">2,140</td><td class="num">5,320</td><td class="num">2.5</td></tr>
+            <tr><td>Bhopal</td><td class="num">540</td><td class="num">890</td><td class="num">1.6</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ STUB PANELS ============ -->
+      <section class="tab-panel" id="tab-users">
+        <div class="page-head"><h1>User Management</h1><p>Every account across all five stakeholder types — search, review activity, and act on any of them from here.</p></div>
+
+        <div class="um-search-row">
+          <input type="text" id="umSearch" placeholder="Search by name, school, or organisation...">
+        </div>
+        <div class="filter-row" id="umTypeFilter">
+          <button class="fchip active" data-type="all">All Types</button>
+          <button class="fchip" data-type="student">Students</button>
+          <button class="fchip" data-type="counsellor">Counsellors</button>
+          <button class="fchip" data-type="professional">Professionals</button>
+          <button class="fchip" data-type="partner">Program Partners</button>
+          <button class="fchip" data-type="school">Schools</button>
+        </div>
+        <div class="filter-row" id="umStatusFilter">
+          <button class="fchip active" data-status="all">All Statuses</button>
+          <button class="fchip" data-status="active">Active</button>
+          <button class="fchip" data-status="pending">Pending</button>
+          <button class="fchip" data-status="suspended">Suspended</button>
+        </div>
+        <div class="um-count" id="umCount"></div>
+        <div id="umList"></div>
+      </section>
+
+      <section class="tab-panel" id="tab-library">
+        <div class="page-head"><h1>Career Library CMS</h1><p>The publishing pipeline behind all 519 careers — draft, validate, publish. Nothing reaches a student until a Career Professional has signed off.</p></div>
+
+        <div class="cms-stat-strip">
+          <div class="cms-stat"><b style="color:var(--teal-deep);">2</b><span>Published</span></div>
+          <div class="cms-stat"><b style="color:#a56b00;">2</b><span>Pending Validation</span></div>
+          <div class="cms-stat"><b style="color:#6b3fa0;">3</b><span>In Draft</span></div>
+          <div class="cms-stat"><b style="color:var(--muted);">512</b><span>Not Started</span></div>
+        </div>
+
+        <div class="filter-row" id="clStatusFilter">
+          <button class="fchip active" data-status="all">All</button>
+          <button class="fchip" data-status="published">Published</button>
+          <button class="fchip" data-status="pending">Pending Validation</button>
+          <button class="fchip" data-status="draft">In Draft</button>
+        </div>
+        <div id="clList"></div>
+        <div class="backlog-note">512 more careers in the taxonomy haven't been started yet — visible in the public Library, but without a full written profile until they enter this pipeline.</div>
+      </section>
+
+      <!-- ============ APPROVALS (teaser depth) ============ -->
+      <section class="tab-panel" id="tab-approvals">
+        <div class="page-head"><h1>Approvals</h1><p>Nothing goes live on Merrakii+ without a human on our side confirming it first.</p></div>
+
+        <div class="filter-row" id="apCatFilter">
+          <button class="fchip active" data-cat="all">All (7)</button>
+          <button class="fchip" data-cat="professional">Career Professionals (3)</button>
+          <button class="fchip" data-cat="partner">Program Partners (2)</button>
+          <button class="fchip" data-cat="counsellor">Partner Counsellors (2)</button>
+        </div>
+        <div id="apList"></div>
+
+        <div class="school-section">
+          <div class="school-eyebrow">School Pilot Requests · Separate Process, Not Counted Above</div>
+          <div id="apSchoolList"></div>
+        </div>
+
+        <div class="school-section">
+          <div class="school-eyebrow">Portfolio Content · Videos &amp; Social Links, Separate Process, Not Counted Above</div>
+          <div id="apPortfolioList"></div>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="tab-financial">
+        <div class="page-head"><h1>Financial</h1><p>Every rupee moving through the system — in, out, and pending. Same numbers as Overview, just the full ledger behind them.</p></div>
+
+        <div class="fx-stat-strip">
+          <div class="fx-stat"><div class="fs-label">Total In — This Month</div><div class="fs-val in">₹11,01,100</div><div class="fs-sub">Signups + commission collected</div></div>
+          <div class="fx-stat"><div class="fs-label">Total Out — Pending</div><div class="fs-val out">₹9,14,200</div><div class="fs-sub">342 counsellors, 58 professionals</div></div>
+          <div class="fx-stat"><div class="fs-label">Net Position</div><div class="fs-val in">₹1,86,900</div><div class="fs-sub">This month, after pending payouts</div></div>
+          <div class="fx-stat"><div class="fs-label">Open Disputes</div><div class="fs-val out">1</div><div class="fs-sub">Awaiting review</div></div>
+        </div>
+
+        <div class="filter-row" id="fxFilter">
+          <button class="fchip active" data-cat="all">All</button>
+          <button class="fchip" data-cat="in">Incoming</button>
+          <button class="fchip" data-cat="out">Outgoing</button>
+          <button class="fchip" data-cat="dispute">Refunds &amp; Disputes</button>
+        </div>
+        <div id="fxList"></div>
+      </section>
+
+      <section class="tab-panel" id="tab-sessions">
+        <div class="page-head"><h1>Sessions</h1><p>Every session across the platform — counsellor sessions, Career Professional network sessions, and paid Premium Sessions — in one calendar view.</p></div>
+
+        <div class="sx-stat-strip">
+          <div class="sx-stat"><b>3</b><span>Sessions Today</span></div>
+          <div class="sx-stat"><b>12</b><span>This Week</span></div>
+          <div class="sx-stat"><b>4.2%</b><span>No-Show Rate</span></div>
+          <div class="sx-stat"><b>₹14,000</b><span>Paid Premium Sessions, This Month</span></div>
+        </div>
+
+        <div class="filter-row" id="sxTypeFilter">
+          <button class="fchip active" data-type="all">All</button>
+          <button class="fchip" data-type="counsellor">Counsellor Sessions</button>
+          <button class="fchip" data-type="professional">Career Professional Sessions</button>
+        </div>
+        <div class="filter-row" id="sxStatusFilter">
+          <button class="fchip active" data-status="all">All Statuses</button>
+          <button class="fchip" data-status="upcoming">Upcoming</button>
+          <button class="fchip" data-status="completed">Completed</button>
+          <button class="fchip" data-status="noshow">No-Show</button>
+        </div>
+        <div id="sxList"></div>
+      </section>
+
+      <section class="tab-panel" id="tab-notifications">
+        <div class="page-head"><h1>Notifications</h1><p>Every email, SMS, and WhatsApp template the system sends — editable without a code deploy.</p></div>
+
+        <div class="nt-stat-strip">
+          <div class="nt-stat"><b>13</b><span>Total Templates</span></div>
+          <div class="nt-stat"><b>11</b><span>Active</span></div>
+          <div class="nt-stat"><b>48,691</b><span>Sent This Month</span></div>
+          <div class="nt-stat"><b>0.4%</b><span>Bounce / Failure Rate</span></div>
+        </div>
+
+        <div class="filter-row" id="ntChanFilter">
+          <button class="fchip active" data-chan="all">All Channels</button>
+          <button class="fchip" data-chan="email">Email</button>
+          <button class="fchip" data-chan="sms">SMS</button>
+          <button class="fchip" data-chan="whatsapp">WhatsApp</button>
+        </div>
+        <div class="filter-row" id="ntCatFilter">
+          <button class="fchip active" data-cat="all">All Categories</button>
+          <button class="fchip" data-cat="session">Session Reminders</button>
+          <button class="fchip" data-cat="application">Application &amp; Approval Status</button>
+          <button class="fchip" data-cat="payment">Payments &amp; Payouts</button>
+          <button class="fchip" data-cat="milestone">Student Milestones</button>
+          <button class="fchip" data-cat="partner">Partner &amp; School Communications</button>
+        </div>
+        <div id="ntList"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="overlay"></div>
+  <div id="drawer" role="dialog" aria-modal="true">
+    <div id="drawer-head">
+      <button id="drawer-close" aria-label="Close">✕</button>
+      <div id="dh-type">ACCOUNT TYPE</div>
+      <div id="dh-name">Name</div>
+      <div id="dh-meta">Meta</div>
+    </div>
+    <div id="drawer-body"></div>
+    <div id="drawer-foot">
+      <button id="footSuspend">Suspend Account</button>
+      <button id="footReset">Reset Password</button>
+      <button class="primary" id="footPrimary" onclick="alert('This would open the account in full edit mode.')">Edit Details</button>
+    </div>
+  </div>
+
+<script>
+  // ============ User Management: mock account data ============
+  const accounts = [
+    { id:1, type:"student", name:"Arjun Nair", meta:"Class 12 · Design track · Jaipur", status:"active", metricLabel:"Decisions Enabled", metricVal:"4", joined:"Aug 2023",
+      stats:[{label:"Decisions Enabled",val:"4"},{label:"Skills Developed",val:"8"},{label:"Programmes",val:"2"}],
+      notes:["Signed up 12 Aug 2023 · ₹99 unlock","Enrolled in Portfolio Development Bootcamp, 28 Jun 2026","Applications submitted, 10 Jul 2026"] },
+    { id:2, type:"student", name:"Ananya Gupta", meta:"Class 10 · Exploring Design · Jaipur", status:"active", metricLabel:"Decisions Enabled", metricVal:"0", joined:"Jun 2026",
+      stats:[{label:"Decisions Enabled",val:"0"},{label:"Skills Developed",val:"1"},{label:"Programmes",val:"0"}],
+      notes:["Signed up 5 Jun 2026 · ₹99 unlock","Deep profiling completed 6 Jun 2026"] },
+    { id:3, type:"student", name:"Karan Mehta", meta:"Class 12 · Design track · Jaipur", status:"active", metricLabel:"Decisions Enabled", metricVal:"3", joined:"Feb 2025",
+      stats:[{label:"Decisions Enabled",val:"3"},{label:"Skills Developed",val:"6"},{label:"Programmes",val:"1"}],
+      notes:["Enrolled in Mock Test Series, 1 Jul 2026"] },
+    { id:4, type:"student", name:"Reyansh Pillai", meta:"Class 9 · Not decided · Jaipur", status:"pending", metricLabel:"Decisions Enabled", metricVal:"0", joined:"9 Jul 2026",
+      stats:[{label:"Decisions Enabled",val:"0"},{label:"Skills Developed",val:"0"},{label:"Programmes",val:"0"}],
+      notes:["Signed up 9 Jul 2026 — deep profiling not yet completed"] },
+
+    { id:5, type:"counsellor", name:"Sunita Verma", meta:"Associate Partner · Jaipur · Creative Careers", status:"active", metricLabel:"Lifetime Decisions", metricVal:"62", joined:"Jan 2024",
+      stats:[{label:"Decisions Enabled",val:"62"},{label:"Families Guided",val:"14"},{label:"Students Active",val:"3"}],
+      notes:["Foundation Residential completed 2024","Domain Specialisation — Creative Careers, completed 2025"] },
+    { id:6, type:"counsellor", name:"Meenal Joshi", meta:"Senior Partner · Pune", status:"active", metricLabel:"Lifetime Decisions", metricVal:"1,840", joined:"Mar 2022",
+      stats:[{label:"Decisions Enabled",val:"1,840"},{label:"Families Guided",val:"310"},{label:"Students Active",val:"22"}],
+      notes:["Top contributor, Q2 2026 leaderboard"] },
+    { id:7, type:"counsellor", name:"Farida Sheikh", meta:"Partner · Lucknow", status:"active", metricLabel:"Lifetime Decisions", metricVal:"720", joined:"Sep 2023",
+      stats:[{label:"Decisions Enabled",val:"720"},{label:"Families Guided",val:"96"},{label:"Students Active",val:"9"}],
+      notes:[] },
+    { id:8, type:"counsellor", name:"Deepak Rathi", meta:"Associate · Indore", status:"suspended", metricLabel:"Lifetime Decisions", metricVal:"290", joined:"Nov 2024",
+      stats:[{label:"Decisions Enabled",val:"290"},{label:"Families Guided",val:"41"},{label:"Students Active",val:"0"}],
+      notes:["Suspended 3 Jul 2026 — pending review of a parent complaint"] },
+
+    { id:9, type:"professional", name:"Priya Mehta", meta:"Senior Designer, Ogilvy · Design & Creative Industries", status:"active", metricLabel:"Sessions Given", metricVal:"34", joined:"Aug 2024",
+      stats:[{label:"Sessions Given",val:"34"},{label:"Journeys Validated",val:"6"},{label:"Downstream Decisions",val:"18"}],
+      notes:["Verified Professional since Aug 2024"] },
+    { id:10, type:"professional", name:"Dr. Kavita Reddy", meta:"Senior Consultant, Pulmonology · Medical & Healthcare", status:"active", metricLabel:"Sessions Given", metricVal:"41", joined:"May 2024",
+      stats:[{label:"Sessions Given",val:"41"},{label:"Journeys Validated",val:"9"},{label:"Downstream Decisions",val:"22"}],
+      notes:[] },
+    { id:11, type:"professional", name:"Rohit Malhotra", meta:"Finance domain · Pending onboarding", status:"pending", metricLabel:"Sessions Given", metricVal:"0", joined:"12 Jul 2026",
+      stats:[{label:"Sessions Given",val:"0"},{label:"Journeys Validated",val:"0"},{label:"Downstream Decisions",val:"0"}],
+      notes:["Application approved 12 Jul 2026 — training not yet started"] },
+
+    { id:12, type:"partner", name:"Design Foundry Academy", meta:"Entrance Examination Coaching · Delhi", status:"active", metricLabel:"Enrolments", metricVal:"38", joined:"Jan 2025",
+      stats:[{label:"Students Matched",val:"142"},{label:"Enrolments",val:"38"},{label:"Satisfaction",val:"4.7"}],
+      notes:["Preferred Partner tier"] },
+    { id:13, type:"partner", name:"EduFin Advisors", meta:"Financial Services · Gurugram", status:"active", metricLabel:"Enrolments", metricVal:"64", joined:"Apr 2025",
+      stats:[{label:"Students Matched",val:"210"},{label:"Enrolments",val:"64"},{label:"Satisfaction",val:"4.5"}],
+      notes:[] },
+    { id:14, type:"partner", name:"ScholarBridge Tutoring", meta:"Skill Development · Pending review", status:"pending", metricLabel:"Enrolments", metricVal:"0", joined:"11 Jul 2026",
+      stats:[{label:"Students Matched",val:"0"},{label:"Enrolments",val:"0"},{label:"Satisfaction",val:"—"}],
+      notes:["Application submitted 11 Jul 2026"] },
+
+    { id:15, type:"school", name:"DPS Sector 45, Gurugram", meta:"Pilot requested · 640 students Class 9–12", status:"pending", metricLabel:"Cohort Size", metricVal:"—", joined:"12 Jul 2026",
+      stats:[{label:"Cohort Size",val:"Proposed 40"},{label:"Decisions Enabled",val:"0"},{label:"Stage",val:"Proposal"}],
+      notes:["Initial conversation held 12 Jul 2026 — pilot proposal in progress"] },
+    { id:16, type:"school", name:"Ryan International, Jaipur", meta:"Active pilot · Class 9–12", status:"active", metricLabel:"Cohort Size", metricVal:"46", joined:"Feb 2026",
+      stats:[{label:"Cohort Size",val:"46"},{label:"Decisions Enabled",val:"112"},{label:"Stage",val:"Pilot Delivery"}],
+      notes:[] }
+  ];
+
+  const typeMeta = {
+    student:{ label:"Student", cls:"student" },
+    counsellor:{ label:"Partner Counsellor", cls:"counsellor" },
+    professional:{ label:"Career Professional", cls:"professional" },
+    partner:{ label:"Program Partner", cls:"partner" },
+    school:{ label:"School", cls:"school" }
+  };
+  const statusMeta = {
+    active:{ label:"Active", cls:"active" },
+    pending:{ label:"Pending", cls:"pending" },
+    suspended:{ label:"Suspended", cls:"suspended" }
+  };
+
+  let umType = "all", umStatus = "all", umQuery = "";
+
+  function renderUsers(){
+    const list = document.getElementById('umList');
+    let filtered = accounts.filter(a=>{
+      if(umType !== "all" && a.type !== umType) return false;
+      if(umStatus !== "all" && a.status !== umStatus) return false;
+      if(umQuery && !a.name.toLowerCase().includes(umQuery) && !a.meta.toLowerCase().includes(umQuery)) return false;
+      return true;
+    });
+    document.getElementById('umCount').textContent = `${filtered.length} of ${accounts.length} accounts`;
+    list.innerHTML = filtered.map(a=>{
+      const initials = a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      const tm = typeMeta[a.type], sm = statusMeta[a.status];
+      return `
+        <div class="um-row" onclick="openAccount(${a.id})">
+          <div class="um-avatar">${initials}</div>
+          <div class="um-main"><div class="um-name">${a.name}</div><div class="um-meta">${a.meta}</div></div>
+          <span class="um-type ${tm.cls}">${tm.label}</span>
+          <span class="um-status ${sm.cls}">${sm.label}</span>
+          <div class="um-metric">${a.metricLabel}<b>${a.metricVal}</b></div>
+        </div>
+      `;
+    }).join('') || `<div class="stub-wrap"><div class="stub-ic">🔍</div><div class="stub-title">No accounts match</div><div class="stub-desc">Try a different search term or filter.</div></div>`;
+  }
+
+  document.getElementById('umTypeFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#umTypeFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); umType = chip.dataset.type; renderUsers();
+  });
+  document.getElementById('umStatusFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#umStatusFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); umStatus = chip.dataset.status; renderUsers();
+  });
+  document.getElementById('umSearch').addEventListener('input', e=>{
+    umQuery = e.target.value.trim().toLowerCase(); renderUsers();
+  });
+
+  function openAccount(id){
+    const a = accounts.find(x=>x.id===id);
+    const tm = typeMeta[a.type];
+    document.getElementById('dh-type').textContent = tm.label.toUpperCase() + " · " + statusMeta[a.status].label.toUpperCase();
+    document.getElementById('dh-name').textContent = a.name;
+    document.getElementById('dh-meta').textContent = `${a.meta} · Joined ${a.joined}`;
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-section-label">Key Metrics</div>
+      <div class="dstat-grid">${a.stats.map(s=>`<div class="dstat"><b>${s.val}</b><span>${s.label}</span></div>`).join('')}</div>
+      <div class="dp-section-label">Notes &amp; History</div>
+      <div class="timeline">${(a.notes.length? a.notes : ['No activity logged yet.']).map(n=>`<div class="tl-item"><div class="tl-dot"></div><div class="tl-txt">${n}</div></div>`).join('')}</div>
+    `;
+    const suspendBtn = document.getElementById('footSuspend');
+    suspendBtn.textContent = a.status === 'suspended' ? 'Reactivate Account' : 'Suspend Account';
+    suspendBtn.className = a.status === 'suspended' ? '' : 'danger';
+    suspendBtn.onclick = ()=> alert(`This would ${a.status === 'suspended' ? 'reactivate' : 'suspend'} ${a.name}'s account — wire this up to the backend.`);
+    document.getElementById('footReset').onclick = ()=> alert(`This would send a password reset link to ${a.name}.`);
+    document.getElementById('footReset').textContent = 'Reset Password';
+    const primaryBtn = document.getElementById('footPrimary');
+    primaryBtn.textContent = 'Edit Details';
+    primaryBtn.onclick = ()=> alert('This would open the account in full edit mode.');
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    document.getElementById('overlay').classList.remove('show');
+    document.getElementById('drawer').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  document.getElementById('overlay').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDrawer(); });
+
+  renderUsers();
+
+  // ============ Career Library CMS ============
+  const clEntries = [
+    { id:"cl1", name:"Data Scientist", stream:"Science", domain:"Computer Science, AI & Data", status:"published",
+      validator:"Arnav Sethi", validatorRole:"Technology & Engineering", updated:"13 Jul 2026",
+      gates:[true,true,true,true] },
+    { id:"cl2", name:"Actuary", stream:"Commerce", domain:"Banking & Financial Services", status:"published",
+      validator:"Rohit Malhotra", validatorRole:"Finance", updated:"12 Jul 2026",
+      gates:[true,true,true,true] },
+    { id:"cl3", name:"Doctor", stream:"Science", domain:"Medical & Healthcare", status:"pending",
+      validator:"Dr. Kavita Reddy", validatorRole:"Medical & Healthcare", updated:"10 Jul 2026",
+      gates:[true,true,false,false] },
+    { id:"cl4", name:"IAS Officer", stream:"Humanities / Arts", domain:"Civil Services & Public Administration", status:"pending",
+      validator:"Vikram Choudhary", validatorRole:"Law & Public Service", updated:"8 Jul 2026",
+      gates:[true,true,false,false] },
+    { id:"cl5", name:"Chartered Accountant", stream:"Commerce", domain:"Commerce & Finance", status:"draft",
+      validator:null, validatorRole:null, updated:"9 Jul 2026",
+      gates:[true,false,false,false] },
+    { id:"cl6", name:"UI Designer", stream:"Science", domain:"Computer Science, AI & Data", status:"draft",
+      validator:null, validatorRole:null, updated:"6 Jul 2026",
+      gates:[true,false,false,false] },
+    { id:"cl7", name:"Architect", stream:"Science", domain:"Architecture & Planning", status:"draft",
+      validator:null, validatorRole:null, updated:"3 Jul 2026",
+      gates:[false,false,false,false] }
+  ];
+  const clStatusMeta = {
+    published:{ label:"Published", cls:"published" },
+    pending:{ label:"Pending Validation", cls:"pending" },
+    draft:{ label:"In Draft", cls:"draft" }
+  };
+  const gateNames = ["Content Complete (10 categories drafted)","Editorial Accuracy Review","Career Professional Validation","Final Admin Publish Approval"];
+
+  let clStatus = "all";
+  function renderLibrary(){
+    const list = document.getElementById('clList');
+    const filtered = clEntries.filter(e => clStatus === "all" || e.status === clStatus);
+    list.innerHTML = filtered.map(e=>{
+      const sm = clStatusMeta[e.status];
+      return `
+        <div class="cl-row" onclick="openCareerEntry('${e.id}')">
+          <div class="cl-main"><div class="cl-name">${e.name}${e.id==='cl1'?' ★':''}</div><div class="cl-path">${e.stream} › ${e.domain}</div></div>
+          <span class="cl-status ${sm.cls}">${sm.label}</span>
+          <div class="cl-validator">${e.validator ? `Validator<b>${e.validator}</b>` : `Updated<b>${e.updated}</b>`}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('clStatusFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#clStatusFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); clStatus = chip.dataset.status; renderLibrary();
+  });
+
+  function openCareerEntry(id){
+    const e = clEntries.find(x=>x.id===id);
+    const sm = clStatusMeta[e.status];
+    document.getElementById('dh-type').textContent = `${e.stream.toUpperCase()} › ${e.domain.toUpperCase()}`;
+    document.getElementById('dh-name').textContent = e.name;
+    document.getElementById('dh-meta').textContent = `${sm.label} · Last updated ${e.updated}`;
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-section-label">Publication Gates</div>
+      <div class="gate-list">
+        ${gateNames.map((g,i)=>`<div class="gate-row ${e.gates[i]?'done':''}"><div class="gate-icon">${e.gates[i]?'✓':i+1}</div><div class="gate-txt">${g}</div></div>`).join('')}
+      </div>
+      <div class="dp-section-label">Validation</div>
+      <div class="dstat-grid">
+        <div class="dstat"><b>${e.validator || '—'}</b><span>Assigned Validator</span></div>
+        <div class="dstat"><b>${e.validatorRole || 'Unassigned'}</b><span>Domain</span></div>
+      </div>
+    `;
+    const suspendBtn = document.getElementById('footSuspend');
+    suspendBtn.textContent = 'Request Changes';
+    suspendBtn.className = 'danger';
+    suspendBtn.onclick = ()=> alert(`This would send "${e.name}" back to draft with review notes.`);
+    document.getElementById('footReset').textContent = 'View Full Content';
+    document.getElementById('footReset').onclick = ()=> alert(`This would open the full 10-category content editor for "${e.name}".`);
+    const primaryBtn = document.getElementById('footPrimary');
+    const primaryLabel = e.status === 'draft' ? 'Submit for Validation' : e.status === 'pending' ? 'Approve & Publish' : 'Mark for Update';
+    primaryBtn.textContent = primaryLabel;
+    primaryBtn.onclick = ()=> alert(`This would ${primaryLabel.toLowerCase()} for "${e.name}" — wire this up to the backend.`);
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  renderLibrary();
+
+  // ============ Approvals ============
+  const applications = [
+    { id:"a1", cat:"professional", name:"Ananya Krishnan", meta:"UX &amp; Product Design · Bangalore · 8 yrs experience", submitted:"11 Jul 2026",
+      details:[["Domain","Technology & Engineering"],["Experience","8 years"],["Current Role","Lead Product Designer, Freshworks"],["LinkedIn","Provided"]] },
+    { id:"a2", cat:"professional", name:"Suresh Iyer", meta:"Mechanical Engineering · Chennai · 12 yrs experience", submitted:"10 Jul 2026",
+      details:[["Domain","Engineering & Technology"],["Experience","12 years"],["Current Role","Senior Engineer, Ashok Leyland"],["LinkedIn","Provided"]] },
+    { id:"a3", cat:"professional", name:"Ritika Chawla", meta:"Journalism &amp; Media · Delhi · 6 yrs experience", submitted:"9 Jul 2026",
+      details:[["Domain","Media, Journalism & Communication"],["Experience","6 years"],["Current Role","Senior Correspondent, a national daily"],["LinkedIn","Provided"]] },
+    { id:"a4", cat:"partner", name:"ScholarBridge Tutoring", meta:"Skill Development &amp; Certification · Pan-India", submitted:"11 Jul 2026",
+      details:[["Category","Skill Development & Certification"],["Programme Focus","Core subject tutoring, revision resources"],["Existing Students","5,100+ (per own claim)"],["Website","Provided"]] },
+    { id:"a5", cat:"partner", name:"NextGen Coding Academy", meta:"EdTech &amp; Online Course Platforms · Bangalore", submitted:"9 Jul 2026",
+      details:[["Category","EdTech & Online Course Platforms"],["Programme Focus","Coding & CS fundamentals, Class 9–12"],["Existing Students","2,300+ (per own claim)"],["Website","Provided"]] },
+    { id:"a6", cat:"counsellor", name:"Geeta Sharma", meta:"Retired Teacher, 22 yrs · Lucknow", submitted:"10 Jul 2026",
+      details:[["Background","Retired School Teacher"],["Experience","22 years teaching"],["City","Lucknow"],["Domain Interest","Commerce Careers"]] },
+    { id:"a7", cat:"counsellor", name:"Anil Kumar", meta:"Ex-Government Official · Bhopal", submitted:"8 Jul 2026",
+      details:[["Background","Ex-Government Official"],["Experience","Not specified"],["City","Bhopal"],["Domain Interest","Government & Public Service Careers"]] }
+  ];
+  const schoolApps = [
+    { id:"s1", name:"DPS Sector 45, Gurugram", meta:"640 students · Class 9–12 · Proposed cohort: 40", submitted:"12 Jul 2026",
+      details:[["Stage","Initial Conversation Held"],["Total Students","640"],["Proposed Cohort","40"],["Next Step","Pilot Proposal"]] }
+  ];
+  const apCatMeta = {
+    professional:{ label:"Career Professional", cls:"professional" },
+    partner:{ label:"Program Partner", cls:"partner" },
+    counsellor:{ label:"Partner Counsellor", cls:"counsellor" }
+  };
+
+  let apCat = "all";
+  function renderApprovals(){
+    const list = document.getElementById('apList');
+    const filtered = applications.filter(a=> apCat === "all" || a.cat === apCat);
+    list.innerHTML = filtered.map(a=>{
+      const cm = apCatMeta[a.cat];
+      const initials = a.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      return `
+        <div class="app-row" onclick="openApplication('${a.id}', 'application')">
+          <div class="app-avatar">${initials}</div>
+          <div class="app-main"><div class="app-name">${a.name}</div><div class="app-meta">${a.meta}</div></div>
+          <span class="app-cat ${cm.cls}">${cm.label}</span>
+          <div class="app-date">Submitted<b>${a.submitted}</b></div>
+        </div>
+      `;
+    }).join('');
+  }
+  function renderSchoolApprovals(){
+    document.getElementById('apSchoolList').innerHTML = schoolApps.map(s=>{
+      const initials = s.name.split(' ').map(w=>w[0]).slice(0,2).join('');
+      return `
+        <div class="app-row" onclick="openApplication('${s.id}', 'school')">
+          <div class="app-avatar">${initials}</div>
+          <div class="app-main"><div class="app-name">${s.name}</div><div class="app-meta">${s.meta}</div></div>
+          <span class="app-cat school">School Pilot</span>
+          <div class="app-date">Submitted<b>${s.submitted}</b></div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('apCatFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#apCatFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); apCat = chip.dataset.cat; renderApprovals();
+  });
+
+  function openApplication(id, source){
+    let a, cm, displayName;
+    if(source === 'school'){
+      a = schoolApps.find(x=>x.id===id);
+      cm = {label:"School Pilot Request"};
+      displayName = a.name;
+    } else if(source === 'portfolio'){
+      a = portfolioContent.find(x=>x.id===id);
+      cm = {label:`Portfolio Content · ${a.kind}`};
+      displayName = a.owner;
+    } else {
+      a = applications.find(x=>x.id===id);
+      cm = apCatMeta[a.cat];
+      displayName = a.name;
+    }
+    document.getElementById('dh-type').textContent = cm.label.toUpperCase() + " · PENDING REVIEW";
+    document.getElementById('dh-name').textContent = displayName;
+    document.getElementById('dh-meta').textContent = `${a.meta.replace(/&amp;/g,'&')} · Submitted ${a.submitted}`;
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-section-label">${source === 'portfolio' ? 'Submission Details' : 'Application Details'}</div>
+      ${a.details.map(([l,v])=>`<div class="app-detail-row"><span class="adl">${l}</span><span class="adv">${v}</span></div>`).join('')}
+    `;
+    const suspendBtn = document.getElementById('footSuspend');
+    suspendBtn.textContent = 'Reject';
+    suspendBtn.className = 'danger';
+    suspendBtn.onclick = ()=> alert(`This would reject ${displayName}'s submission — wire this up to the backend.`);
+    document.getElementById('footReset').textContent = source === 'portfolio' ? 'Ask for a Different Link' : 'Request More Info';
+    document.getElementById('footReset').onclick = ()=> alert(`This would message ${displayName} for more information.`);
+    const primaryBtn = document.getElementById('footPrimary');
+    primaryBtn.textContent = source === 'school' ? 'Move to Pilot Proposal' : source === 'portfolio' ? 'Approve & Publish' : 'Approve';
+    primaryBtn.onclick = ()=> alert(`This would approve ${displayName}'s ${source === 'portfolio' ? 'content' : 'application'} — wire this up to the backend.`);
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  renderApprovals();
+  renderSchoolApprovals();
+
+  // ============ Portfolio Content Approvals ============
+  const portfolioContent = [
+    { id:"pc1", owner:"Priya Mehta", role:"Career Professional", kind:"YouTube Video", meta:'"How I Review Design Portfolios"', submitted:"12 Jul 2026",
+      details:[["Owner","Priya Mehta (Career Professional)"],["Type","YouTube Video"],["Title","How I Review Design Portfolios"],["URL","youtube.com/watch?v=9bZkp7q19f0"]] },
+    { id:"pc2", owner:"Sunita Verma", role:"Partner Counsellor", kind:"YouTube Video", meta:'"Why I Became a Partner Counsellor"', submitted:"13 Jul 2026",
+      details:[["Owner","Sunita Verma (Partner Counsellor)"],["Type","YouTube Video"],["Title","Why I Became a Partner Counsellor"],["URL","youtube.com/watch?v=2Xc9gXyf2G4"]] },
+    { id:"pc3", owner:"Sunita Verma", role:"Partner Counsellor", kind:"Social Handle", meta:"Instagram · instagram.com/sunitaverma.careers", submitted:"11 Jul 2026",
+      details:[["Owner","Sunita Verma (Partner Counsellor)"],["Type","Social Handle"],["Platform","Instagram"],["Handle","instagram.com/sunitaverma.careers"]] },
+    { id:"pc4", owner:"Arjun Nair", role:"Student", kind:"YouTube Video", meta:'"My Design Journey So Far"', submitted:"13 Jul 2026",
+      details:[["Owner","Arjun Nair (Student)"],["Type","YouTube Video"],["Title","My Design Journey So Far"],["URL","youtube.com/watch?v=M7lc1UVf-VE"]] }
+  ];
+
+  function renderPortfolioApprovals(){
+    document.getElementById('apPortfolioList').innerHTML = portfolioContent.map(p=>{
+      const initials = p.owner.split(' ').map(w=>w[0]).slice(0,2).join('');
+      const kindTag = p.kind === 'YouTube Video' ? 'professional' : 'counsellor';
+      return `
+        <div class="app-row" onclick="openApplication('${p.id}', 'portfolio')">
+          <div class="app-avatar">${initials}</div>
+          <div class="app-main"><div class="app-name">${p.owner} <span style="font-weight:400; color:var(--muted);">— ${p.kind}</span></div><div class="app-meta">${p.meta}</div></div>
+          <span class="app-cat ${kindTag}">${p.role}</span>
+          <div class="app-date">Submitted<b>${p.submitted}</b></div>
+        </div>
+      `;
+    }).join('');
+  }
+  renderPortfolioApprovals();
+
+  // ============ Financial Ledger ============
+  const ledger = [
+    { id:"f1", cat:"in", desc:"₹99 Signups Batch", meta:"1–13 Jul 2026 · 187 signups", amt:"+₹18,513", status:"completed",
+      details:[["Period","1–13 Jul 2026"],["Signups","187"],["Rate","₹99 each"],["Settlement","Auto-settled via payment gateway"]] },
+    { id:"f2", cat:"in", desc:"₹99 Signups Batch", meta:"1–30 Jun 2026 · 612 signups", amt:"+₹60,588", status:"completed",
+      details:[["Period","1–30 Jun 2026"],["Signups","612"],["Rate","₹99 each"],["Settlement","Auto-settled via payment gateway"]] },
+    { id:"f3", cat:"in", desc:"Program Partner Commission — Design Foundry Academy", meta:"Invoice INV-0612 · 4 enrolments", amt:"+₹28,400", status:"pending",
+      details:[["Partner","Design Foundry Academy"],["Invoice","INV-0612"],["Enrolments Covered","4"],["Commission Rate","14%"],["Due Date","31 Jul 2026"]] },
+    { id:"f4", cat:"in", desc:"Program Partner Commission — Design Foundry Academy", meta:"Invoice INV-0587 · 5 enrolments", amt:"+₹31,900", status:"completed",
+      details:[["Partner","Design Foundry Academy"],["Invoice","INV-0587"],["Enrolments Covered","5"],["Commission Rate","14%"]] },
+    { id:"f5", cat:"in", desc:"Program Partner Commission — EduFin Advisors", meta:"Invoice INV-0601 · 6 enrolments", amt:"+₹19,600", status:"completed",
+      details:[["Partner","EduFin Advisors"],["Invoice","INV-0601"],["Enrolments Covered","6"],["Commission Rate","12%"]] },
+    { id:"f6", cat:"out", desc:"Counsellor Payout Batch", meta:"128 counsellors · Processed", amt:"−₹3,42,000", status:"completed",
+      details:[["Recipients","128 Partner Counsellors"],["Batch Type","Monthly scheduled payout"],["Processed","12 Jul 2026"]] },
+    { id:"f7", cat:"out", desc:"Counsellor Payout Batch", meta:"342 counsellors · Scheduled", amt:"−₹8,20,000", status:"pending",
+      details:[["Recipients","342 Partner Counsellors"],["Batch Type","Monthly scheduled payout"],["Due Date","31 Jul 2026"]] },
+    { id:"f8", cat:"out", desc:"Career Professional Payout Batch", meta:"58 professionals · Scheduled", amt:"−₹94,200", status:"pending",
+      details:[["Recipients","58 Career Professionals"],["Batch Type","Premium Session payouts"],["Due Date","25 Jul 2026"]] },
+    { id:"f9", cat:"dispute", desc:"Refund — Duplicate ₹99 Payment", meta:"Student signup, processed", amt:"−₹99", status:"completed",
+      details:[["Reason","Duplicate payment on signup"],["Requested By","Student"],["Processed","10 Jul 2026"]] },
+    { id:"f10", cat:"dispute", desc:"Refund Request — Programme Cancellation", meta:"Parent dispute · Under review", amt:"−₹6,000", status:"review",
+      details:[["Reason","Parent requesting cancellation within cooling-off period"],["Programme","Mock Test Series"],["Requested","9 Jul 2026"],["Status","Awaiting Admin decision"]] }
+  ];
+
+  let fxCat = "all";
+  function renderLedger(){
+    const list = document.getElementById('fxList');
+    const filtered = ledger.filter(x=> fxCat === "all" || x.cat === fxCat);
+    list.innerHTML = filtered.map(x=>{
+      const dir = x.cat === 'out' ? 'out' : 'in';
+      const ic = x.cat === 'dispute' ? '⚠️' : (dir === 'in' ? '↓' : '↑');
+      const statusLabel = x.status === 'completed' ? 'Completed' : x.status === 'pending' ? 'Pending' : 'Under Review';
+      return `
+        <div class="lx-row" onclick="openLedgerItem('${x.id}')">
+          <div class="lx-ic ${dir}">${ic}</div>
+          <div class="lx-main"><div class="lx-desc">${x.desc}</div><div class="lx-meta">${x.meta}</div></div>
+          <span class="lx-status ${x.status}">${statusLabel}</span>
+          <div class="lx-amt ${dir}">${x.amt}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  document.getElementById('fxFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#fxFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); fxCat = chip.dataset.cat; renderLedger();
+  });
+
+  function openLedgerItem(id){
+    const x = ledger.find(i=>i.id===id);
+    const dir = x.cat === 'out' ? 'Outgoing' : x.cat === 'dispute' ? 'Refund / Dispute' : 'Incoming';
+    document.getElementById('dh-type').textContent = dir.toUpperCase();
+    document.getElementById('dh-name').textContent = x.desc;
+    document.getElementById('dh-meta').textContent = x.meta;
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-section-label">Transaction Details</div>
+      ${x.details.map(([l,v])=>`<div class="app-detail-row"><span class="adl">${l}</span><span class="adv">${v}</span></div>`).join('')}
+      <div class="dp-section-label">Amount</div>
+      <div class="dstat-grid"><div class="dstat"><b style="color:${x.cat==='out'?'#c4451f':'var(--teal-deep)'};">${x.amt}</b><span>${x.status}</span></div></div>
+    `;
+    const suspendBtn = document.getElementById('footSuspend');
+    suspendBtn.textContent = x.status === 'review' ? 'Deny Refund' : 'Flag for Review';
+    suspendBtn.className = 'danger';
+    suspendBtn.onclick = ()=> alert(`This would flag "${x.desc}" for finance review.`);
+    document.getElementById('footReset').textContent = 'Download Receipt';
+    document.getElementById('footReset').onclick = ()=> alert('This would generate a downloadable PDF receipt.');
+    const primaryBtn = document.getElementById('footPrimary');
+    primaryBtn.textContent = x.status === 'pending' ? 'Process Now' : x.status === 'review' ? 'Approve Refund' : 'Mark Reconciled';
+    primaryBtn.onclick = ()=> alert(`This would ${primaryBtn.textContent.toLowerCase()} for "${x.desc}" — wire this up to the payment gateway.`);
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  renderLedger();
+
+  // ============ Sessions ============
+  const sessions = [
+    { id:"sx1", type:"counsellor", with:"Sunita Verma", title:"Ananya Gupta — Stream Selection Guidance", day:"14", mon:"Jul", meta:"Today, 4:00 PM · Video call", status:"upcoming", paid:false,
+      details:[["Student","Ananya Gupta, Class 10"],["Counsellor","Sunita Verma"],["Format","Video call"],["Purpose","Stream Selection Guidance session"]] },
+    { id:"sx2", type:"counsellor", with:"Sunita Verma", title:"Rohit Sharma — First Contact Call", day:"14", mon:"Jul", meta:"Today, 11:00 AM · Phone call", status:"upcoming", paid:false,
+      details:[["Student","Rohit Sharma, Class 9"],["Counsellor","Sunita Verma"],["Format","Phone call"],["Purpose","First contact after Merrakii+ assigned enquiry"]] },
+    { id:"sx3", type:"counsellor", with:"Sunita Verma", title:"Priya Singh — Profiling Nudge Call", day:"14", mon:"Jul", meta:"Today, 2:00 PM · Phone call", status:"noshow", paid:false,
+      details:[["Student","Priya Singh, Class 11"],["Counsellor","Sunita Verma"],["Format","Phone call"],["Outcome","Student did not join — reschedule needed"]] },
+    { id:"sx4", type:"professional", with:"Priya Mehta", title:"Karan Mehta — Portfolio Review", day:"18", mon:"Jul", meta:"6:00 PM · Video call", status:"upcoming", paid:true,
+      details:[["Student","Karan Mehta, Class 12"],["Professional","Priya Mehta"],["Format","Premium Session · 1-on-1"],["Fee","₹2,000 · Booked &amp; paid by student"]] },
+    { id:"sx5", type:"professional", with:"Priya Mehta", title:"Ananya Gupta — Career Exploration Follow-up", day:"16", mon:"Jul", meta:"4:00 PM · Video call", status:"upcoming", paid:false,
+      details:[["Student","Ananya Gupta, Class 10"],["Professional","Priya Mehta"],["Format","Free network session"],["Purpose","Career exploration follow-up"]] },
+    { id:"sx6", type:"professional", with:"Priya Mehta", title:"Group Panel — 5 Students", day:"19", mon:"Jul", meta:"5:30 PM · Video call", status:"upcoming", paid:false,
+      details:[["Students","5 students, Class 10"],["Professional","Priya Mehta"],["Format","Free network session · Group Panel"]] },
+    { id:"sx7", type:"professional", with:"Priya Mehta", title:"Arjun Nair — Portfolio Review", day:"5", mon:"Jul", meta:"Completed · Video call", status:"completed", paid:true,
+      details:[["Student","Arjun Nair, Class 12"],["Professional","Priya Mehta"],["Format","Premium Session · 1-on-1"],["Fee","₹2,000 · Paid"]] },
+    { id:"sx8", type:"professional", with:"Priya Mehta", title:"Design Foundry Academy — Cohort Workshop", day:"2", mon:"Jul", meta:"Completed · 12 students", status:"completed", paid:true,
+      details:[["Booked By","Design Foundry Academy (school)"],["Professional","Priya Mehta"],["Format","Premium Session · Group Workshop"],["Fee","₹10,000 · Paid"]] },
+    { id:"sx9", type:"professional", with:"Priya Mehta", title:"Simran Kaur — Career Professional Interaction", day:"10", mon:"Jul", meta:"Completed · Video call", status:"completed", paid:false,
+      details:[["Student","Simran Kaur, Class 11"],["Professional","Priya Mehta"],["Format","Free network session"]] },
+    { id:"sx10", type:"professional", with:"Priya Mehta", title:"Reyansh Pillai — Career Exploration", day:"15", mon:"Jun", meta:"Completed · Video call", status:"completed", paid:false,
+      details:[["Student","Reyansh Pillai, Class 9"],["Professional","Priya Mehta"],["Format","Free network session"]] }
+  ];
+
+  let sxType = "all", sxStatus = "all";
+  function renderSessions(){
+    const list = document.getElementById('sxList');
+    const filtered = sessions.filter(s => (sxType === "all" || s.type === sxType) && (sxStatus === "all" || s.status === sxStatus));
+    const statusLabel = { upcoming:"Upcoming", completed:"Completed", noshow:"No-Show" };
+    const withLabel = { counsellor:"Counsellor", professional:"Career Professional" };
+    list.innerHTML = filtered.map(s=>`
+      <div class="sx-row" onclick="openSession('${s.id}')">
+        <div class="sx-date-badge"><b>${s.day}</b><span>${s.mon}</span></div>
+        <div class="sx-main"><div class="sx-title">${s.title}${s.paid?'<span class="paid-tag">PAID</span>':''}</div><div class="sx-meta">${s.meta}</div></div>
+        <span class="sx-with ${s.type}">${withLabel[s.type]}</span>
+        <span class="sx-status ${s.status}">${statusLabel[s.status]}</span>
+      </div>
+    `).join('') || `<div class="stub-wrap"><div class="stub-ic">📅</div><div class="stub-title">No sessions match</div><div class="stub-desc">Try a different filter combination.</div></div>`;
+  }
+  document.getElementById('sxTypeFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#sxTypeFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); sxType = chip.dataset.type; renderSessions();
+  });
+  document.getElementById('sxStatusFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#sxStatusFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); sxStatus = chip.dataset.status; renderSessions();
+  });
+
+  function openSession(id){
+    const s = sessions.find(x=>x.id===id);
+    document.getElementById('dh-type').textContent = (s.type === 'counsellor' ? 'COUNSELLOR SESSION' : 'CAREER PROFESSIONAL SESSION') + (s.paid ? ' · PAID' : '');
+    document.getElementById('dh-name').textContent = s.title;
+    document.getElementById('dh-meta').textContent = s.meta;
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-section-label">Session Details</div>
+      ${s.details.map(([l,v])=>`<div class="app-detail-row"><span class="adl">${l}</span><span class="adv">${v}</span></div>`).join('')}
+    `;
+    const suspendBtn = document.getElementById('footSuspend');
+    suspendBtn.textContent = 'Cancel Session';
+    suspendBtn.className = 'danger';
+    suspendBtn.onclick = ()=> alert(`This would cancel "${s.title}" and notify both parties.`);
+    document.getElementById('footReset').textContent = 'Reschedule';
+    document.getElementById('footReset').onclick = ()=> alert(`This would open rescheduling for "${s.title}".`);
+    const primaryBtn = document.getElementById('footPrimary');
+    primaryBtn.textContent = s.status === 'upcoming' ? 'Send Reminder' : s.status === 'noshow' ? 'Log Follow-Up' : 'View Session Notes';
+    primaryBtn.onclick = ()=> alert(`This would ${primaryBtn.textContent.toLowerCase()} for "${s.title}".`);
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  renderSessions();
+
+  // ============ Notifications ============
+  const templates = [
+    { id:"n1", chan:"email", cat:"payment", name:"₹99 Signup Confirmation", status:"active", sent:"4,229", edited:"2 Jun 2026",
+      subject:"You're in — your Merrakii+ report is being built", body:"Hi {{student_name}},\n\nYour ₹99 unlock is confirmed. We're building your full Career Journey Report now — personalised to your profile across all 8 stages.\n\nThis was a one-time payment. No auto-renewal.\n\n— Team Merrakii+" },
+    { id:"n2", chan:"whatsapp", cat:"milestone", name:"Deep Profiling Reminder", status:"active", sent:"1,124", edited:"15 May 2026",
+      subject:null, body:"Hi {{student_name}}! You're one short step from your full personalised report — just finish your profile (2 mins) and your Live Career Journey Report unlocks. {{profiling_link}}" },
+    { id:"n3", chan:"whatsapp", cat:"session", name:"Session Reminder — 24 Hrs Before", status:"active", sent:"6,840", edited:"20 Jun 2026",
+      subject:null, body:"Reminder: {{session_type}} with {{counsellor_or_professional}} is tomorrow at {{time}}. Reply RESCHEDULE if this no longer works." },
+    { id:"n4", chan:"sms", cat:"session", name:"Session Reminder — 1 Hr Before", status:"active", sent:"6,840", edited:"20 Jun 2026",
+      subject:null, body:"Merrakii+: Your session with {{counsellor_or_professional}} starts in 1 hour. Join: {{session_link}}" },
+    { id:"n5", chan:"whatsapp", cat:"milestone", name:"Decision Enabled Milestone", status:"active", sent:"1,840", edited:"28 Jun 2026",
+      subject:null, body:"🎯 {{student_name}} just confirmed a real decision: {{decision_name}}. That's what Merrakii+ is actually for — not just information, a decision made with real understanding." },
+    { id:"n6", chan:"email", cat:"application", name:"Career Professional Application Approved", status:"active", sent:"58", edited:"10 Apr 2026",
+      subject:"Welcome to the Merrakii+ Career Professionals Network", body:"Hi {{applicant_name}},\n\nYour application has been approved. You're now a Merrakii+ Verified Professional in {{domain}}.\n\nNext step: complete your onboarding session, and you'll be ready to validate journeys and take your first student session.\n\n— Team Merrakii+" },
+    { id:"n7", chan:"email", cat:"application", name:"Career Professional — More Info Needed", status:"active", sent:"14", edited:"10 Apr 2026",
+      subject:"A quick follow-up on your Merrakii+ application", body:"Hi {{applicant_name}},\n\nThanks for applying to the Career Professionals Network. Before we can move forward, we need a little more detail: {{requested_info}}.\n\nReply to this email whenever it's convenient.\n\n— Team Merrakii+" },
+    { id:"n8", chan:"email", cat:"application", name:"Partner Counsellor Application Approved", status:"active", sent:"342", edited:"12 Mar 2026",
+      subject:"You're a Merrakii+ Partner Counsellor", body:"Hi {{applicant_name}},\n\nWelcome aboard. Your Foundation Residential training is scheduled next — details to follow within 3 working days.\n\n— Team Merrakii+" },
+    { id:"n9", chan:"email", cat:"application", name:"Program Partner Application Approved", status:"active", sent:"24", edited:"12 Mar 2026",
+      subject:"Merrakii+ Partnership Confirmed", body:"Hi {{contact_name}},\n\n{{organisation_name}} is now a live Program Partner. Your listing will appear in relevant student journeys within 48 hours.\n\n— Team Merrakii+" },
+    { id:"n10", chan:"sms", cat:"payment", name:"Counsellor Payout Processed", status:"active", sent:"470", edited:"5 Jul 2026",
+      subject:null, body:"Merrakii+: Your payout of {{amount}} has been processed to your registered account. Details in your Earnings tab." },
+    { id:"n11", chan:"email", cat:"payment", name:"Refund Processed", status:"active", sent:"8", edited:"1 Jul 2026",
+      subject:"Your Merrakii+ refund has been processed", body:"Hi {{student_name}},\n\nYour refund of {{amount}} has been processed and should reflect in 5–7 working days.\n\n— Team Merrakii+" },
+    { id:"n12", chan:"email", cat:"partner", name:"School Pilot — Proposal Ready", status:"draft", sent:"0", edited:"13 Jul 2026",
+      subject:"Your Merrakii+ pilot proposal is ready", body:"Hi {{principal_name}},\n\nFollowing our conversation, here's a customised pilot proposal for {{school_name}} — zero cost, specific outcomes, a clear process.\n\n{{proposal_link}}\n\n— Team Merrakii+" },
+    { id:"n13", chan:"whatsapp", cat:"milestone", name:"Re-engagement — Inactive 30 Days", status:"paused", sent:"—", edited:"22 Jun 2026",
+      subject:null, body:"Hi {{student_name}}, it's been a while! Your Career Journey Report is still here whenever you're ready to pick it back up. {{dashboard_link}}" }
+  ];
+  const chanIcon = { email:"✉️", sms:"💬", whatsapp:"🟢" };
+  const chanLabel = { email:"Email", sms:"SMS", whatsapp:"WhatsApp" };
+  const ntStatusLabel = { active:"Active", draft:"Draft", paused:"Paused" };
+
+  let ntChan = "all", ntCat = "all";
+  function renderNotifications(){
+    const list = document.getElementById('ntList');
+    const filtered = templates.filter(t => (ntChan === "all" || t.chan === ntChan) && (ntCat === "all" || t.cat === ntCat));
+    list.innerHTML = filtered.map(t=>`
+      <div class="nt-row" onclick="openTemplate('${t.id}')">
+        <div class="nt-chan ${t.chan}">${chanIcon[t.chan]}</div>
+        <div class="nt-main"><div class="nt-name">${t.name}</div><div class="nt-meta">${chanLabel[t.chan]} · Edited ${t.edited}</div></div>
+        <span class="nt-status ${t.status}">${ntStatusLabel[t.status]}</span>
+        <div class="nt-sent">Sent<b>${t.sent}</b></div>
+      </div>
+    `).join('') || `<div class="stub-wrap"><div class="stub-ic">✉️</div><div class="stub-title">No templates match</div><div class="stub-desc">Try a different filter combination.</div></div>`;
+  }
+  document.getElementById('ntChanFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#ntChanFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); ntChan = chip.dataset.chan; renderNotifications();
+  });
+  document.getElementById('ntCatFilter').addEventListener('click', e=>{
+    const chip = e.target.closest('.fchip'); if(!chip) return;
+    document.querySelectorAll('#ntCatFilter .fchip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active'); ntCat = chip.dataset.cat; renderNotifications();
+  });
+
+  function highlightVars(text){
+    return text.replace(/\{\{([^}]+)\}\}/g, '<span class="tpl-var">{{$1}}</span>');
+  }
+  function openTemplate(id){
+    const t = templates.find(x=>x.id===id);
+    document.getElementById('dh-type').textContent = `${chanLabel[t.chan].toUpperCase()} TEMPLATE · ${ntStatusLabel[t.status].toUpperCase()}`;
+    document.getElementById('dh-name').textContent = t.name;
+    document.getElementById('dh-meta').textContent = `Sent ${t.sent} times · Last edited ${t.edited}`;
+    const charNote = t.chan === 'sms' ? `<div class="tpl-charcount">${t.body.length} / 160 characters</div>` : '';
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="dp-section-label">Template Preview</div>
+      <div class="tpl-preview">
+        ${t.subject ? `<div class="tpl-subject">Subject: ${t.subject}</div>` : ''}
+        <div class="tpl-body">${highlightVars(t.body)}</div>
+        ${charNote}
+      </div>
+    `;
+    const suspendBtn = document.getElementById('footSuspend');
+    suspendBtn.textContent = t.status === 'paused' ? 'Activate' : 'Pause Template';
+    suspendBtn.className = t.status === 'paused' ? '' : 'danger';
+    suspendBtn.onclick = ()=> alert(`This would ${t.status === 'paused' ? 'activate' : 'pause'} "${t.name}".`);
+    document.getElementById('footReset').textContent = 'Duplicate';
+    document.getElementById('footReset').onclick = ()=> alert(`This would duplicate "${t.name}" as a new draft.`);
+    const primaryBtn = document.getElementById('footPrimary');
+    primaryBtn.textContent = 'Edit Template';
+    primaryBtn.onclick = ()=> alert(`This would open the full editor for "${t.name}".`);
+    document.getElementById('overlay').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  renderNotifications();
+
+
+
+
+
+
+  function switchTab(tab){
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('tab-'+tab).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('.nav-item').forEach(btn=>{
+    btn.addEventListener('click', ()=> switchTab(btn.dataset.tab));
+  });
+</script>
+</body>
+</html>

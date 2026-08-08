@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arjun Nair | Merrakii+ Verified Journey</title>
+<meta name="description" content="Arjun Nair's verified career journey — decisions, skills, and work built through Merrakii+.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    background-image:radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ============ TOP STRIP ============ */
+  #topstrip{
+    display:flex; align-items:center; justify-content:space-between; padding:13px 24px;
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff;
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:16px; display:flex; align-items:center; gap:8px; }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+  .brand small{ display:block; font-family:var(--font-body); font-weight:500; font-size:9px; letter-spacing:.12em; text-transform:uppercase; opacity:.78; }
+  .verified-tag{ font-size:10.5px; font-weight:700; background:rgba(255,255,255,.16); padding:5px 12px; border-radius:20px; display:flex; align-items:center; gap:6px; }
+
+  #wrap{ max-width:880px; margin:0 auto; padding:0 20px 70px; }
+
+  /* ============ HERO ============ */
+  #hero{
+    text-align:center; padding:44px 20px 30px;
+  }
+  .hero-avatar{
+    width:88px; height:88px; border-radius:50%; background:var(--gold-light); color:var(--gold-deep);
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800;
+    font-size:32px; margin:0 auto; border:4px solid #fff; box-shadow:0 10px 26px rgba(10,26,20,.1);
+  }
+  #hero h1{ font-family:var(--font-display); font-weight:700; font-size:28px; margin-top:16px; }
+  .hero-tag{ font-size:13.5px; color:var(--muted); margin-top:5px; }
+  .hero-badges{ display:flex; gap:8px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
+  .hbadge{ font-size:10.5px; font-weight:700; padding:5px 12px; border-radius:20px; background:var(--teal-light); color:var(--teal-deep); }
+  .hbadge.gold{ background:var(--gold-light); color:var(--gold-deep); }
+
+  /* ============ STAT ROW ============ */
+  .stat-row{ display:flex; justify-content:center; gap:0; margin-top:30px; background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(10,26,20,.05); }
+  .stat-col{ flex:1; text-align:center; padding:20px 10px; border-right:1px solid var(--paper-line); }
+  .stat-col:last-child{ border-right:none; }
+  .stat-col b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:24px; color:var(--teal-deep); }
+  .stat-col.gold b{ color:var(--gold-deep); }
+  .stat-col span{ font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; font-weight:700; }
+
+  /* ============ SECTION SHELL ============ */
+  .section{ margin-top:38px; }
+  .section-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:16px; }
+  .section-head h2{ font-family:var(--font-display); font-weight:700; font-size:18px; }
+  .section-head .sh-sub{ font-size:11px; color:var(--muted); }
+  .video-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+  .yt-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
+  .yt-card:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(10,26,20,.09); }
+  .yt-thumb{ height:130px; background:linear-gradient(135deg,var(--teal-deep),var(--teal)); position:relative; display:flex; align-items:center; justify-content:center; }
+  .yt-play{ width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--teal-deep); }
+  .yt-badge{ position:absolute; top:10px; right:10px; background:rgba(0,0,0,.55); color:#fff; font-size:9px; font-weight:700; padding:3px 8px; border-radius:6px; }
+  .yt-body{ padding:11px 13px; }
+  .yt-title{ font-size:12px; font-weight:700; line-height:1.4; }
+  .yt-sub{ font-size:10px; color:var(--muted); margin-top:3px; }
+  .connect-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .connect-link{ display:flex; align-items:center; gap:8px; background:var(--white); border:1px solid var(--paper-line); border-radius:20px; padding:9px 16px; font-size:12px; font-weight:700; cursor:pointer; transition:all .15s; }
+  .connect-link:hover{ border-color:var(--teal); color:var(--teal-deep); }
+
+  /* ============ JOURNEY ROAD ============ */
+  .road-box{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:20px 22px 6px; }
+  svg#pubroad{ width:100%; height:150px; display:block; overflow:visible; }
+  .pr-path{ fill:none; stroke:var(--paper-line); stroke-width:5; stroke-linecap:round; }
+  .pr-path-fill{ fill:none; stroke:var(--teal); stroke-width:5; stroke-linecap:round; }
+  .pr-node circle{ fill:#fff; stroke:var(--paper-line); stroke-width:3; }
+  .pr-node.done circle{ fill:var(--teal); stroke:var(--teal); }
+  .pr-node.cur circle{ fill:var(--coral); stroke:var(--coral); }
+  .pr-node text.n{ font-family:var(--font-display); font-weight:700; font-size:11px; fill:var(--teal); text-anchor:middle; dominant-baseline:central; }
+  .pr-node.done text.n, .pr-node.cur text.n{ fill:#fff; }
+  .pr-node text.lbl{ font-family:var(--font-body); font-weight:700; font-size:9px; fill:var(--ink); text-anchor:middle; }
+
+  /* ============ DECISIONS ============ */
+  .decision-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  @media (max-width:640px){ .decision-grid{ grid-template-columns:1fr; } }
+  .decision-card{ display:flex; gap:12px; background:var(--white); border:1px solid var(--paper-line); border-left:4px solid var(--gold); border-radius:12px; padding:14px 16px; }
+  .decision-card .dc-ic{ font-size:18px; flex-shrink:0; }
+  .decision-card .dc-title{ font-size:12.5px; font-weight:700; }
+  .decision-card .dc-date{ font-size:10.5px; color:var(--muted); margin-top:2px; }
+
+  /* ============ SKILLS ============ */
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-tag{ font-size:11.5px; font-weight:700; padding:8px 14px; border-radius:20px; background:var(--teal-light); color:var(--teal-deep); border:1px solid #CFEAE0; }
+
+  /* ============ PORTFOLIO PIECES ============ */
+  .piece-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; }
+  .piece-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:14px; overflow:hidden; }
+  .piece-thumb{ height:110px; display:flex; align-items:center; justify-content:center; font-size:30px; }
+  .piece-body{ padding:12px 14px; }
+  .piece-title{ font-size:12px; font-weight:700; }
+  .piece-meta{ font-size:10px; color:var(--muted); margin-top:3px; }
+
+  /* ============ PROGRAMMES ============ */
+  .cert-list{ display:flex; flex-direction:column; gap:9px; }
+  .cert-row{ display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-line); border-radius:12px; padding:13px 16px; }
+  .cert-ic{ width:36px; height:36px; border-radius:10px; background:var(--gold-light); color:var(--gold-deep); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .cert-main{ flex:1; }
+  .cert-title{ font-size:12.5px; font-weight:700; }
+  .cert-sub{ font-size:10.5px; color:var(--muted); margin-top:1px; }
+  .cert-status{ font-size:9.5px; font-weight:800; padding:4px 10px; border-radius:20px; background:var(--teal-light); color:var(--teal-deep); flex-shrink:0; }
+
+  /* ============ ENDORSEMENT ============ */
+  .endorsement{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:22px 24px; display:flex; gap:16px; align-items:flex-start; }
+  .end-avatar{ width:44px; height:44px; border-radius:50%; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:15px; flex-shrink:0; }
+  .end-quote{ font-size:13px; line-height:1.65; color:var(--ink); font-style:italic; }
+  .end-who{ margin-top:10px; font-size:11.5px; font-weight:700; color:var(--teal-deep); }
+  .end-role{ font-size:10.5px; color:var(--muted); }
+
+  /* ============ FOOTER ============ */
+  #footer{
+    margin-top:44px; text-align:center; padding:26px 20px; border-top:1px solid var(--paper-line);
+  }
+  #footer .f-updated{ font-size:11px; color:var(--muted); }
+  #footer .f-brand{ font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--teal-deep); margin-top:8px; }
+  #footer .f-note{ font-size:10.5px; color:var(--muted); margin-top:6px; max-width:420px; margin-left:auto; margin-right:auto; line-height:1.6; }
+
+  /* ============ SHARE BAR ============ */
+  #sharebar{ position:sticky; bottom:0; display:flex; justify-content:center; gap:10px; padding:14px; background:linear-gradient(to top, var(--paper) 60%, transparent); }
+  .sb-btn{ display:flex; align-items:center; gap:7px; padding:11px 18px; border-radius:20px; border:1px solid var(--paper-line); background:var(--white); font-weight:700; font-size:12px; cursor:pointer; box-shadow:0 4px 14px rgba(10,26,20,.08); }
+  .sb-btn.primary{ background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; }
+</style>
+</head>
+<body>
+
+  <div id="topstrip">
+    <a href="01_home.html" class="brand" title="Powered by Merrakii+"><span class="dot"></span>Merrakii<small>Student Journey Portfolio</small></a>
+    <div class="verified-tag">✓ Verified Journey</div>
+  </div>
+
+  <div id="wrap">
+
+    <div id="hero">
+      <div class="hero-avatar">AN</div>
+      <h1>Arjun Nair</h1>
+      <div class="hero-tag">Aspiring Designer · Class 12 · On the Merrakii+ journey since 2023</div>
+      <div class="hero-badges">
+        <span class="hbadge gold">🎯 4 Decisions Enabled</span>
+        <span class="hbadge">📍 Currently: Higher Education</span>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-col gold"><b>4</b><span>Decisions</span></div>
+      <div class="stat-col"><b>8</b><span>Skills</span></div>
+      <div class="stat-col"><b>5</b><span>Portfolio Pieces</span></div>
+      <div class="stat-col"><b>2</b><span>Programmes Done</span></div>
+      <div class="stat-col"><b>50%</b><span>Journey Mapped</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>The Route So Far</h2><span class="sh-sub">Class 9 → Career Entry</span></div>
+      <div class="road-box">
+        <svg id="pubroad" viewBox="0 0 1000 150" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>🎯 Decisions Enabled</h2><span class="sh-sub">Real choices, made with real information</span></div>
+      <div class="decision-grid">
+        <div class="decision-card"><div class="dc-ic">✅</div><div><div class="dc-title">Stream Selected</div><div class="dc-date">Confirmed Sep 2023</div></div></div>
+        <div class="decision-card"><div class="dc-ic">✅</div><div><div class="dc-title">Direction Statement Confirmed</div><div class="dc-date">Confirmed Oct 2023</div></div></div>
+        <div class="decision-card"><div class="dc-ic">✅</div><div><div class="dc-title">College Shortlist Finalized</div><div class="dc-date">Confirmed Jun 2026</div></div></div>
+        <div class="decision-card"><div class="dc-ic">✅</div><div><div class="dc-title">Applications Submitted</div><div class="dc-date">Confirmed Jul 2026</div></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>Skills Developed</h2></div>
+      <div class="skill-tags">
+        <span class="skill-tag">Self-Awareness of Strengths</span>
+        <span class="skill-tag">Field Exploration</span>
+        <span class="skill-tag">Stream Subject Fundamentals</span>
+        <span class="skill-tag">Design Aptitude &amp; Sketching</span>
+        <span class="skill-tag">Digital Design Tools</span>
+        <span class="skill-tag">Portfolio Planning</span>
+        <span class="skill-tag">Colour Theory &amp; Composition</span>
+        <span class="skill-tag">Visual Storytelling</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>Portfolio Pieces</h2><span class="sh-sub">From the Domain Skill Programme</span></div>
+      <div class="piece-grid">
+        <div class="piece-card"><div class="piece-thumb" style="background:var(--teal-light);">✏️</div><div class="piece-body"><div class="piece-title">Foundation Sketchbook</div><div class="piece-meta">15 pieces · Observational drawing</div></div></div>
+        <div class="piece-card"><div class="piece-thumb" style="background:var(--coral-light);">🎨</div><div class="piece-body"><div class="piece-title">Colour Theory Composition Set</div><div class="piece-meta">6 pieces · Design theory</div></div></div>
+        <div class="piece-card"><div class="piece-thumb" style="background:var(--gold-light);">📱</div><div class="piece-body"><div class="piece-title">Campus App — UX Case Study</div><div class="piece-meta">Figma prototype</div></div></div>
+        <div class="piece-card"><div class="piece-thumb" style="background:#F0E6FB;">📰</div><div class="piece-body"><div class="piece-title">Editorial Zine Spread</div><div class="piece-meta">Typography &amp; layout</div></div></div>
+        <div class="piece-card"><div class="piece-thumb" style="background:#E8EEFB;">🎬</div><div class="piece-body"><div class="piece-title">Motion Graphics Reel</div><div class="piece-meta">15-second loop</div></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>🎥 In My Own Words</h2></div>
+      <div class="video-grid">
+        <div class="yt-card" onclick="alert('This would open the YouTube video in a new tab.')">
+          <div class="yt-thumb"><span class="yt-badge">YouTube</span><div class="yt-play">▶</div></div>
+          <div class="yt-body"><div class="yt-title">Meet Arjun — Class 12, Design Track</div><div class="yt-sub">Student Journey Series</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>Programmes Completed</h2></div>
+      <div class="cert-list">
+        <div class="cert-row"><div class="cert-ic">🎓</div><div class="cert-main"><div class="cert-title">Design Aptitude Coaching — Foundation Batch</div><div class="cert-sub">Design Foundry Academy · 10 months</div></div><span class="cert-status">Completed Jun 2026</span></div>
+        <div class="cert-row"><div class="cert-ic">✏️</div><div class="cert-main"><div class="cert-title">Foundation Sketching &amp; Observational Drawing</div><div class="cert-sub">Design Foundry Academy · 6 months</div></div><span class="cert-status">Completed Feb 2026</span></div>
+        <div class="cert-row"><div class="cert-ic">📁</div><div class="cert-main"><div class="cert-title">Portfolio Development Bootcamp</div><div class="cert-sub">Merrakii+ Portfolio Lab · In progress</div></div><span class="cert-status" style="background:var(--coral-light); color:#c4451f;">60% Complete</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h2>From His Counsellor</h2></div>
+      <div class="endorsement">
+        <div class="end-avatar">SV</div>
+        <div>
+          <div class="end-quote">"Arjun is one of the most self-driven students I work with — he shows up to sessions having already thought through his own options, which makes our conversations about actually deciding, not just informing."</div>
+          <div class="end-who">Sunita Verma</div>
+          <div class="end-role">Partner Counsellor, Merrakii+</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer">
+      <div class="f-updated">Last updated 13 July 2026</div>
+      <div class="f-brand">Merrakii+ · Decision Enabling Student Success System</div>
+      <div class="f-note">This portfolio updates automatically as Arjun progresses — nothing here is self-reported. Every decision, skill, and programme shown is confirmed through Merrakii+'s counselling and assessment process.</div>
+    </div>
+
+  </div>
+
+  <div id="sharebar">
+    <button class="sb-btn primary" onclick="alert('This would open a LinkedIn share dialog.')">in Share to LinkedIn</button>
+    <button class="sb-btn" onclick="navigator.clipboard && navigator.clipboard.writeText(window.location.href)">📋 Copy Link</button>
+    <button class="sb-btn" onclick="alert('This would generate a downloadable PDF version.')">⬇ Download PDF</button>
+  </div>
+
+<script>
+  const stages = [
+    { label:"Foundation", done:true },
+    { label:"Direction", done:true },
+    { label:"Build Yr 1", done:true },
+    { label:"Prove", done:true },
+    { label:"Higher Ed", cur:true },
+    { label:"Post-Grad", done:false },
+    { label:"Pre-Career", done:false },
+    { label:"Career Entry", done:false }
+  ];
+  const svg = document.getElementById('pubroad');
+  const NS = "http://www.w3.org/2000/svg";
+  const n = stages.length;
+  const padX = 40, usableW = 1000 - padX*2, baseY = 70;
+  function xFor(i){ return padX + (usableW * i/(n-1)); }
+  function yFor(i){ return baseY + Math.sin(i*1.1) * 26 * (i%2===0?1:-0.6); }
+  const pts = stages.map((s,i)=>({x:xFor(i), y:yFor(i)}));
+
+  function el(tag, attrs){ const e = document.createElementNS(NS, tag); for(const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function smoothPath(points){
+    let d = `M ${points[0].x} ${points[0].y}`;
+    for(let i=0;i<points.length-1;i++){
+      const p0=points[i], p1=points[i+1], midX=(p0.x+p1.x)/2;
+      d += ` C ${midX} ${p0.y}, ${midX} ${p1.y}, ${p1.x} ${p1.y}`;
+    }
+    return d;
+  }
+  svg.appendChild(el('path', { d: smoothPath(pts), class:'pr-path' }));
+  const curIdx = stages.findIndex(s=>s.cur);
+  svg.appendChild(el('path', { d: smoothPath(pts.slice(0,curIdx+1)), class:'pr-path-fill' }));
+
+  stages.forEach((s,i)=>{
+    const p = pts[i];
+    const cls = s.done ? 'done' : (s.cur ? 'cur' : '');
+    const g = el('g', { class:`pr-node ${cls}` });
+    g.appendChild(el('circle', { cx:p.x, cy:p.y, r:14 }));
+    const t = el('text', { x:p.x, y:p.y+1, class:'n' });
+    t.textContent = s.done ? '✓' : (i+1);
+    g.appendChild(t);
+    const lbl = el('text', { x:p.x, y:p.y+28, class:'lbl' });
+    lbl.textContent = s.label;
+    g.appendChild(lbl);
+    svg.appendChild(g);
+  });
+</script>
+</body>
+</html>

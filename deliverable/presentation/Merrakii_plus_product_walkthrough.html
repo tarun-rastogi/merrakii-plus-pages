@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merrakii+ Product Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+  <style>
+    :root {
+      --brand: #c1121f;
+      --brand-dark: #9b0f19;
+      --navy: #1c2340;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --slide-w: 960px;
+      --slide-h: 540px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background: #f1f5f9;
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .btn {
+      font: 600 14px inherit;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, #4361ee, #7c3aed);
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .toolbar-note { font-size: 13px; color: var(--muted); max-width: 560px; }
+    .deck { padding: 32px 24px 64px; display: flex; flex-direction: column; align-items: center; gap: 28px; }
+    .slide {
+      width: min(100%, var(--slide-w));
+      aspect-ratio: 16 / 9;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 8px 32px rgba(28,35,64,.12);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      page-break-after: always;
+    }
+    .slide-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #fff;
+      border-bottom: 3px solid var(--brand);
+      color: var(--navy);
+    }
+    .slide-head .logos {
+      display: flex;
+      align-items: center;
+    }
+    .slide-head img { height: 30px; object-fit: contain; display: block; }
+    .slide-num { font-size: 11px; font-weight: 600; color: var(--muted); }
+    .slide-body {
+      display: grid;
+      grid-template-columns: 0.85fr 1.35fr;
+      gap: 12px;
+      padding: 14px 16px 16px;
+      min-height: 0;
+    }
+    .slide-body.text-only { grid-template-columns: 1fr; }
+    .slide-body.title-slide {
+      grid-template-columns: 1fr;
+      place-content: center;
+      text-align: center;
+      padding: 32px;
+    }
+    .slide-body.title-slide h1 { font-size: 2rem; margin: 0 0 12px; color: var(--navy); }
+    .slide-body.title-slide p { font-size: 1.05rem; color: var(--muted); max-width: 640px; margin: 0 auto; }
+    .slide-body.title-slide.first-title {
+      position: relative;
+      background: linear-gradient(135deg, #fffbfb 0%, #fff8f8 40%, #ffffff 100%);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .slide-body.title-slide.first-title::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 10% 88%, rgba(193, 18, 31, 0.035) 0%, transparent 72%),
+        radial-gradient(ellipse 48% 42% at 92% 10%, rgba(193, 18, 31, 0.025) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .slide-body.title-slide.first-title > div {
+      position: relative;
+      z-index: 1;
+    }
+    .title-dess-line {
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin: 0 auto 14px;
+      max-width: 680px;
+      line-height: 1.45;
+    }
+    .brand-accent {
+      color: var(--brand);
+      font-weight: 800;
+    }
+    .title-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: rgba(193, 18, 31, 0.12);
+      color: var(--brand);
+      margin-bottom: 12px;
+      border: 1px solid rgba(193, 18, 31, 0.2);
+    }
+    .slide-copy h2 { margin: 0 0 8px; font-size: 1.15rem; color: var(--brand-dark); }
+    .slide-copy p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.5; color: #334155; }
+    .slide-copy ul { margin: 6px 0 0; padding-left: 1.1rem; font-size: 13px; line-height: 1.45; color: #475569; }
+    .slide-copy li { margin-bottom: 4px; }
+    .slide-body:has(.shot-wrap) .slide-copy p {
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: auto;
+    }
+    .slide-copy.dense p { font-size: 12.5px; line-height: 1.45; }
+    .slide-copy.dense ul { font-size: 11.5px; line-height: 1.4; }
+    .slide-copy.dense h2 { font-size: 1.05rem; }
+    .shot-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f8fafc;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      max-height: 100%;
+    }
+    .shot-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      object-position: top;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: var(--brand-dark);
+      margin-bottom: 6px;
+    }
+    table.comp { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+    table.comp th, table.comp td { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; text-align: left; }
+    table.comp th { background: #fff7ed; font-weight: 600; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .metric {
+      padding: 10px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .metric strong { display: block; font-size: 1.25rem; color: var(--brand); }
+    .metric span { font-size: 11px; color: var(--muted); }
+    .slide-foot {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 16px;
+      min-height: 34px;
+      background: #f8fafc;
+      border-top: 1px solid var(--line);
+    }
+    .slide-foot img {
+      height: 34px;
+      margin: -6px 0;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+    .slide-foot .keywords {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .slide-foot .kw-sep {
+      margin: 0 8px;
+      color: #cbd5e1;
+      font-weight: 400;
+    }
+    @page {
+      size: landscape;
+      margin: 0;
+    }
+
+    @media print {
+      .toolbar,
+      .no-print { display: none !important; }
+
+      html,
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .deck {
+        display: block;
+        margin: 0;
+        padding: 0;
+        gap: 0;
+        width: 100%;
+      }
+
+      .slide {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        width: 100vw;
+        max-width: none;
+        height: 100vh;
+        min-height: 100vh;
+        max-height: 100vh;
+        aspect-ratio: unset;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        break-after: page;
+        page-break-after: always;
+        break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+
+      .slide-head {
+        flex-shrink: 0;
+      }
+
+      .slide-body {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .slide-foot {
+        flex-shrink: 0;
+        margin-top: auto;
+      }
+
+      .slide-head,
+      .slide-foot,
+      .tag,
+      table.comp th,
+      .metric,
+      .slide-body.title-slide.first-title,
+      .slide-body.title-slide.first-title::before,
+      .title-badge,
+      .brand-accent {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar no-print">
+    <button type="button" class="btn" id="exportPptBtn">Export as PPT</button>
+    <button type="button" class="btn" id="exportPdfBtn">Export as PDF</button>
+    <span class="toolbar-note">PPT: downloads a <strong>.pptx</strong> with selectable text and screen images. PDF: use browser <strong>Print → Save as PDF</strong> for a landscape slide deck.</span>
+  </div>
+
+  <main class="deck" id="deck"></main>
+
+  <script>
+    const SLIDES = [
+      {
+        type: "title",
+        badge: "DESSS",
+        title: '<span class="brand-accent">Merrakii+</span> Product Walkthrough',
+        dess: '<span class="brand-accent">Merrakii+ DESSS</span> — Decision Enabling Student Success System',
+        subtitle: "Personalised career paths, paid journey unlock, and the full Horizon 1 MVP — screen by screen.",
+        meta: "Munjal Universal Consultancy · July 2026 · Built by Maple AI Technologies"
+      },
+      {
+        tag: "Public",
+        title: "Home",
+        route: "/",
+        image: "images/01-home.png",
+        what: "The main landing page visitors see first.",
+        purpose: "Explains the career-guidance problem and invites students to search for a career. Search starts the personalised intake flow — not the public library directly.",
+        who: "Public visitors, students, parents, schools, and partners."
+      },
+      {
+        tag: "Public",
+        title: "Career Journey Library",
+        route: "/journeys",
+        image: "images/04-journey-library.png",
+        what: "A browsable index of validated career journeys.",
+        purpose: "Shows what careers Merrakii+ covers. Personalised paths come from home-page search plus student intake. Full journey detail is not free.",
+        who: "Visitors researching what Merrakii+ offers."
+      },
+      {
+        tag: "Gated",
+        title: "Journey detail (glimpse)",
+        route: "/journeys/doctor-mbbs",
+        image: "images/05-journey-detail.png",
+        what: "Signed-in view of one career path — preview only until payment.",
+        purpose: "After intake, students see a glimpse of the primary path (first milestones). Full pathway, services, and financial map unlock after enrollment payment.",
+        who: "Registered students and parents (free = glimpse; enrolled = full)."
+      },
+      {
+        tag: "Gated",
+        title: "Service catalogue",
+        route: "/services",
+        image: "images/06-services.png",
+        what: "The full list of 30+ guidance services — not a public page.",
+        purpose: "Requires sign-in. Free tier sees a locked summary; enrolled students and parents see the complete catalogue on the journey map.",
+        who: "Enrolled students, parents, and counsellors."
+      },
+      {
+        tag: "Public",
+        title: "Student intake (Discover)",
+        route: "/discover?q=doctor",
+        image: "images/19-discover.png",
+        what: "The form shown after a career search.",
+        purpose: "Collects location, school, Class 11/12, stream, family earning, and academic % (current year + last 3 years) to prepare 3–4 personalised paths.",
+        who: "Any visitor who searched for a career from the home page."
+      },
+      {
+        tag: "Public",
+        title: "Your career paths",
+        route: "/career-paths",
+        image: "images/20-career-paths.png",
+        what: "Results page with 3–4 paths prepared for the student.",
+        purpose: "Shows a free glimpse of the primary path only. Alternative paths are locked. Full details require profile creation and enrollment payment.",
+        who: "Visitors who completed the intake form."
+      },
+      {
+        tag: "Public",
+        title: "How career journeys work",
+        route: "/how-career-journeys-work",
+        image: "images/21-how-journeys.png",
+        what: "Public explainer of what a career journey path is.",
+        purpose: "Replaces direct public access to journey detail. Explains five stages, class milestones, and search → intake → paths → pay → follow.",
+        who: "All audiences before they commit."
+      },
+      {
+        tag: "Public",
+        title: "Services overview",
+        route: "/services-overview",
+        image: "images/22-services-overview.png",
+        what: "Public explainer of services during a career journey.",
+        purpose: "Describes eight service categories and when services happen — without exposing the full priced catalogue.",
+        who: "Students, parents, and schools evaluating Merrakii+."
+      },
+      {
+        tag: "Marketing",
+        title: "For Students",
+        route: "/for-students",
+        image: "images/07-for-students.png",
+        what: "A marketing page aimed at Class 9–12 students.",
+        purpose: "Explains benefits in plain language and drives sign-ups. Supports student acquisition campaigns and school outreach.",
+        who: "Prospective student users."
+      },
+      {
+        tag: "Marketing",
+        title: "For Parents",
+        route: "/for-parents",
+        image: "images/08-for-parents.png",
+        what: "A marketing page for parents and guardians.",
+        purpose: "Shows how families see progress, costs, and decisions together. Parents are often the paying decision-makers — this page builds trust before enrolment.",
+        who: "Parents evaluating Merrakii+ for their child."
+      },
+      {
+        tag: "Marketing",
+        title: "For Schools",
+        route: "/for-schools",
+        image: "images/09-for-schools.png",
+        what: "A partnership page for schools and counsellors-in-school.",
+        purpose: "Positions Merrakii+ as NEP 2020–ready career guidance with low burden on school staff. Opens the B2B school pilot channel.",
+        who: "School principals, counsellors, and management."
+      },
+      {
+        tag: "Recruitment",
+        title: "Career Professionals",
+        route: "/professionals",
+        image: "images/10-professionals.png",
+        what: "Recruitment page for working professionals who validate journeys.",
+        purpose: "Attracts doctors, lawyers, engineers, and other professionals to join the network, validate journey content, and run paid sessions — this scales credibility beyond Merrakii’s in-house team.",
+        who: "Working professionals considering the Verified Professional programme."
+      },
+      {
+        tag: "Recruitment",
+        title: "Partner Counsellors",
+        route: "/partner-counsellors",
+        image: "images/11-partner-counsellors.png",
+        what: "Recruitment page for district-level partner counsellors.",
+        purpose: "Explains how partners deliver Merrakii services in their geography and earn commissions. This is the channel for pan-India scale without hiring everyone on payroll.",
+        who: "Independent counsellors and coaching centres."
+      },
+      {
+        tag: "Public",
+        title: "About",
+        route: "/about",
+        image: "images/12-about.png",
+        what: "The company story and 2030 vision page.",
+        purpose: "Builds brand credibility — who Merrakii+ is, why decisions enabled matter, and the long-term mission. Useful for investors, school partners, and media.",
+        who: "All audiences seeking context on the company."
+      },
+      {
+        tag: "Public",
+        title: "Contact",
+        route: "/contact",
+        image: "images/13-contact.png",
+        what: "The inquiry and lead-capture form.",
+        purpose: "Routes questions from students, parents, schools, professionals, and partners to the right Merrakii team. Every submission is a potential sales lead.",
+        who: "Anyone ready to talk to Merrakii."
+      },
+      {
+        tag: "Public",
+        title: "Sign in",
+        route: "/login",
+        image: "images/02-login.png",
+        what: "The login screen for returning users.",
+        purpose: "Students, parents, counsellors, professionals, and staff sign in to reach dashboards and gated journey content.",
+        who: "All registered users."
+      },
+      {
+        tag: "Public",
+        title: "Create profile",
+        route: "/register",
+        image: "images/03-register.png",
+        what: "Account creation — pre-filled from intake when the student completed Discover.",
+        purpose: "Saves personalised paths. Full journey unlock still requires enrollment payment in student or parent portal.",
+        who: "New students after viewing their career paths."
+      },
+      {
+        tag: "Student",
+        title: "Student dashboard — Career Journey Map",
+        route: "/dashboard",
+        image: "images/14-student-dashboard.png",
+        what: "The signed-in student’s personalised interactive career map.",
+        purpose: "Flagship enrolled experience. Free-tier students see enrollment payment here to unlock full pathway, services, and counsellor.",
+        who: "Registered students (free and enrolled tiers)."
+      },
+      {
+        tag: "Parent",
+        title: "Parent dashboard",
+        route: "/parent",
+        image: "images/15-parent-dashboard.png",
+        what: "The linked parent’s view of their child’s journey.",
+        purpose: "Parents see progress and can pay to unlock the full career journey for their child from this portal.",
+        who: "Parents with linked accounts."
+      },
+      {
+        tag: "Counsellor",
+        title: "Counsellor dashboard",
+        route: "/counsellor",
+        image: "images/16-counsellor-dashboard.png",
+        what: "The mobile-first operations hub for Merrakii counsellors.",
+        purpose: "Shows caseload, upcoming sessions, recent decisions, and quick access to each student. Designed for counsellors working on phone in schools and on 4G.",
+        who: "In-house and partner counsellors."
+      },
+      {
+        tag: "Counsellor",
+        title: "Student record (counsellor view)",
+        route: "/counsellor/students/[id]",
+        image: "images/17-counsellor-student-detail.png",
+        what: "Deep view of one student’s journey from the counsellor side.",
+        purpose: "Counsellors update service status, commitment/achievement scores, book sessions, add notes, and log decisions. This is where human guidance is delivered and recorded — the core of “decisions enabled.”",
+        who: "Counsellors managing an individual student."
+      },
+      {
+        tag: "Professional",
+        title: "Career Professional portal",
+        route: "/professional",
+        image: "images/18-professional-portal.png",
+        what: "The workspace for verified career professionals.",
+        purpose: "Professionals manage their profile, submit journey validations, see session bookings, and give post-session feedback. Keeps journey library content accurate and enables expert-led paid sessions.",
+        who: "Verified career professionals in the network."
+      },
+      {
+        type: "business",
+        title: "How Merrakii+ DESSS Contributes to Merrakii Success",
+        intro: "Merrakii is building a Decision Enabling Student Success System (DESSS) to help students understand the journey to the career they want — and to deliver every service they need to get there successfully. This application is <strong>not a side tool</strong>. It is the <strong>centre of Merrakii's success</strong>.",
+        bullets: [
+          { bold: "Turns career curiosity into paying journeys", text: "Shows students the right path for their profile, then connects Merrakii's services — assessments, counselling, exam prep, applications, and more — at each milestone." },
+          { bold: "Every persona meets here — students, parents, counsellors, providers, schools", text: "All engagement runs through Merrakii+ DESSS — not through separate offline channels or parallel systems." },
+          { bold: "The first place anyone thinks of Merrakii", text: "Every stakeholder's primary entry point — to search a career, enroll, pay, book sessions, track progress, or manage delivery." },
+          { bold: "How every payer experiences Merrakii", text: "Whether a student family pays for a journey unlock or a school signs a pilot contract, Merrakii+ DESSS is how they discover, transact, and stay engaged." },
+          { bold: "This application facilitates 100% of business actions", text: "Lead capture, personalised paths, service sales, counsellor workflows, professional sessions, partner commissions, and school partnerships all run through this platform." },
+          { bold: "The operating system for Merrakii's decision-enabled model", text: "Merrakii's success is built here — not as a 20% side tool while the rest of the business runs elsewhere." }
+        ]
+      },
+      {
+        type: "partner",
+        title: "Maple AI's Role in Merrakii+ DESSS Application Development",
+        intro: "Maple AI Technologies is <strong>not just an application development vendor</strong>. We are <strong>Merrakii's technology and project partner</strong> — <strong>by your side across every phase</strong>, <strong>not a team of coders</strong> who take specs and build in isolation.",
+        bullets: [
+          { bold: "Your partner in requirement gathering and finalization", text: "We brainstorm with Merrakii at every phase — shaping what the application must do, not waiting for a finished brief." },
+          { bold: "Co-shaping the application design with Merrakii", text: "We contribute to architecture, user flows, and product decisions — not only to writing code after designs are handed over." },
+          { bold: "By your side from discovery through go-live", text: "From discovery and design through build, UAT, and launch — we stay alongside Merrakii as an embedded project partner." },
+          { bold: "Shaping and brainstorming development with you", text: "We co-create the product at each milestone — discussing trade-offs, options, and direction together, not building in a silo." },
+          { bold: "We articulate what Merrakii needs to provide", text: "We clearly state what information, decisions, and inputs are needed at each stage so nothing blocks progress." },
+          { bold: "Supporter, not a passive vendor", text: "We help Merrakii gather that information — working alongside your team, not waiting on page-by-page requirements." },
+          { bold: "What we are NOT", text: "Receiving page-by-page requirements from Merrakii and building exactly as specified, without ongoing collaboration." }
+        ]
+      },
+      {
+        type: "compare",
+        title: "Merrakii (marketplace) vs Merrakii+ (DESSS)",
+        rows: [
+          ["What it is", "Digital Academic Marketplace — browse programmes, apply, pay", "Decision Enabling Student Success System — multi-year career guidance platform"],
+          ["Core job", "Sell and enrol learners into partner programmes", "Guide students from Class 9 to career entry with a documented decision log"],
+          ["Career discovery", "Browse programmes freely", "Search → intake → 3–4 paths → pay to unlock full journey"],
+          ["Users", "2 personas (learner + staff)", "9 personas — student, parent, counsellor, partner, professional, admin, visitor"],
+          ["Product centre", "Programme catalogue and checkout", "Career Journey Map with 32 embedded services"],
+          ["Family & counselling", "Not built in", "Parent linked accounts, counsellor dashboards, professional sessions"],
+          ["Revenue model", "Transaction fees on programme sales", "Journey unlock fee, enrolled subscriptions, services, school pilots, partner commissions"],
+          ["Strategic role", "Useful for programme distribution", "Merrakii’s core differentiator — structured decisions at scale"]
+        ]
+      },
+      {
+        type: "title",
+        title: "Thank you",
+        subtitle: "Merrakii+ Horizon 1 MVP · MAT_PRJ_2026_002 · Maple AI Technologies",
+        meta: "Questions? tarunrastogi@mapleaitechnologies.com · +91 9619060302"
+      }
+    ];
+
+    const deck = document.getElementById("deck");
+    const STRIP_KEYWORDS = ["Product Engineering Partner", "Ship Fast", "Enterprise-Grade Delivery"];
+    const STRIP_PPT_TEXT = "Maple AI Technologies · Product Engineering Partner · Ship Fast · Enterprise-Grade Delivery";
+
+    function buildSlideFoot() {
+      const foot = document.createElement("div");
+      foot.className = "slide-foot";
+      const kwHtml = STRIP_KEYWORDS.map((k, i) =>
+        `${i ? '<span class="kw-sep">·</span>' : ""}<span>${k}</span>`
+      ).join("");
+      foot.innerHTML = `<img src="images/maple-ai-logo.jpg" alt="Maple AI Technologies" /><span class="keywords">${kwHtml}</span>`;
+      return foot;
+    }
+
+    function addPptSlideFoot(slide, pptx, logoData) {
+      const footH = 0.28;
+      const footY = 5.625 - footH;
+      slide.addShape(pptx.ShapeType.rect, {
+        x: 0, y: footY, w: "100%", h: footH,
+        fill: { color: "F8FAFC" },
+        line: { color: "E2E8F0", pt: 0.5 }
+      });
+      if (logoData) {
+        slide.addImage({
+          data: logoData,
+          x: 0.25, y: footY + 0.02, w: 0.55, h: 0.24,
+          sizing: { type: "contain", w: 0.55, h: 0.24 }
+        });
+      }
+      slide.addText(STRIP_PPT_TEXT, {
+        x: logoData ? 0.88 : 0.35, y: footY + 0.06, w: 8.4, h: 0.18,
+        fontSize: 8, color: "64748B", fontFace: "Arial", bold: true
+      });
+    }
+
+    function bulletHtml(b) {
+      if (typeof b === "string") return b;
+      const lead = b.bold ? `<strong>${b.bold}</strong>` : "";
+      const sep = b.bold && b.text ? " " : "";
+      return `${lead}${sep}${b.text || ""}`;
+    }
+
+    function htmlToPptRuns(html) {
+      return html.split(/(<strong>.*?<\/strong>)/g).filter(Boolean).map((part) => {
+        const m = part.match(/^<strong>(.*)<\/strong>$/);
+        return m ? { text: m[1], options: { bold: true } } : { text: part };
+      });
+    }
+
+    function bulletPptRuns(b, prefix) {
+      if (typeof b === "string") return [{ text: `${prefix}${b}\n` }];
+      const runs = [{ text: prefix }];
+      if (b.bold) runs.push({ text: b.bold, options: { bold: true } });
+      const rest = b.text ? (b.bold ? " " + b.text : b.text) : "";
+      runs.push({ text: (rest || "") + "\n" });
+      return runs;
+    }
+
+    function buildRichTextBlock(intro, bullets) {
+      const runs = [];
+      if (intro) {
+        runs.push(...htmlToPptRuns(intro));
+        runs.push({ text: "\n\n" });
+      }
+      bullets.forEach((b) => {
+        runs.push(...bulletPptRuns(b, "• "));
+      });
+      return runs;
+    }
+
+    function renderSlides() {
+      SLIDES.forEach((s, i) => {
+        const el = document.createElement("section");
+        el.className = "slide";
+        el.dataset.index = String(i);
+
+        const head = document.createElement("div");
+        head.className = "slide-head";
+        head.innerHTML = `<div class="logos"><img src="images/merrakii-logo.png" alt="Merrakii+" /></div><span class="slide-num">Slide ${i + 1} of ${SLIDES.length}</span>`;
+        el.appendChild(head);
+
+        const body = document.createElement("div");
+        body.className = "slide-body";
+
+        if (s.type === "title") {
+          body.classList.add("title-slide");
+          if (i === 0) body.classList.add("first-title");
+          const badgeHtml = s.badge ? `<span class="title-badge">${s.badge}</span>` : "";
+          const dessHtml = s.dess ? `<p class="title-dess-line">${s.dess}</p>` : "";
+          body.innerHTML = `<div>${badgeHtml}<h1>${s.title}</h1>${dessHtml}<p>${s.subtitle || ""}</p>${s.meta ? `<p style="margin-top:16px;font-size:13px">${s.meta}</p>` : ""}</div>`;
+        } else if (s.type === "business") {
+          body.classList.add("text-only");
+          body.innerHTML = `<div class="slide-copy dense"><span class="tag">Business</span><h2>${s.title}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}<ul>${s.bullets.map((b) => `<li>${bulletHtml(b)}</li>`).join("")}</ul></div>`;
+        } else if (s.type === "partner") {
+          body.classList.add("text-only");
+          body.innerHTML = `<div class="slide-copy dense"><span class="tag">Partnership</span><h2>${s.title}</h2>${s.intro ? `<p>${s.intro}</p>` : ""}<ul>${s.bullets.map((b) => `<li>${bulletHtml(b)}</li>`).join("")}</ul></div>`;
+        } else if (s.type === "roi") {
+          body.classList.add("text-only");
+          body.innerHTML = `<div class="slide-copy"><span class="tag">Commercial</span><h2>${s.title}</h2><p>${s.intro}</p><div class="metric-grid"><div class="metric"><strong>₹15L</strong><span>One-time build (Quotation)</span></div><div class="metric"><strong>Aug 2026</strong><span>Target go-live</span></div><div class="metric"><strong>9–15 mo</strong><span>Illustrative payback range</span></div></div><ul>${s.scenarios.map((sc) => `<li><strong>${sc.label}:</strong> ${sc.math}</li>`).join("")}</ul><p style="font-size:12px;color:var(--muted)"><em>${s.note}</em></p></div>`;
+        } else if (s.type === "compare") {
+          body.classList.add("text-only");
+          body.innerHTML = `<div class="slide-copy"><span class="tag">Comparison</span><h2>${s.title}</h2><table class="comp"><thead><tr><th>Dimension</th><th>Merrakii marketplace</th><th>Merrakii+ DESSS</th></tr></thead><tbody>${s.rows.map((r) => `<tr><td><strong>${r[0]}</strong></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>`;
+        } else {
+          body.innerHTML = `
+            <div class="slide-copy">
+              <span class="tag">${s.tag}</span>
+              <h2>${s.title}</h2>
+              <p><strong>What it is:</strong> ${s.what}</p>
+              <p><strong>Purpose:</strong> ${s.purpose}</p>
+              <p><strong>Who uses it:</strong> ${s.who}</p>
+            </div>
+            <div class="shot-wrap"><img src="${s.image}" alt="${s.title} screen" loading="eager" decoding="async" /></div>`;
+        }
+
+        el.appendChild(body);
+        el.appendChild(buildSlideFoot());
+        deck.appendChild(el);
+      });
+    }
+
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("Image load failed: " + src));
+        img.src = src;
+      });
+    }
+
+    async function imageFromDom(src) {
+      let img = document.querySelector(`img[src="${src}"]`);
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        img = await loadImage(src);
+      }
+      const maxW = 800;
+      const scale = img.naturalWidth > maxW ? maxW / img.naturalWidth : 1;
+      const w = Math.round(img.naturalWidth * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      return canvas.toDataURL("image/jpeg", 0.82);
+    }
+
+    async function exportPpt() {
+      const btn = document.getElementById("exportPptBtn");
+      btn.disabled = true;
+      btn.textContent = "Building PPT…";
+
+      try {
+        const pptx = new PptxGenJS();
+        pptx.layout = "LAYOUT_16x9";
+        pptx.author = "Maple AI Technologies";
+        pptx.title = "Merrakii+ Product Walkthrough";
+        pptx.subject = "Screen-by-screen guide and business case";
+
+        const imageCache = {};
+        let mapleLogoData = null;
+        try {
+          mapleLogoData = await imageFromDom("images/maple-ai-logo.jpg");
+        } catch (_) { /* footer text still renders without logo */ }
+        for (const s of SLIDES) {
+          if (s.image && !imageCache[s.image]) {
+            btn.textContent = `Building PPT… (${s.title})`;
+            imageCache[s.image] = await imageFromDom(s.image);
+          }
+        }
+        btn.textContent = "Building PPT… (writing file)";
+
+        SLIDES.forEach((s, idx) => {
+          const slide = pptx.addSlide();
+          slide.background = { color: "FFFFFF" };
+
+          slide.addShape(pptx.ShapeType.rect, {
+            x: 0, y: 0, w: "100%", h: 0.45,
+            fill: { color: "FFFFFF" },
+            line: { color: "C1121F", pt: 2 }
+          });
+          slide.addText(`Merrakii+  ·  Slide ${idx + 1}`, {
+            x: 0.3, y: 0.1, w: 9, h: 0.3,
+            fontSize: 11, color: "1C2340", fontFace: "Arial"
+          });
+
+          if (s.type === "title") {
+            slide.addText(s.title, { x: 0.6, y: 1.6, w: 8.8, h: 1, fontSize: 28, bold: true, color: "1C2340", fontFace: "Arial" });
+            if (s.subtitle) slide.addText(s.subtitle, { x: 0.6, y: 2.6, w: 8.8, h: 1.2, fontSize: 14, color: "64748B", fontFace: "Arial" });
+            if (s.meta) slide.addText(s.meta, { x: 0.6, y: 4.2, w: 8.8, h: 0.6, fontSize: 11, color: "888FA8", fontFace: "Arial" });
+          } else if (s.type === "business" || s.type === "partner") {
+            slide.addText(s.title, { x: 0.4, y: 0.52, w: 9.2, h: 0.55, fontSize: 17, bold: true, color: "9B0F19", fontFace: "Arial" });
+            slide.addText(buildRichTextBlock(s.intro, s.bullets), {
+              x: 0.4, y: 1.05, w: 9.2, h: 4.25, fontSize: 10, color: "334155", fontFace: "Arial", valign: "top"
+            });
+          } else if (s.type === "roi") {
+            slide.addText(s.title, { x: 0.4, y: 0.55, w: 9.2, h: 0.5, fontSize: 20, bold: true, color: "9B0F19", fontFace: "Arial" });
+            const roiText = [s.intro, "", ...s.scenarios.map((sc) => `${sc.label}: ${sc.math}`), "", s.note].join("\n");
+            slide.addText(roiText, { x: 0.4, y: 1.05, w: 9.2, h: 4.3, fontSize: 11, color: "334155", fontFace: "Arial", valign: "top" });
+          } else if (s.type === "compare") {
+            slide.addText(s.title, { x: 0.4, y: 0.55, w: 9.2, h: 0.45, fontSize: 18, bold: true, color: "9B0F19", fontFace: "Arial" });
+            const rows = [["Dimension", "Merrakii marketplace", "Merrakii+ DESSS"], ...s.rows];
+            slide.addTable(rows, {
+              x: 0.25, y: 1.0, w: 9.5,
+              fontSize: 9, fontFace: "Arial",
+              border: { type: "solid", color: "E2E8F0", pt: 0.5 },
+              fill: { color: "FFFFFF" },
+              color: "1C2340",
+              valign: "top"
+            });
+          } else {
+            slide.addText(s.title, { x: 0.35, y: 0.52, w: 2.75, h: 0.4, fontSize: 16, bold: true, color: "9B0F19", fontFace: "Arial" });
+            const copy = [
+              `What it is: ${s.what}`,
+              "",
+              `Purpose: ${s.purpose}`,
+              "",
+              `Who uses it: ${s.who}`
+            ].join("\n");
+            slide.addText(copy, { x: 0.35, y: 0.95, w: 2.75, h: 4.0, fontSize: 10, color: "334155", fontFace: "Arial", valign: "top", align: "justify" });
+
+            if (s.image && imageCache[s.image]) {
+              slide.addImage({ data: imageCache[s.image], x: 3.2, y: 0.75, w: 6.825, h: 4.59, sizing: { type: "contain", w: 6.825, h: 4.59 } });
+            }
+          }
+
+          addPptSlideFoot(slide, pptx, mapleLogoData);
+        });
+
+        await pptx.writeFile({ fileName: "Merrakii_plus_Product_Walkthrough.pptx" });
+      } catch (err) {
+        console.error(err);
+        alert("Export failed: " + err.message + "\n\nTip: open via a local server if images do not load from disk, e.g. cd deliverable/presentation && python3 -m http.server 8765");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Export as PPT";
+      }
+    }
+
+    renderSlides();
+    document.getElementById("exportPptBtn").addEventListener("click", exportPpt);
+    document.getElementById("exportPdfBtn").addEventListener("click", function () {
+      document.title = "Merrakii+ Product Walkthrough";
+      window.print();
+    });
+  </script>
+</body>
+</html>

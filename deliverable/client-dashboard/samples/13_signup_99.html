@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | Unlock Your Full Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56;
+    --teal-deep:#0A4E3E;
+    --teal-light:#E1F5EE;
+    --coral:#FF6B4A;
+    --coral-light:#FFE7DF;
+    --gold:#C89B3C;
+    --gold-light:#FBF1DC;
+    --ink:#142420;
+    --muted:#5C6B66;
+    --paper:#FBFAF6;
+    --paper-line:#E8E4D9;
+    --white:#ffffff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    font-family:var(--font-body); background:var(--paper); color:var(--ink);
+    background-image: radial-gradient(circle at 1px 1px, var(--paper-line) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+
+  #topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff;
+    box-shadow:0 3px 14px rgba(10,78,62,.18); position:sticky; top:0; z-index:20;
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:20px; display:flex; align-items:center; gap:10px; }
+  .brand .dot{ width:9px;height:9px;border-radius:50%; background:var(--coral); box-shadow:0 0 0 4px rgba(255,107,74,.28); }
+  .brand small{ display:block; font-family:var(--font-body); font-weight:500; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.78; margin-top:1px; }
+  .step-pill{ font-size:11px; font-weight:700; background:rgba(255,255,255,.16); padding:6px 13px; border-radius:20px; letter-spacing:.03em; }
+
+  #shell{ max-width:1180px; margin:0 auto; padding:38px 24px 60px; display:grid; grid-template-columns:1.15fr 0.85fr; gap:34px; align-items:start; }
+  @media (max-width:920px){ #shell{ grid-template-columns:1fr; padding:26px 18px 48px; } }
+
+  /* ---------- Left column: value recap ---------- */
+  .eyebrow{ font-size:10.5px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--coral); }
+  h1{ font-family:var(--font-display); font-weight:700; font-size:28px; line-height:1.28; margin-top:8px; color:var(--ink); }
+  h1 span{ color:var(--teal); }
+  .lede{ margin-top:10px; font-size:13.5px; color:var(--muted); line-height:1.6; max-width:520px; }
+
+  .progress-recap{
+    margin-top:22px; background:var(--white); border:1px solid var(--paper-line); border-radius:14px; padding:16px 18px;
+  }
+  .progress-recap .pr-head{ display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:var(--muted); }
+  .progress-recap .bar{ margin-top:8px; height:7px; border-radius:8px; background:var(--paper-line); overflow:hidden; }
+  .progress-recap .bar > i{ display:block; height:100%; width:12%; background:var(--coral); border-radius:8px; }
+  .progress-recap .pr-note{ margin-top:8px; font-size:11.5px; color:var(--muted); }
+  .progress-recap .pr-note b{ color:var(--ink); }
+
+  .unlock-grid{ margin-top:26px; display:flex; flex-direction:column; gap:10px; }
+  .unlock-item{
+    display:flex; gap:13px; align-items:flex-start; background:var(--white); border:1px solid var(--paper-line);
+    border-radius:12px; padding:14px 16px; transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .unlock-item:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(15,110,86,.08); }
+  .unlock-item .ic{
+    width:34px; height:34px; border-radius:9px; background:var(--teal-light); color:var(--teal);
+    display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;
+  }
+  .unlock-item .txt b{ font-size:13px; color:var(--ink); }
+  .unlock-item .txt p{ font-size:12px; color:var(--muted); margin-top:3px; line-height:1.5; }
+  .unlock-item .tag{
+    margin-left:auto; flex-shrink:0; font-size:8.5px; font-weight:800; letter-spacing:.05em; color:var(--gold);
+    background:var(--gold-light); border:1px solid #EAD9A8; padding:3px 8px; border-radius:20px; align-self:flex-start;
+    white-space:nowrap;
+  }
+
+  .live-note{
+    margin-top:20px; display:flex; gap:12px; align-items:flex-start; background:var(--teal-light);
+    border:1px solid #CFEAE0; border-radius:12px; padding:14px 16px;
+  }
+  .live-note .ic{ font-size:18px; }
+  .live-note p{ font-size:12px; color:#204338; line-height:1.55; }
+  .live-note b{ color:var(--teal-deep); }
+
+  .reassure-row{ margin-top:22px; display:flex; gap:18px; flex-wrap:wrap; }
+  .reassure{ display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--muted); font-weight:600; }
+  .reassure .ic{ color:var(--teal); font-size:13px; }
+
+  /* ---------- Right column: payment card ---------- */
+  .pay-card{
+    background:var(--white); border:1px solid var(--paper-line); border-radius:18px;
+    box-shadow:0 14px 40px rgba(10,26,20,.08); overflow:hidden; position:sticky; top:96px;
+  }
+  .pay-head{
+    background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; padding:20px 24px;
+  }
+  .pay-head .ph-label{ font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; opacity:.8; }
+  .pay-price{ display:flex; align-items:baseline; gap:8px; margin-top:6px; }
+  .pay-price .amt{ font-family:var(--font-display); font-weight:800; font-size:38px; }
+  .pay-price .cur{ font-size:16px; font-weight:700; opacity:.85; }
+  .pay-price .per{ font-size:11.5px; opacity:.8; font-weight:600; }
+  .pay-head .ph-sub{ margin-top:6px; font-size:11.5px; opacity:.88; }
+
+  .pay-body{ padding:22px 24px 24px; }
+
+  .field{ margin-bottom:14px; }
+  .field label{ font-size:11px; font-weight:700; color:var(--ink); display:block; margin-bottom:6px; }
+  .field input, .field select{
+    width:100%; padding:11px 13px; border:1px solid var(--paper-line); border-radius:9px; font-family:var(--font-body);
+    font-size:13px; color:var(--ink); background:var(--paper); outline:none; transition:border-color .15s;
+  }
+  .field input:focus, .field select:focus{ border-color:var(--teal); background:var(--white); }
+  .field-row{ display:flex; gap:10px; }
+  .field-row .field{ flex:1; }
+
+  .locked-field{ position:relative; }
+  .locked-field input{ background:var(--teal-light); color:var(--teal-deep); font-weight:600; cursor:not-allowed; }
+  .locked-field .li{ position:absolute; right:11px; top:34px; font-size:11px; color:var(--teal); }
+
+  .pay-method{ display:flex; gap:8px; margin:16px 0 14px; }
+  .pm-btn{
+    flex:1; padding:10px 8px; border:1px solid var(--paper-line); border-radius:9px; background:var(--paper);
+    font-size:12px; font-weight:700; color:var(--muted); cursor:pointer; text-align:center; transition:all .15s;
+  }
+  .pm-btn.active{ border-color:var(--teal); background:var(--teal-light); color:var(--teal-deep); }
+
+  .cta-pay{
+    width:100%; padding:14px 18px; border:none; border-radius:12px; cursor:pointer; margin-top:6px;
+    background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; font-family:var(--font-body);
+    font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 8px 20px rgba(255,107,74,.32); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cta-pay:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(255,107,74,.4); }
+
+  .pay-fine{ text-align:center; font-size:10.5px; color:var(--muted); margin-top:10px; line-height:1.5; }
+  .pay-fine b{ color:var(--teal-deep); }
+
+  .seat-note{
+    margin-top:16px; display:flex; align-items:center; gap:9px; background:var(--coral-light);
+    border:1px solid #FFD4C4; border-radius:10px; padding:10px 13px; font-size:11px; color:#9A3B22; font-weight:600;
+  }
+
+  /* ---------- Confirmation state ---------- */
+  #confirm{ display:none; padding:30px 24px 34px; text-align:center; }
+  #confirm .cf-badge{
+    width:56px; height:56px; border-radius:50%; background:var(--teal-light); color:var(--teal);
+    display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 14px;
+  }
+  #confirm h3{ font-family:var(--font-display); font-size:19px; color:var(--ink); }
+  #confirm p{ font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.6; }
+  #confirm .cta-pay{ margin-top:18px; background:linear-gradient(120deg,var(--teal),var(--teal-deep)); box-shadow:0 8px 20px rgba(15,110,86,.28); }
+
+  .sr-only{ position:absolute; width:1px;height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+</style>
+</head>
+<body>
+
+  <div id="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      Merrakii<small>Decision Enabling Student Success System</small>
+    </div>
+    <div class="step-pill">Step 3 of 5 — Unlock Your Report</div>
+  </div>
+
+  <div id="shell">
+    <!-- LEFT: value recap -->
+    <div>
+      <div class="eyebrow">Your journey map is ready — just not fully yours yet</div>
+      <h1>What you saw was the <span>class average</span>. Here's what unlocks when it becomes <span>yours</span>.</h1>
+      <p class="lede">Every stage you tapped had one open insight and a few locked ones. That wasn't a limitation — it was the exact line between "generic roadmap" and a report built from your profile, updated as you actually move through school.</p>
+
+      <div class="progress-recap">
+        <div class="pr-head"><span>YOUR JOURNEY REPORT</span><span>12% unlocked</span></div>
+        <div class="bar"><i></i></div>
+        <div class="pr-note"><b>1 of 8 stages</b> previewed. The other 7 — plus every locked insight inside this one — open the moment your profile is confirmed.</div>
+      </div>
+
+      <div class="unlock-grid">
+        <div class="unlock-item">
+          <div class="ic">🎯</div>
+          <div class="txt"><b>Personalized signals at every stage</b><p>Stream fit, exam picks, risk flags — recalculated for your profile, not the class average.</p></div>
+          <div class="tag">PERSONALIZED</div>
+        </div>
+        <div class="unlock-item">
+          <div class="ic">🗺️</div>
+          <div class="txt"><b>All 8 stages, fully detailed</b><p>Class 9 through Career Entry — every locked card across the whole route, opened.</p></div>
+          <div class="tag">FULL ACCESS</div>
+        </div>
+        <div class="unlock-item">
+          <div class="ic">📈</div>
+          <div class="txt"><b>A report that updates as you grow</b><p>Not a one-time PDF — it moves with your actual results, term after term.</p></div>
+          <div class="tag">LIVE</div>
+        </div>
+        <div class="unlock-item">
+          <div class="ic">🧭</div>
+          <div class="txt"><b>Action plans, not advice</b><p>Specific next steps mapped to deadlines that actually apply to you.</p></div>
+          <div class="tag">ACTION PLAN</div>
+        </div>
+      </div>
+
+      <div class="live-note">
+        <div class="ic">💡</div>
+        <p><b>Why ₹99, not free or ₹999:</b> free reports get skimmed and forgotten. This is priced low enough to be an easy yes, and just real enough that you'll actually use what's inside — that's the only reason this step exists.</p>
+      </div>
+
+      <div class="reassure-row">
+        <div class="reassure"><span class="ic">✓</span> One-time payment</div>
+        <div class="reassure"><span class="ic">✓</span> No recurring charge</div>
+        <div class="reassure"><span class="ic">✓</span> Secure checkout</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: payment card -->
+    <div class="pay-card">
+      <div id="pay-form-wrap">
+        <div class="pay-head">
+          <div class="ph-label">One-time unlock</div>
+          <div class="pay-price"><span class="cur">₹</span><span class="amt">99</span><span class="per">/ full journey report</span></div>
+          <div class="ph-sub">Less than a movie ticket. Unlocks every stage, for good.</div>
+        </div>
+        <div class="pay-body">
+          <form id="signup-form">
+            <div class="field-row">
+              <div class="field">
+                <label for="fname">Full name</label>
+                <input id="fname" type="text" placeholder="As per school records" required>
+              </div>
+              <div class="field locked-field">
+                <label for="lclass">Class</label>
+                <input id="lclass" type="text" value="Class 10" disabled>
+                <span class="li">🔒</span>
+              </div>
+            </div>
+
+            <div class="field locked-field">
+              <label for="lcareer">Target career</label>
+              <input id="lcareer" type="text" value="Confirmed from your map" disabled>
+              <span class="li">🔒</span>
+            </div>
+
+            <div class="field">
+              <label for="phone">Mobile number</label>
+              <input id="phone" type="tel" placeholder="10-digit mobile number" required>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" type="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="pay-method">
+              <button type="button" class="pm-btn active" data-pm="upi">UPI</button>
+              <button type="button" class="pm-btn" data-pm="card">Card</button>
+              <button type="button" class="pm-btn" data-pm="netbank">Netbanking</button>
+            </div>
+
+            <div id="pm-fields">
+              <div class="field">
+                <label for="upi">UPI ID</label>
+                <input id="upi" type="text" placeholder="yourname@upi">
+              </div>
+            </div>
+
+            <button type="submit" class="cta-pay">🔓 Pay ₹99 &amp; Unlock My Journey</button>
+            <div class="pay-fine">Encrypted checkout · <b>No auto-renewal</b> · Report unlocks instantly</div>
+
+            <div class="seat-note">🎓 Counselling walkthroughs for this cohort are scheduled in batches — early sign-ups get the next available slot.</div>
+          </form>
+        </div>
+      </div>
+
+      <div id="confirm">
+        <div class="cf-badge">✓</div>
+        <h3>You're in.</h3>
+        <p>Your ₹99 unlock is confirmed. We're building your full Career Journey Report now — personalized to your profile across all 8 stages.</p>
+        <button class="cta-pay" id="goto-report">Continue to Personalize My Report →</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  document.querySelectorAll('.pm-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const pm = btn.dataset.pm;
+      const wrap = document.getElementById('pm-fields');
+      if(pm==='upi'){
+        wrap.innerHTML = `<div class="field"><label for="upi">UPI ID</label><input id="upi" type="text" placeholder="yourname@upi"></div>`;
+      } else if(pm==='card'){
+        wrap.innerHTML = `
+          <div class="field"><label for="cardnum">Card number</label><input id="cardnum" type="text" placeholder="1234 5678 9012 3456"></div>
+          <div class="field-row">
+            <div class="field"><label for="exp">Expiry</label><input id="exp" type="text" placeholder="MM/YY"></div>
+            <div class="field"><label for="cvv">CVV</label><input id="cvv" type="text" placeholder="•••"></div>
+          </div>`;
+      } else {
+        wrap.innerHTML = `<div class="field"><label for="bank">Select bank</label>
+          <select id="bank"><option>HDFC Bank</option><option>ICICI Bank</option><option>State Bank of India</option><option>Axis Bank</option><option>Other</option></select></div>`;
+      }
+    });
+  });
+
+  document.getElementById('signup-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    // NOTE: this is a front-end mock only — wire this submit handler to the
+    // real payment gateway + backend signup endpoint before going live.
+    document.getElementById('pay-form-wrap').style.display = 'none';
+    document.getElementById('confirm').style.display = 'block';
+  });
+
+  document.getElementById('goto-report').addEventListener('click', ()=>{
+    window.location.href = '14_deep_profiling.html';
+  });
+</script>
+</body>
+</html>

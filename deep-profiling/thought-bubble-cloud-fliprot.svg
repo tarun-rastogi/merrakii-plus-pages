@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" fill="none">
+  <defs>
+    <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="-2" dy="8" stdDeviation="7" flood-color="#8FB0C9" flood-opacity="0.42"/>
+    </filter>
+  </defs>
+  <g transform="translate(340,0) scale(-1,1) rotate(-5 170 110)">
+  <path
+    filter="url(#softShadow)"
+    fill="#FFFFFF"
+    d="M78 158
+       C52 158 34 140 36 116
+       C18 108 14 82 34 70
+       C30 46 52 28 78 34
+       C90 14 118 8 140 22
+       C156 8 184 10 198 28
+       C220 18 250 28 258 52
+       C286 54 304 78 296 104
+       C314 118 308 148 282 154
+       C274 176 244 186 216 176
+       C196 196 160 198 136 180
+       C112 194 86 180 78 158
+       Z"
+  />
+  </g>
+</svg>
