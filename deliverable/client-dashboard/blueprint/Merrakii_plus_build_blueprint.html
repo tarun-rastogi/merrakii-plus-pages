@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merrakii+ Build Blueprint — Maple AI Technologies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00b4d8;
+      --blue: #4361ee;
+      --purple: #7c3aed;
+      --navy: #1c2340;
+      --gray: #888fa8;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #ffffff;
+      --soft: #f8fafc;
+      --green: #059669;
+      --amber: #d97706;
+      --crimson: #c1121f;
+      --doc-w: 1440px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      font-size: 15px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background: var(--paper);
+      line-height: 1.5;
+    }
+
+    .wrap-screen {
+      padding: 0;
+    }
+
+    .toolbar {
+      width: var(--doc-w);
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 16px 24px 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-print {
+      font: 600 14px inherit;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(67, 97, 238, 0.35);
+    }
+
+    .btn-print:hover { filter: brightness(1.06); }
+
+    .doc {
+      width: var(--doc-w);
+      max-width: 100%;
+      margin: 0 auto;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: visible;
+      border: none;
+    }
+
+    .doc-header {
+      padding: 36px 40px 32px;
+      background:
+        radial-gradient(ellipse 80% 120% at 100% 0%, rgba(0, 180, 216, 0.12), transparent 55%),
+        radial-gradient(ellipse 60% 100% at 0% 100%, rgba(124, 58, 237, 0.1), transparent 50%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .brand-row img.maple { height: 52px; width: auto; object-fit: contain; }
+    .brand-row img.merrakii { height: 40px; width: auto; object-fit: contain; }
+
+    .label-chip {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(67, 97, 238, 0.1);
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .doc-header h1 {
+      margin: 0 0 10px;
+      font-family: Fraunces, Georgia, serif;
+      font-size: clamp(1.85rem, 3.2vw, 2.55rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--navy);
+    }
+
+    .doc-header .subtitle {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 42em;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px 20px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .meta-item dt {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin: 0 0 4px;
+    }
+
+    .meta-item dd {
+      margin: 0;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .doc-body { padding: 32px 40px 44px; }
+
+    .section {
+      margin-bottom: 40px;
+      scroll-margin-top: 24px;
+    }
+
+    .section > h2 {
+      margin: 0 0 8px;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section > .lede {
+      margin: 0 0 20px;
+      color: var(--muted);
+      max-width: 52em;
+    }
+
+    .vision-box {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .vision-box { grid-template-columns: 1fr; }
+      .doc-header, .doc-body, .doc-footer { padding-left: 20px; padding-right: 20px; }
+    }
+
+    .vision-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px 24px;
+      background: linear-gradient(160deg, #fff, #f8fafc);
+    }
+
+    .vision-card.accent {
+      background:
+        radial-gradient(ellipse 80% 80% at 100% 0%, rgba(0, 180, 216, 0.16), transparent 55%),
+        linear-gradient(145deg, #1c2340 0%, #2a3358 100%);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .vision-card.accent h3,
+    .vision-card.accent p { color: #fff; }
+
+    .vision-card.accent p { color: rgba(255, 255, 255, 0.82); }
+
+    .vision-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .vision-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .positioning {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-left: 4px solid var(--blue);
+      background: rgba(67, 97, 238, 0.06);
+      border-radius: 0 12px 12px 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 1100px) {
+      .pillars { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .pillar {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .pillar strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.92rem;
+    }
+
+    .pillar span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 6px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(0, 180, 216, 0.08), rgba(124, 58, 237, 0.06));
+      margin-bottom: 14px;
+    }
+
+    .flow .step {
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--navy);
+    }
+
+    .flow .arrow {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .toc ol {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: var(--muted);
+    }
+
+    .toc a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .toc a:hover { text-decoration: underline; }
+
+    .level {
+      margin-bottom: 22px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .level-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px 18px;
+      padding: 18px 22px;
+      background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .level-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .level-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 8px;
+      border-radius: 10px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .level-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(67, 97, 238, 0.1);
+      padding: 4px 9px;
+      border-radius: 6px;
+    }
+
+    .level-tag.admin { color: var(--purple); background: rgba(124, 58, 237, 0.12); }
+    .level-tag.platform { color: var(--green); background: rgba(5, 150, 105, 0.12); }
+    .level-tag.polish { color: var(--amber); background: rgba(217, 119, 6, 0.14); }
+    .level-tag.testing { color: #be185d; background: rgba(190, 24, 93, 0.12); }
+    .level-tag.golive { color: #0f766e; background: rgba(15, 118, 110, 0.14); }
+
+    .level-head h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .level-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      max-width: 46em;
+    }
+
+    .level-count {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-top: 6px;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    @media (max-width: 1000px) {
+      .page-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid { grid-template-columns: 1fr; }
+    }
+
+    .page-item {
+      padding: 16px 18px;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      min-height: 96px;
+    }
+
+    .page-grid .page-item:nth-child(3n) { border-right: none; }
+
+    @media (max-width: 1000px) {
+      .page-grid .page-item:nth-child(3n) { border-right: 1px solid var(--line); }
+      .page-grid .page-item:nth-child(2n) { border-right: none; }
+    }
+
+    @media (max-width: 640px) {
+      .page-grid .page-item { border-right: none; }
+    }
+
+    .page-item .kind {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .page-item h4 {
+      margin: 0 0 4px;
+      font-size: 0.95rem;
+    }
+
+    .page-item p {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .approach {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .approach { grid-template-columns: 1fr; }
+    }
+
+    .approach-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 18px 16px;
+      background: #fff;
+    }
+
+    .approach-card .n {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .approach-card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .approach-card p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .outcome-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .outcome {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--green);
+    }
+
+    .doc-footer {
+      padding: 20px 40px 28px;
+      border-top: 1px solid var(--line);
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .doc-footer strong { color: var(--navy); }
+
+    @media print {
+      body { background: #fff; }
+      .toolbar { display: none; }
+      .wrap-screen { padding: 0; }
+      .doc {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+      }
+      .level { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap-screen">
+    <div class="toolbar">
+      <button type="button" class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+    <article class="doc">
+      <header class="doc-header">
+        <div class="brand-row">
+          <img class="maple" src="images/maple-ai-logo.jpg" alt="Maple AI Technologies" />
+          <img class="merrakii" src="images/merrakii-logo.png" alt="Merrakii" />
+        </div>
+        <span class="label-chip">Build Blueprint</span>
+        <h1>How we will build Merrakii+</h1>
+        <p class="subtitle">
+          A clear delivery blueprint: Product Design vision, in-scope pages from
+          <em>Merrakii_pages_inscope.xlsx</em>, and eight progressive build levels — from the student core journey through admin CMS, platform foundations, testing, and go-live.
+        </p>
+        <dl class="meta-grid">
+          <div class="meta-item">
+            <dt>Product</dt>
+            <dd>Merrakii+ Decision Intelligence</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Prepared by</dt>
+            <dd>Maple AI Technologies</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Source design</dt>
+            <dd>Product Design.docx</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Source scope</dt>
+            <dd>Merrakii_pages_inscope.xlsx</dd>
+          </div>
+          <div class="meta-item">
+            <dt>Document date</dt>
+            <dd>12 August 2026</dd>
+          </div>
+        </dl>
+      </header>
+
+      <div class="doc-body">
+        <section class="section" id="vision">
+          <h2>Product north star</h2>
+          <p class="lede">
+            From Product Design: Merrakii is not “just another career site.” It is a Decision Intelligence system —
+            one connected destination for academic and career choices.
+          </p>
+
+          <div class="vision-box">
+            <div class="vision-card accent">
+              <h3>Vision</h3>
+              <p>
+                Build the world’s most comprehensive Decision Intelligence System that empowers every student
+                to make informed academic and career decisions through AI, validated knowledge, immersive
+                experiences, and continuous guidance.
+              </p>
+            </div>
+            <div class="vision-card">
+              <h3>Philosophy</h3>
+              <p>
+                Every student starts their journey differently, but every student deserves one connected destination.
+                Students think in aspirations, degrees, colleges, exams, skills, or professions — Merrakii unifies these
+                into one intelligent decision ecosystem.
+              </p>
+            </div>
+          </div>
+
+          <div class="positioning">“One Platform. Every Student Decision.”</div>
+
+          <div class="pillars">
+            <div class="pillar">
+              <strong>By Intelligence</strong>
+              <span>Student, academic, career, institution, examination, industry &amp; decision intelligence working together.</span>
+            </div>
+            <div class="pillar">
+              <strong>By Entry Points</strong>
+              <span>Start from career, degree, college, exam, stream, skills, industry, or study abroad — then connect to the full journey.</span>
+            </div>
+            <div class="pillar">
+              <strong>By Experience</strong>
+              <span>Personalized, immersive, guided, and collaborative — students, parents, counsellors, partners, professionals.</span>
+            </div>
+            <div class="pillar">
+              <strong>By Outcome</strong>
+              <span>Clarity, confidence, direction, readiness, personalized roadmap, continuous progress.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="approach">
+          <h2>How Maple AI will deliver</h2>
+          <p class="lede">
+            We ship in levels: first a clickable student core path, then enrolment depth, then the admin CMS layers,
+            then the remaining student pages, platform foundations, testing, and go-live. Each level is usable and
+            reviewable on its own.
+          </p>
+          <div class="approach">
+            <div class="approach-card">
+              <div class="n">01 — Vertical slices</div>
+              <h3>Ship journeys, not orphan screens</h3>
+              <p>
+                Levels 1–2 follow the real student path: search → profile → journey → pay → dashboard → courses.
+                That keeps demos honest and feedback tied to outcomes.
+              </p>
+            </div>
+            <div class="approach-card">
+              <div class="n">02 — Design system + scope</div>
+              <h3>Product Design guides UX; workbook locks scope</h3>
+              <p>
+                Experience principles come from Product Design. Page inventory and Phase 1 boundaries come from
+                Merrakii_pages_inscope.xlsx — so build order stays aligned with client priorities.
+              </p>
+            </div>
+            <div class="approach-card">
+              <div class="n">03 — Harden last</div>
+              <h3>Platform, testing and go-live come last</h3>
+              <p>
+                Admin CMS (Levels 3–4) lands once the student loop is stable, then the remaining student pages
+                (Level 5) and non-UI foundations (Level 6). Testing (Level 7) and go-live (Level 8) close the plan,
+                so reliability supports a proven journey rather than a moving target.
+              </p>
+            </div>
+          </div>
+          <div class="outcome-row">
+            <span class="outcome">Clarity for stakeholders</span>
+            <span class="outcome">Reviewable levels</span>
+            <span class="outcome">Reduced rework</span>
+            <span class="outcome">Production-ready increments</span>
+          </div>
+        </section>
+
+        <section class="section" id="student-flow">
+          <h2>Student journey this blueprint unlocks first</h2>
+          <p class="lede">Levels 1 and 2 establish the primary clickable loop parents and students will experience.</p>
+          <div class="flow" aria-label="Primary student journey">
+            <span class="step">1. Home search</span>
+            <span class="arrow">→</span>
+            <span class="step">2. Deep profiling</span>
+            <span class="arrow">→</span>
+            <span class="step">3. Career journey map</span>
+            <span class="arrow">→</span>
+            <span class="step">4. Journey payment</span>
+            <span class="arrow">→</span>
+            <span class="step">5. Student dashboard</span>
+            <span class="arrow">→</span>
+            <span class="step">6. Courses &amp; enrolment</span>
+          </div>
+        </section>
+
+        <nav class="section toc" aria-label="Blueprint contents">
+          <h2>Contents</h2>
+          <ol>
+            <li><a href="#level-1">Level 1 — Core student journey <em>(2 weeks)</em></a></li>
+            <li><a href="#level-2">Level 2 — Report, courses &amp; enrolment <em>(2 weeks)</em></a></li>
+            <li><a href="#level-3">Level 3 — Career library, users &amp; knowledge CMS <em>(2 weeks)</em></a></li>
+            <li><a href="#level-4">Level 4 — Courses, counsellors, resources &amp; financials <em>(2 weeks)</em></a></li>
+            <li><a href="#level-5">Level 5 — Additional functionality on Levels 1 &amp; 2 <em>(1 week)</em></a></li>
+            <li><a href="#level-6">Level 6 — Platform foundations (non-UI), incl. AWS staging/production <em>(1 week)</em></a></li>
+            <li><a href="#level-7">Level 7 — Testing <em>(1 week)</em></a></li>
+            <li><a href="#level-8">Level 8 — Go Live <em>(1 week)</em></a></li>
+          </ol>
+        </nav>
+
+        <!-- LEVEL 1 -->
+        <section class="section" id="level-1">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L1</span>
+                  <span class="level-tag">Student core</span>
+                </div>
+                <h3>Level 1 — Core student journey</h3>
+                <p>
+                  First lock the website journey wireframes, then establish the primary loop: discovery, profiling,
+                  journey experience, payment entry, and the first dashboard surfaces a student opens after joining.
+                </p>
+              </div>
+              <div class="level-count">2 weeks · 7 items · wireframe + core pages</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Gate</span>
+                <h4>Website journey Wireframe finalization</h4>
+                <p>Agree and freeze the end-to-end student website journey wireframes before building Level 1 pages.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Home Page — Search Bar</h4>
+                <p>Entry discovery. Search / explore starts the Decision Intelligence journey.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Career Journey Map</h4>
+                <p>Immersive, visual pathway for a selected career — milestones and next steps.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Deep Profiling</h4>
+                <p>Short student intake (profile + OTP gate) so personalisation has a real base.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Journey Payment Page</h4>
+                <p>Plans / checkout for beginning the journey — Starter, Growth, Premium style flow.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Student Dashboard — Overview</h4>
+                <p>Post-join home: progress, status, and where to go next.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Student Dashboard — My Journey</h4>
+                <p>Class-linked journey path after payment — the living roadmap a student returns to.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 2 -->
+        <section class="section" id="level-2">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L2</span>
+                  <span class="level-tag">Enrolment depth</span>
+                </div>
+                <h3>Level 2 — Report, courses &amp; enrolment</h3>
+                <p>
+                  Extend the dashboard into actionable learning commerce: journey report, course list,
+                  detail, enrolment, and course payment.
+                </p>
+              </div>
+              <div class="level-count">2 weeks · 5 pages · core functionality</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Student Dashboard — Career Journey Report</h4>
+                <p>Readable report of the student’s pathway, fit, and recommended next actions.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Student Dashboard — Course List Page</h4>
+                <p>Browse courses tied to services on the journey (sample depth per service).</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Course Detail Page</h4>
+                <p>Full course story: outcomes, structure, and why it matters for the pathway.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Course Enrolment Page</h4>
+                <p>Confirm selection and enrolment intent before payment (cart-style step).</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Course Payment Page</h4>
+                <p>Checkout for course enrolment with branded payment methods.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 3 -->
+        <section class="section" id="level-3">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L3</span>
+                  <span class="level-tag admin">Admin CMS</span>
+                </div>
+                <h3>Level 3 — Career library, users &amp; knowledge CMS</h3>
+                <p>
+                  Give Merrakii operations control of careers (profession + course + college + exam),
+                  student accounts, and service knowledge — without engineering for every content change.
+                </p>
+              </div>
+              <div class="level-count">2 weeks · 10 admin pages</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Career Library CMS Overview</h4>
+                <p>Career = Profession + Course + College + Exam — catalogue overview.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Add Career (per category / stream)</h4>
+                <p>CRUD for each career record across category and stream.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>User Management — Overview</h4>
+                <p>Student accounts overview for staff operations.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>User Management — Add Student</h4>
+                <p>Create / manage a student account from the admin console.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Service Knowledge — Overview</h4>
+                <p>Catalogue of services available on the platform.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Add Service Knowledge</h4>
+                <p>CRUD for each service knowledge record.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Exam Overview</h4>
+                <p>Examination catalogue overview (metadata to be confirmed).</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Exam Add</h4>
+                <p>Create and maintain exam records in the career ecosystem.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>College Overview</h4>
+                <p>Institution catalogue overview (metadata to be confirmed).</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>College Add</h4>
+                <p>Create and maintain college / university records.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 4 -->
+        <section class="section" id="level-4">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L4</span>
+                  <span class="level-tag admin">Ops CMS</span>
+                </div>
+                <h3>Level 4 — Courses, counsellors, resources &amp; financials</h3>
+                <p>
+                  Complete the operations surface: course inventory per career/service, counsellor profiles,
+                  learning resources, and financial visibility.
+                </p>
+              </div>
+              <div class="level-count">2 weeks · 8 admin pages</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Courses Overview</h4>
+                <p>All courses in the system at a glance.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Add Courses (per career / service)</h4>
+                <p>CRUD for courses linked to careers and services.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Counsellor Overview</h4>
+                <p>Counsellor profile inventory for staffing and assignment.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Add Counsellor</h4>
+                <p>CRUD for counsellor profiles.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Resources Overview</h4>
+                <p>Learning and guidance resources catalogue.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Add Resources</h4>
+                <p>CRUD for resource records students see in the dashboard.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Financials Overview</h4>
+                <p>Financial summary views (including per-student visibility).</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Admin</span>
+                <h4>Add Financials</h4>
+                <p>Capture off-system financial events (e.g. partner commission).</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 5 -->
+        <section class="section" id="level-5">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L5</span>
+                  <span class="level-tag polish">Enrichment</span>
+                </div>
+                <h3>Level 5 — Additional functionality on Levels 1 &amp; 2</h3>
+                <p>
+                  Layer payment integration and trust / marketing pages so the student product is complete for
+                  go-live conversations: contact, about, policies, and FAQs.
+                </p>
+              </div>
+              <div class="level-count">1 week · 8 items · pages + integration</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Integration</span>
+                <h4>Payment Integration</h4>
+                <p>Razorpay (and related) wiring behind journey and course checkout flows.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Contact Us</h4>
+                <p>Reach Merrakii with a clear, mobile-friendly contact experience.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>About Merrakii</h4>
+                <p>Brand story and Decision Intelligence positioning for students and parents.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Terms &amp; Conditions</h4>
+                <p>Legal terms for platform use — content provided by Merrakii.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Privacy Policy</h4>
+                <p>How student and parent data is collected, used, and protected.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>Refund Policy</h4>
+                <p>Transparent refund rules aligned to journey and course purchases.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Page</span>
+                <h4>FAQs</h4>
+                <p>Common questions for students, parents, and first-time visitors.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Focus</span>
+                <h4>Hardening Levels 1 &amp; 2</h4>
+                <p>Edge cases, empty states, validation, and polish on the core student loop.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 6 -->
+        <section class="section" id="level-6">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L6</span>
+                  <span class="level-tag platform">Platform</span>
+                </div>
+                <h3>Level 6 — Platform foundations (non-UI) — includes AWS staging/production</h3>
+                <p>
+                  The invisible systems that make Decision Intelligence trustworthy at scale: security, search,
+                  integrations, responsive behaviour, data architecture, workflows, DevOps, and compliance quality.
+                </p>
+              </div>
+              <div class="level-count">1 week · 8 foundation tracks</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Backend</span>
+                <h4>Access &amp; security</h4>
+                <p>Sign-in, roles, and protection of student / parent data across the platform.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Backend</span>
+                <h4>Search &amp; personalisation</h4>
+                <p>Turn search and intake into the right journeys, filters, and pathway recommendations.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Backend</span>
+                <h4>Integrations</h4>
+                <p>Razorpay, email, LinkedIn, Instagram, WhatsApp — credentials, webhooks, sync.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Cross-cutting</span>
+                <h4>Responsiveness</h4>
+                <p>Layouts and navigation that stay usable from mobile through desktop.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Backend</span>
+                <h4>Data &amp; architecture</h4>
+                <p>Database, APIs, and shared models for journeys, services, users, and decisions.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Backend</span>
+                <h4>Business logic / workflows</h4>
+                <p>Rules for enrolment, service status, sessions, payments, and journey validation.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">DevOps</span>
+                <h4>DevOps &amp; reliability</h4>
+                <p>AWS staging/production, CI/CD, health checks, backups, uptime.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Quality</span>
+                <h4>Compliance &amp; quality (non-UI)</h4>
+                <p>Validation, audit trails, error handling, and security standards behind the screens.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 7 -->
+        <section class="section" id="level-7">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L7</span>
+                  <span class="level-tag testing">Testing</span>
+                </div>
+                <h3>Level 7 — Testing</h3>
+                <p>
+                  Prove the whole product on staging before anyone depends on it: functional coverage across the
+                  student and admin journeys, device and browser checks, performance and security passes, and
+                  Merrakii-led acceptance testing ending in written sign-off.
+                </p>
+              </div>
+              <div class="level-count">1 week · 4 test tracks</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Testing</span>
+                <h4>End-to-end functional testing</h4>
+                <p>Every student and admin journey walked start to finish on staging, with defects logged and fixed.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Testing</span>
+                <h4>Cross-browser &amp; responsive testing</h4>
+                <p>Layout, navigation, and forms verified from mobile through desktop on the major browsers.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Testing</span>
+                <h4>Performance &amp; security testing</h4>
+                <p>Page load, API response, payment reliability, access controls, and data protection checks.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Acceptance</span>
+                <h4>UAT support &amp; sign-off</h4>
+                <p>Merrakii tests against agreed scenarios with Maple AI support; closes with written approval.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEVEL 8 -->
+        <section class="section" id="level-8">
+          <div class="level">
+            <div class="level-head">
+              <div>
+                <div class="level-badge">
+                  <span class="level-num">L8</span>
+                  <span class="level-tag golive">Go Live</span>
+                </div>
+                <h3>Level 8 — Go Live</h3>
+                <p>
+                  Move the approved build into production on AWS, watch it closely through the first days of real
+                  traffic, and hand over everything Merrakii needs to operate the platform confidently.
+                </p>
+              </div>
+              <div class="level-count">1 week · 3 release tracks</div>
+            </div>
+            <div class="page-grid">
+              <div class="page-item">
+                <span class="kind">Release</span>
+                <h4>Production deployment on AWS</h4>
+                <p>Cutover to production, domain and certificate setup, live payment configuration, smoke checks.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Support</span>
+                <h4>Hypercare &amp; monitoring</h4>
+                <p>Close monitoring of uptime, errors, and payments with rapid fixes during the first live days.</p>
+              </div>
+              <div class="page-item">
+                <span class="kind">Handover</span>
+                <h4>Handover runbooks &amp; documentation</h4>
+                <p>Environment guides, admin how-tos, API and architecture docs so Merrakii is never locked in.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="summary">
+          <h2>What success looks like</h2>
+          <p class="lede">
+            By the end of this blueprint, Merrakii+ is a Decision Intelligence product students can travel through,
+            operators can content-manage, and Maple AI can run reliably in production — aligned to Product Design
+            and the Phase 1 page inventory.
+          </p>
+          <div class="pillars">
+            <div class="pillar">
+              <strong>Levels 1–2</strong>
+              <span>Clickable student value: search to dashboard to courses.</span>
+            </div>
+            <div class="pillar">
+              <strong>Levels 3–4</strong>
+              <span>Admin CMS so Merrakii owns careers, services, courses, and ops data.</span>
+            </div>
+            <div class="pillar">
+              <strong>Level 5</strong>
+              <span>Payments and trust pages ready for public confidence.</span>
+            </div>
+            <div class="pillar">
+              <strong>Level 6</strong>
+              <span>Security, scale, integrations, and reliability under the hood.</span>
+            </div>
+            <div class="pillar">
+              <strong>Levels 7–8</strong>
+              <span>Tested, approved, and live on AWS production with handover complete.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="doc-footer">
+        <div>
+          <strong>Maple AI Technologies</strong><br />
+          Product engineering partner for Merrakii+ · Prepared for Munjal Universal Consultancy / Merrakii
+        </div>
+        <div>
+          Contact: tarunrastogi@mapleaitechnologies.com<br />
+          mapleaitechnologies.com · +91 96190 60302
+        </div>
+      </footer>
+    </article>
+  </div>
+</body>
+</html>

@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Executive Dashboard — Merrakii+ Progress</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00b4d8;
+      --blue: #4361ee;
+      --purple: #7c3aed;
+      --navy: #1c2340;
+      --gray: #888fa8;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --paper: #ffffff;
+      --soft: #f4f7fb;
+      --ok: #0f766e;
+      --warn: #b45309;
+      --bad: #b91c1c;
+      --doc-w: 1440px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(0, 180, 216, 0.12), transparent 60%),
+        radial-gradient(900px 400px at 90% 0%, rgba(67, 97, 238, 0.10), transparent 55%),
+        linear-gradient(180deg, #eef3f9 0%, #f7f9fc 40%, #eef2f7 100%);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: var(--doc-w);
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 32px 64px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--navy);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 9px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .btn:hover { border-color: #cbd5e1; background: #f8fafc; }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--blue), #3550d4);
+      color: #fff;
+      border-color: transparent;
+    }
+    .btn.primary:hover { filter: brightness(1.05); }
+    .btn.ghost { background: transparent; }
+    .btn.sm { padding: 6px 10px; font-size: 0.8rem; }
+    .save-status {
+      font-size: 0.8rem;
+      color: var(--muted);
+      min-height: 1.2em;
+      margin: 0 0 10px;
+    }
+    .as-of {
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding: 6px 10px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 999px;
+      border: 1px solid var(--line);
+    }
+    .status-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    /* Panels */
+    .stack { display: flex; flex-direction: column; gap: 16px; }
+
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 22px;
+      box-shadow: 0 10px 30px rgba(28, 35, 64, 0.04);
+    }
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+    }
+
+    /* 1 Status strip */
+    .status-panel {
+      background:
+        linear-gradient(135deg, rgba(67, 97, 238, 0.06), rgba(0, 180, 216, 0.08)),
+        #fff;
+    }
+    .status-strip {
+      display: grid;
+      grid-template-columns: auto 1.2fr auto auto auto;
+      gap: 20px;
+      align-items: center;
+    }
+    .gauge svg { width: 150px; height: 150px; display: block; }
+    .week-rows {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .week-row {
+      display: grid;
+      grid-template-columns: 150px 190px 1fr 160px;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+    }
+    .week-row.is-current {
+      border-color: rgba(0, 180, 216, 0.45);
+      background: rgba(0, 180, 216, 0.06);
+    }
+    .wr-week {
+      display: block;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--navy);
+    }
+    .wr-week em {
+      font-style: normal;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--cyan-ink, #0e7490);
+      font-weight: 800;
+    }
+    .wr-range { display: block; font-size: 0.78rem; color: var(--muted); }
+    .wr-level { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+    .wr-code {
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--blue);
+    }
+    .wr-name { font-size: 0.86rem; color: var(--navy); }
+    .wr-bar {
+      display: flex;
+      height: 12px;
+      border-radius: 999px;
+      background: #eef2f8;
+      overflow: hidden;
+    }
+    .wr-prior { background: #c7d6f5; }
+    .wr-gain { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+    .wr-num { text-align: right; }
+    .wr-gain-num {
+      display: block;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .wr-sub { display: block; font-size: 0.72rem; color: var(--muted); }
+    .week-row.is-unrecorded .wr-gain-num { color: var(--muted); font-weight: 400; }
+    .status-main .pct-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .pct-big {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .pct-label { color: var(--muted); font-size: 0.95rem; }
+    .pct-label .pct-level { color: #0e7490; font-weight: 800; }
+    .progress {
+      height: 10px;
+      background: #e8eef7;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .progress > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+      border-radius: inherit;
+    }
+    .dates {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 180px;
+    }
+    .date-item .k {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+    .date-item .v {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .date-item .v.accent { color: var(--blue); }
+    .date-item .v.golive { color: #0f766e; }
+
+    .health {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .health.on_track { background: #ecfdf5; color: var(--ok); border-color: #a7f3d0; }
+    .health.at_risk { background: #fffbeb; color: var(--warn); border-color: #fde68a; }
+    .health.delayed { background: #fef2f2; color: var(--bad); border-color: #fecaca; }
+    .health-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* 2 KPI row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .level-map-lead {
+      margin: 0 0 14px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+    .level-map-lead strong { color: var(--navy); }
+    .level-map-lead .lm-pages { color: var(--blue); }
+    .level-map-lead .lm-weeks { color: #0f766e; }
+    .level-chips {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    /* Levels borrow the Gantt palette: teal for done, cyan/blue for the level
+       in build, slate for what is still ahead. */
+    .level-chip {
+      border: 1px solid var(--line);
+      border-left: 3px solid #94a3b8;
+      border-radius: 12px;
+      padding: 12px 12px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+    .level-chip.is-in_progress {
+      border-color: rgba(0, 180, 216, 0.45);
+      border-left-color: var(--cyan);
+    }
+    .level-chip.is-done {
+      border-color: rgba(15, 118, 110, 0.3);
+      border-left-color: #0f766e;
+    }
+    .lc-code {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      color: #64748b;
+    }
+    .level-chip.is-in_progress .lc-code { color: #0e7490; }
+    .level-chip.is-done .lc-code { color: #0f766e; }
+    .lc-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--navy);
+    }
+    .lc-aud {
+      align-self: flex-start;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+    }
+    .lc-aud.is-student { color: var(--blue); }
+    .lc-aud.is-admin { color: var(--purple); }
+    .lc-foot {
+      margin-top: auto;
+      padding-top: 8px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .lc-count {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+    .level-chip.is-in_progress .lc-count { color: #0e7490; }
+    .level-chip.is-done .lc-count { color: #0f766e; }
+    .lc-weeks {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .kpi {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--blue);
+      border-radius: 14px;
+      padding: 16px 16px 14px;
+      box-shadow: 0 8px 20px rgba(28, 35, 64, 0.03);
+    }
+    .kpi.kpi-levels { border-left-color: #0f766e; }
+    .kpi.kpi-pages { border-left-color: var(--blue); }
+    .kpi.kpi-blockers { border-left-color: #94a3b8; }
+    .kpi.kpi-blockers.bad { border-left-color: var(--bad); }
+    .kpi .n .done { color: #0f766e; }
+    .kpi .n .wip { color: var(--blue); }
+    .kpi .n .rest { color: var(--gray); }
+    .kpi .n .sep { color: var(--line); font-weight: 400; }
+    .kpi .k {
+      font-size: 0.95rem;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .kpi .n {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .kpi .s {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .kpi .s .done { color: #0f766e; font-weight: 700; }
+    .kpi .s .wip { color: var(--blue); font-weight: 700; }
+    .kpi.warn .n { color: var(--warn); }
+    .kpi.bad .n { color: var(--bad); }
+
+    /* Charts row */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 12px;
+    }
+    .chart-panel { min-height: 280px; }
+    .chart-panel .chart-sub {
+      margin: -6px 0 12px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .donut-svg { width: 168px; height: 168px; flex-shrink: 0; }
+    .donut-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .donut-legend li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.86rem;
+    }
+    .donut-legend .swatch {
+      width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;
+    }
+    .donut-legend .count {
+      margin-left: auto;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    /* Gantt */
+    .gantt { display: flex; flex-direction: column; gap: 8px; }
+    .gantt-axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding-left: 150px;
+      margin-bottom: 4px;
+    }
+    .gantt-weeks {
+      position: relative;
+      min-height: 44px;
+      padding-left: 150px;
+      margin-bottom: 6px;
+    }
+    .gantt-weeks-inner {
+      position: relative;
+      height: 100%;
+      min-height: 44px;
+    }
+    .gantt-week {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2px;
+      padding: 0 2px 2px;
+      border-left: 1px solid #d8dee8;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-align: center;
+    }
+    .gantt-week.is-current {
+      background: rgba(0, 180, 216, 0.1);
+    }
+    .gantt-week .gw-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+    .gantt-week .gw-dates {
+      font-size: 0.6rem;
+      color: var(--muted);
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+    .gantt-week-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(28, 35, 64, 0.1);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .gantt-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .gantt-name {
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .gantt-track {
+      position: relative;
+      height: 28px;
+      background: #eef2f7;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .gantt-bar {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      border-radius: 6px;
+      min-width: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .gantt-bar.done { background: linear-gradient(90deg, #0f766e, #14b8a6); }
+    .gantt-bar.in_progress { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+    .gantt-bar.upcoming { background: linear-gradient(90deg, #94a3b8, #64748b); }
+    .gantt-today {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: var(--bad);
+      z-index: 2;
+    }
+    .gantt-today-label {
+      font-size: 0.72rem;
+      color: var(--bad);
+      font-weight: 700;
+      text-align: right;
+      padding-left: 150px;
+      margin-top: 2px;
+    }
+
+    /* RAG */
+    .rag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .rag.green { background: #16a34a; }
+    .rag.amber { background: #d97706; }
+    .rag.red { background: #dc2626; }
+    .rag-legend {
+      display: flex;
+      gap: 14px;
+      margin: 0 0 12px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .rag-legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* 3 Build levels */
+    .level-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .level-list li {
+      display: grid;
+      grid-template-columns: 36px 110px 1fr 140px 120px;
+      gap: 14px;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--soft);
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      width: fit-content;
+    }
+    .status-pill.done { background: #ecfdf5; color: var(--ok); }
+    .status-pill.in_progress { background: #eff6ff; color: var(--blue); }
+    .status-pill.upcoming { background: #f1f5f9; color: var(--muted); }
+    .status-pill.blocked { background: #fef2f2; color: var(--bad); }
+    .status-pill.pending { background: #f8fafc; color: var(--muted); border: 1px solid var(--line); }
+    .m-name { margin: 0; font-weight: 700; font-size: 0.98rem; }
+    .m-detail { margin: 3px 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.35; }
+    .m-due { text-align: right; font-size: 0.88rem; font-weight: 600; }
+    .m-due span { display: block; font-size: 0.75rem; font-weight: 500; color: var(--muted); margin-top: 2px; }
+    .m-due .slip { color: var(--bad); font-weight: 700; }
+    .m-bar-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .m-bar {
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .m-bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+    }
+    .m-pct { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-align: right; }
+
+    /* 4 Work progress */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .work-col {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--soft);
+      padding: 12px;
+      min-height: 160px;
+    }
+    .work-col h3 {
+      margin: 0 0 10px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .work-col h3 em {
+      font-style: normal;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .task-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .task-list li {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 11px;
+    }
+    .task-list .t-title { margin: 0; font-size: 0.88rem; font-weight: 600; line-height: 1.3; }
+    .task-list .t-meta { margin: 4px 0 0; font-size: 0.75rem; color: var(--muted); }
+    .empty-mini {
+      font-size: 0.85rem;
+      color: var(--gray);
+      padding: 18px 8px;
+      text-align: center;
+    }
+
+    /* 5+6 Delays & deps */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+    table.data th {
+      text-align: left;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      padding: 0 8px 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+    }
+    table.data td {
+      padding: 10px 8px 10px 0;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+    }
+    table.data tr:last-child td { border-bottom: none; }
+
+    /* 7 Product */
+    .product-body {
+      margin: 0 0 14px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #334155;
+    }
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .pillars li {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: var(--soft);
+    }
+    .pillar-name { margin: 0 0 6px; font-weight: 700; font-size: 0.92rem; }
+    .pillar-detail { margin: 0; font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+    /* 8 Artifacts */
+    table.artifacts a { color: var(--blue); text-decoration: none; word-break: break-all; }
+    table.artifacts a:hover { text-decoration: underline; }
+    .owner, .date { color: var(--muted); white-space: nowrap; }
+    .art-status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #eff6ff;
+      color: var(--blue);
+    }
+    .art-status.archived { background: #f1f5f9; color: var(--muted); }
+
+    /* Edit mode */
+    .edit-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .edit-hint {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .form-grid.full { grid-template-columns: 1fr; }
+    label.field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    label.field input,
+    label.field select,
+    label.field textarea {
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--navy);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 11px;
+      background: #fff;
+    }
+    label.field textarea { min-height: 72px; resize: vertical; }
+    .edit-section { margin-top: 18px; }
+    .edit-section h3 {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+    }
+    .row-editor {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: var(--soft);
+    }
+    .row-editor .form-grid { margin-bottom: 0; }
+    .row-actions { margin-top: 8px; }
+
+    .loading {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .wrap { width: 100%; max-width: 100%; padding: 16px; }
+      .status-strip { grid-template-columns: 1fr; }
+      .week-row { grid-template-columns: 1fr; gap: 8px; }
+      .wr-num { text-align: left; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .level-chips { grid-template-columns: repeat(2, 1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+      .level-list li { grid-template-columns: 36px 100px 1fr; }
+      .m-due, .m-bar-wrap { grid-column: 3; text-align: left; }
+      .gantt-axis, .gantt-weeks, .gantt-today-label { padding-left: 0; }
+      .gantt-week .gw-dates { white-space: normal; }
+      .gantt-row { grid-template-columns: 1fr; }
+      .work-grid, .two-col, .pillars, .form-grid { grid-template-columns: 1fr; }
+      .status-actions { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="save-status" id="save-status" aria-live="polite"></p>
+    <div id="app" class="stack">
+      <p class="loading">Loading executive dashboard…</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var LS_KEY = "merrakii_executive_overview_v1";
+      var overviewData = null;
+      var scopeData = null;
+      var editMode = false;
+
+      var app = document.getElementById("app");
+      var statusEl = document.getElementById("save-status");
+
+      function escapeHtml(s) {
+        return String(s == null ? "" : s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function statusLabel(st) {
+        var map = {
+          done: "Done",
+          in_progress: "In progress",
+          upcoming: "Upcoming",
+          pending: "Pending",
+          blocked: "Blocked",
+          open: "Open",
+          resolved: "Resolved"
+        };
+        return map[st] || st || "—";
+      }
+
+      function healthLabel(h) {
+        var map = { on_track: "On track", at_risk: "At risk", delayed: "Delayed" };
+        return map[h] || "On track";
+      }
+
+      function parseLooseDate(raw) {
+        if (!raw) return null;
+        var t = Date.parse(String(raw).trim());
+        if (!isNaN(t)) return new Date(t);
+        var m = String(raw).trim().match(/^(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})$/);
+        if (!m) return null;
+        var months = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+        var mi = months[m[2]];
+        if (mi == null) return null;
+        return new Date(Number(m[3]), mi, Number(m[1]));
+      }
+
+      function timelineLevels(timeline) {
+        return (timeline && (timeline.levels || timeline.milestones)) || [];
+      }
+
+      // Per-level completion is owned by the Functionality In Scope table in the
+      // Client Dashboard, which writes it into scope.json. Levels with no page
+      // work behind them (testing, go-live) keep their manually entered figure.
+      var derivedLevelCodes = {};
+
+      function hasDerivedLevels() {
+        for (var code in derivedLevelCodes) {
+          if (Object.prototype.hasOwnProperty.call(derivedLevelCodes, code)) return true;
+        }
+        return false;
+      }
+
+      function applyDerivedLevelProgress(data) {
+        var completion = (scopeData && scopeData._levelCompletion) || null;
+        derivedLevelCodes = {};
+        if (!completion || !data) return;
+        var levels = timelineLevels(data.timeline || {});
+        levels.forEach(function (level) {
+          var derived = completion[level.code];
+          if (derived == null) return;
+          level.percent = Math.max(0, Math.min(100, Math.round(Number(derived) || 0)));
+          derivedLevelCodes[level.code] = true;
+        });
+        var weighted = 0;
+        var weight = 0;
+        levels.forEach(function (level) {
+          var weeks = parseInt(String(level.duration || "").replace(/[^0-9]/g, ""), 10);
+          if (!isFinite(weeks) || weeks <= 0) weeks = 1;
+          weighted += (Number(level.percent) || 0) * weeks;
+          weight += weeks;
+        });
+        if (weight > 0) {
+          data.timeline = data.timeline || {};
+          data.timeline.overallPercent = Math.round(weighted / weight);
+        }
+      }
+
+      function levelTitle(level) {
+        var name = level.name || "";
+        return level.code ? level.code + " — " + name : name;
+      }
+
+      function slipDays(milestone) {
+        var planned = parseLooseDate(milestone.plannedDue || milestone.due);
+        if (!planned) return 0;
+        var end = milestone.actualDue ? parseLooseDate(milestone.actualDue) : new Date();
+        if (!end) end = new Date();
+        if (milestone.status === "done" && !milestone.actualDue) return 0;
+        if (milestone.status === "upcoming") return 0;
+        if (milestone.status === "done") {
+          var d = Math.round((end - planned) / 86400000);
+          return d > 0 ? d : 0;
+        }
+        // in_progress: slip only if past planned due
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        planned.setHours(0, 0, 0, 0);
+        if (today <= planned) return 0;
+        return Math.round((today - planned) / 86400000);
+      }
+
+      // Page status comes from the development progress columns on the Client
+      // Dashboard: a page is done when every applicable track reads 100 and in
+      // progress once any of them is above zero. That roll-up is written into
+      // scope.json; the completeness column below is only a fallback for a copy
+      // of scope.json saved before those columns existed.
+      function derivePageKpis(scope) {
+        var done = 0, wip = 0, pending = 0, total = 0;
+        if (!scope) return { done: 0, wip: 0, pending: 0, total: 0 };
+        var summary = scope._pageStatus;
+        if (summary && Number(summary.total)) {
+          return {
+            done: Number(summary.done) || 0,
+            wip: Number(summary.wip) || 0,
+            pending: Number(summary.pending) || 0,
+            total: Number(summary.total) || 0
+          };
+        }
+        Object.keys(scope).forEach(function (sheet) {
+          var rows = scope[sheet];
+          if (!Array.isArray(rows) || rows.length < 2) return;
+          var header = rows[0].map(function (h) { return String(h || "").toLowerCase(); });
+          var cIdx = header.indexOf("completeness");
+          var pIdx = header.indexOf("phase 1");
+          if (cIdx < 0) return;
+          for (var i = 1; i < rows.length; i++) {
+            var row = rows[i];
+            if (!row || !row.length) continue;
+            if (pIdx >= 0) {
+              var phase = String(row[pIdx] || "").trim().toLowerCase();
+              if (phase && phase !== "yes") continue;
+            }
+            var topic = String(row[1] || row[0] || "").trim();
+            if (!topic) continue;
+            total++;
+            var c = parseFloat(row[cIdx]);
+            if (isNaN(c) || c <= 0) pending++;
+            else if (c >= 1) done++;
+            else wip++;
+          }
+        });
+        return { done: done, wip: wip, pending: pending, total: total };
+      }
+
+      function taskBuckets(tasks) {
+        var done = [], prog = [], pending = [];
+        (tasks || []).forEach(function (t) {
+          var st = t.status || "pending";
+          if (st === "done") done.push(t);
+          else if (st === "in_progress" || st === "blocked") prog.push(t);
+          else pending.push(t);
+        });
+        return { done: done, prog: prog, pending: pending };
+      }
+
+      function countOpenDeps(deps) {
+        return (deps || []).filter(function (d) { return (d.status || "open") === "open"; }).length;
+      }
+
+      function renderTaskList(items) {
+        if (!items.length) return '<p class="empty-mini">None</p>';
+        var html = '<ul class="task-list">';
+        items.forEach(function (t) {
+          html += "<li>";
+          html += '<p class="t-title">' + escapeHtml(t.title || "") + "</p>";
+          html +=
+            '<p class="t-meta">' +
+            escapeHtml(t.owner || "—") +
+            (t.due ? " · Due " + escapeHtml(t.due) : "") +
+            (t.status === "blocked" ? " · Blocked" : "") +
+            (t.level || t.milestone ? " · " + escapeHtml(t.level || t.milestone) : "") +
+            "</p>";
+          html += "</li>";
+        });
+        html += "</ul>";
+        return html;
+      }
+
+      function deriveRag(m) {
+        if (m.rag === "green" || m.rag === "amber" || m.rag === "red") return m.rag;
+        if (m.status === "done") return "green";
+        if (slipDays(m) > 0) return "red";
+        if (m.status === "in_progress") return "amber";
+        return "green";
+      }
+
+      function ragLabel(r) {
+        return r === "red" ? "R" : r === "amber" ? "A" : "G";
+      }
+
+      function taskStatusCounts(tasks) {
+        var c = { done: 0, in_progress: 0, pending: 0, blocked: 0 };
+        (tasks || []).forEach(function (t) {
+          var st = t.status || "pending";
+          if (st === "done") c.done++;
+          else if (st === "in_progress") c.in_progress++;
+          else if (st === "blocked") c.blocked++;
+          else c.pending++;
+        });
+        return c;
+      }
+
+      // The caption opens with the level being built, e.g. "L1 Core student
+      // journey…"; picking that code out keeps it scannable.
+      function highlightLevelCode(text) {
+        var safe = escapeHtml(text);
+        return safe.replace(/^(L\d+)\b/, '<span class="pct-level">$1</span>');
+      }
+
+      function renderProgressGauge(pct) {
+        var r = 52;
+        var circumference = 2 * Math.PI * r;
+        var filled = (Math.max(0, Math.min(100, pct)) / 100) * circumference;
+        var html = '<div class="gauge">';
+        html += '<svg viewBox="0 0 130 130" role="img" aria-label="Overall completion ' + pct + ' percent">';
+        html += '<defs><linearGradient id="gaugeFill" x1="0" y1="0" x2="1" y2="1">';
+        html += '<stop offset="0%" stop-color="#00b4d8" /><stop offset="100%" stop-color="#4361ee" />';
+        html += "</linearGradient></defs>";
+        html +=
+          '<circle cx="65" cy="65" r="' + r + '" fill="none" stroke="#e2e8f0" stroke-width="14" />';
+        html +=
+          '<circle cx="65" cy="65" r="' +
+          r +
+          '" fill="none" stroke="url(#gaugeFill)" stroke-width="14" stroke-linecap="round" stroke-dasharray="' +
+          filled +
+          " " +
+          (circumference - filled) +
+          '" transform="rotate(-90 65 65)" />';
+        html +=
+          '<text x="65" y="70" text-anchor="middle" font-size="30" font-weight="700" fill="#4361ee" font-family="Fraunces, Georgia, serif">' +
+          pct +
+          "%</text>";
+        html += '<text x="65" y="88" text-anchor="middle" font-size="10" font-weight="700" fill="#0e7490">complete</text>';
+        html += "</svg></div>";
+        return html;
+      }
+
+      function renderDonut(counts) {
+        var parts = [
+          { key: "done", label: "Done", value: counts.done, color: "#0f766e" },
+          { key: "in_progress", label: "In progress", value: counts.in_progress, color: "#4361ee" },
+          { key: "pending", label: "Pending", value: counts.pending, color: "#94a3b8" },
+          { key: "blocked", label: "Blocked", value: counts.blocked, color: "#dc2626" }
+        ];
+        var total = parts.reduce(function (s, p) { return s + p.value; }, 0) || 1;
+        var r = 54;
+        var c = 2 * Math.PI * r;
+        var offset = 0;
+        var html = '<div class="donut-wrap">';
+        html += '<svg class="donut-svg" viewBox="0 0 140 140" aria-hidden="true">';
+        html += '<circle cx="70" cy="70" r="' + r + '" fill="none" stroke="#e2e8f0" stroke-width="16" />';
+        parts.forEach(function (p) {
+          if (!p.value) return;
+          var len = (p.value / total) * c;
+          html +=
+            '<circle cx="70" cy="70" r="' +
+            r +
+            '" fill="none" stroke="' +
+            p.color +
+            '" stroke-width="16" stroke-dasharray="' +
+            len +
+            " " +
+            (c - len) +
+            '" stroke-dashoffset="' +
+            -offset +
+            '" transform="rotate(-90 70 70)" />';
+          offset += len;
+        });
+        html +=
+          '<text x="70" y="66" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2340" font-family="Fraunces, Georgia, serif">' +
+          (counts.done + counts.in_progress + counts.pending + counts.blocked) +
+          "</text>";
+        html += '<text x="70" y="84" text-anchor="middle" font-size="11" fill="#64748b">tasks</text>';
+        html += "</svg>";
+        html += '<ul class="donut-legend">';
+        parts.forEach(function (p) {
+          html +=
+            "<li><span class=\"swatch\" style=\"background:" +
+            p.color +
+            '"></span>' +
+            escapeHtml(p.label) +
+            '<span class="count">' +
+            p.value +
+            "</span></li>";
+        });
+        html += "</ul></div>";
+        return html;
+      }
+
+      var MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+      // Reporting weeks come from weekCalendar in overview.json: week 1 runs
+      // from the project start to firstWeekEnd, then every week is weekDays long.
+      function weekWindow(index) {
+        var cal = (overviewData && overviewData.weekCalendar) || {};
+        var start = parseLooseDate(cal.start || (overviewData && overviewData.startDate));
+        if (!start) return null;
+        var days = Number(cal.weekDays) || 7;
+        var firstEnd = parseLooseDate(cal.firstWeekEnd);
+        if (!firstEnd) {
+          firstEnd = new Date(start);
+          firstEnd.setDate(firstEnd.getDate() + days - 1);
+        }
+        if (index <= 0) return { start: start, end: firstEnd };
+        var from = new Date(firstEnd);
+        from.setDate(from.getDate() + 1 + (index - 1) * days);
+        var to = new Date(from);
+        to.setDate(to.getDate() + days - 1);
+        return { start: from, end: to };
+      }
+
+      function formatWeekRange(window) {
+        if (!window) return "";
+        var from = window.start;
+        var to = window.end;
+        var fromText = from.getDate() + (from.getMonth() === to.getMonth() ? "" : " " + MONTH_ABBR[from.getMonth()]);
+        return fromText + " – " + to.getDate() + " " + MONTH_ABBR[to.getMonth()];
+      }
+
+      function isoDate(d) {
+        var mm = String(d.getMonth() + 1);
+        var dd = String(d.getDate());
+        return (
+          d.getFullYear() + "-" + (mm.length < 2 ? "0" + mm : mm) + "-" + (dd.length < 2 ? "0" + dd : dd)
+        );
+      }
+
+      function currentWeekIndex() {
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        for (var i = 0; i < 200; i++) {
+          var win = weekWindow(i);
+          if (!win) return 0;
+          if (today <= win.end) return i;
+        }
+        return 0;
+      }
+
+      function levelForWeek(levels, window) {
+        if (!window) return null;
+        var found = null;
+        (levels || []).forEach(function (level) {
+          var from = parseLooseDate(level.plannedStart);
+          var to = parseLooseDate(level.plannedDue || level.due);
+          if (!from || !to) return;
+          if (window.start <= to && window.end >= from && !found) found = level;
+        });
+        return found;
+      }
+
+      // Each week reports on the level being built that week: how far that
+      // level had got by the end of the week, and how much of it was gained
+      // during the week itself. Past weeks come from the snapshots the Client
+      // Dashboard writes; the running week reads the live figure.
+      function weeklyDeliveryRows(levels) {
+        var history = (scopeData && scopeData._levelHistory) || {};
+        var current = currentWeekIndex();
+        var rows = [];
+        var reached = {};
+        for (var i = 0; i <= current; i++) {
+          var win = weekWindow(i);
+          if (!win) break;
+          var level = levelForWeek(levels, win);
+          var code = level ? level.code : "";
+          var snapshot = history[isoDate(win.start)] || {};
+          var end = code && snapshot[code] != null ? Number(snapshot[code]) : null;
+          var recorded = end != null;
+          if (i === current && level) {
+            end = Number(level.percent) || 0;
+            recorded = true;
+          }
+          if (end == null) end = reached[code] != null ? reached[code] : 0;
+          var prior = reached[code] != null ? reached[code] : 0;
+          reached[code] = end;
+          rows.push({
+            label: "W" + (i + 1),
+            range: formatWeekRange(win),
+            level: level,
+            code: code,
+            recorded: recorded,
+            end: Math.max(0, Math.min(100, Math.round(end))),
+            gain: Math.max(0, Math.round(end - prior)),
+            isCurrent: i === current
+          });
+        }
+        return rows;
+      }
+
+      function renderWeeklyDelivery(levels) {
+        var rows = weeklyDeliveryRows(levels);
+        if (!rows.length) {
+          return '<p class="empty-mini">No reporting weeks yet — set the project start date.</p>';
+        }
+        var html = '<ul class="week-rows">';
+        rows.forEach(function (row) {
+          var prior = Math.max(0, row.end - row.gain);
+          html +=
+            '<li class="week-row' +
+            (row.isCurrent ? " is-current" : "") +
+            (row.recorded ? "" : " is-unrecorded") +
+            '">';
+          html +=
+            '<div class="wr-when"><span class="wr-week">' +
+            escapeHtml(row.label) +
+            (row.isCurrent ? ' <em>this week</em>' : "") +
+            '</span><span class="wr-range">' +
+            escapeHtml(row.range) +
+            "</span></div>";
+          html +=
+            '<div class="wr-level">' +
+            (row.level
+              ? '<span class="wr-code">' +
+                escapeHtml(row.code) +
+                '</span><span class="wr-name">' +
+                escapeHtml(shortLevelName(row.level)) +
+                "</span>"
+              : '<span class="wr-name">—</span>') +
+            "</div>";
+          if (row.recorded) {
+            html +=
+              '<div class="wr-bar" title="' +
+              row.end +
+              '% of ' +
+              escapeHtml(row.code || "the level") +
+              ' reached"><span class="wr-prior" style="width:' +
+              prior +
+              '%"></span><span class="wr-gain" style="width:' +
+              row.gain +
+              '%"></span></div>';
+            html +=
+              '<div class="wr-num"><span class="wr-gain-num">+' +
+              row.gain +
+              '</span><span class="wr-sub">points ' +
+              (row.isCurrent ? "this week" : "in the week") +
+              " · " +
+              row.end +
+              "% of " +
+              escapeHtml(row.code || "level") +
+              "</span></div>";
+          } else {
+            html += '<div class="wr-bar"></div>';
+            html +=
+              '<div class="wr-num"><span class="wr-gain-num">—</span><span class="wr-sub">not recorded</span></div>';
+          }
+          html += "</li>";
+        });
+        html += "</ul>";
+        return html;
+      }
+
+      function programmeWeekTicks(start, end) {
+        var ticks = [];
+        var current = currentWeekIndex();
+        for (var i = 0; i < 200; i++) {
+          var win = weekWindow(i);
+          if (!win) break;
+          if (win.start > end) break;
+          var clipEnd = win.end > end ? end : win.end;
+          ticks.push({
+            index: i,
+            label: "W" + (i + 1),
+            range: formatWeekRange(win),
+            start: win.start,
+            end: clipEnd,
+            isCurrent: i === current
+          });
+          if (win.end >= end) break;
+        }
+        return ticks;
+      }
+
+      function renderGantt(data, milestones) {
+        var start = parseLooseDate(data.startDate);
+        var end = parseLooseDate(data.goLiveDate);
+        if (!start || !end || end <= start) {
+          return '<p class="empty-mini">Set project start and go-live dates to show the schedule chart.</p>';
+        }
+        var range = end - start;
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var todayPct = ((today - start) / range) * 100;
+        todayPct = Math.max(0, Math.min(100, todayPct));
+        var weeks = programmeWeekTicks(start, end);
+
+        var html = '<div class="gantt">';
+        html +=
+          '<div class="gantt-axis"><span>' +
+          escapeHtml(data.startDate || "") +
+          "</span><span>" +
+          escapeHtml(data.goLiveDate || "") +
+          "</span></div>";
+
+        if (weeks.length) {
+          html += '<div class="gantt-weeks" aria-label="Reporting weeks">';
+          html += '<div class="gantt-weeks-inner">';
+          weeks.forEach(function (week) {
+            var left = ((week.start - start) / range) * 100;
+            var width = ((week.end - week.start) / range) * 100;
+            left = Math.max(0, Math.min(100, left));
+            width = Math.max(0.8, Math.min(100 - left, width));
+            html +=
+              '<div class="gantt-week' +
+              (week.isCurrent ? " is-current" : "") +
+              '" style="left:' +
+              left +
+              "%;width:" +
+              width +
+              '%" title="' +
+              escapeHtml(week.label + ": " + week.range) +
+              '">';
+            html += '<span class="gw-label">' + escapeHtml(week.label) + "</span>";
+            html += '<span class="gw-dates">' + escapeHtml(week.range) + "</span>";
+            html += "</div>";
+          });
+          html += "</div></div>";
+        }
+
+        milestones.forEach(function (m) {
+          var mStart = parseLooseDate(m.plannedStart) || start;
+          var mEnd = parseLooseDate(m.plannedDue || m.due) || end;
+          if (mEnd < mStart) mEnd = mStart;
+          var left = ((mStart - start) / range) * 100;
+          var width = ((mEnd - mStart) / range) * 100;
+          left = Math.max(0, Math.min(100, left));
+          width = Math.max(1.5, Math.min(100 - left, width));
+          var st = m.status || "upcoming";
+          var rag = deriveRag(m);
+          html += '<div class="gantt-row">';
+          html +=
+            '<div class="gantt-name"><span class="rag ' +
+            rag +
+            '" title="' +
+            escapeHtml(rag.toUpperCase()) +
+            '">' +
+            ragLabel(rag) +
+            "</span>" +
+            escapeHtml(levelTitle(m)) +
+            "</div>";
+          html += '<div class="gantt-track">';
+          weeks.forEach(function (week, wi) {
+            if (wi === 0) return;
+            var lineLeft = ((week.start - start) / range) * 100;
+            if (lineLeft <= 0 || lineLeft >= 100) return;
+            html +=
+              '<div class="gantt-week-line" style="left:' + lineLeft + '%" aria-hidden="true"></div>';
+          });
+          if (todayPct > 0 && todayPct < 100) {
+            html += '<div class="gantt-today" style="left:' + todayPct + '%"></div>';
+          }
+          html +=
+            '<div class="gantt-bar ' +
+            escapeHtml(st) +
+            '" style="left:' +
+            left +
+            "%;width:" +
+            width +
+            '%">' +
+            (Number(m.percent) || 0) +
+            "%</div>";
+          html += "</div></div>";
+        });
+        html += '<div class="gantt-today-label">Red line = today · week dates follow the reporting calendar</div>';
+        html += "</div>";
+        return html;
+      }
+
+      // The chips are a map of the programme, not a status report, so long
+      // level names are trimmed to the part that identifies the level.
+      function shortLevelName(level) {
+        var name = String(level.name || "");
+        var cut = name.split(/\s+—\s+|\s+\(/)[0];
+        return (cut || name).trim();
+      }
+
+      function totalProgrammeWeeks(levels) {
+        var weeks = 0;
+        (levels || []).forEach(function (level) {
+          var n = parseInt(String(level.duration || "").replace(/[^0-9]/g, ""), 10);
+          weeks += isFinite(n) && n > 0 ? n : 1;
+        });
+        return weeks;
+      }
+
+      // Testing and go-live have no pages of their own — they cover everything
+      // built before them, so they say so rather than showing a count.
+      function levelScopeLabel(counts) {
+        var pages = Number(counts && counts.pages) || 0;
+        var functions = Number(counts && counts.functions) || 0;
+        if (pages) return pages + (pages === 1 ? " page" : " pages");
+        if (functions) return functions + (functions === 1 ? " platform function" : " platform functions");
+        return "All functionality";
+      }
+
+      // Who a level is for, when it builds screens for one audience. Platform,
+      // testing and go-live levels serve everyone, so they carry no tag.
+      function audienceTag(level) {
+        var audience = String((level && level.audience) || "").trim();
+        if (!audience) return "";
+        var key = /admin/i.test(audience) ? "admin" : "student";
+        return (
+          '<span class="lc-aud is-' + key + '">' + escapeHtml(audience) + "</span>"
+        );
+      }
+
+      function renderLevelMap(levels) {
+        if (!levels || !levels.length) return "";
+        var pageStatus = (scopeData && scopeData._pageStatus) || {};
+        var byLevel = pageStatus.byLevel || {};
+        var totalPages = Number(pageStatus.total) || 0;
+        var html = '<section class="panel" aria-label="Programme build plan">';
+        html += "<h2>Programme build plan</h2>";
+        html += '<p class="level-map-lead">';
+        html += totalPages
+          ? '<strong class="lm-pages">' + totalPages + " pages</strong> built and delivered across "
+          : "The application is built across ";
+        html +=
+          "<strong>" +
+          levels.length +
+          ' levels</strong>, in sequence over <strong class="lm-weeks">' +
+          totalProgrammeWeeks(levels) +
+          " weeks</strong>.</p>";
+        html += '<ol class="level-chips">';
+        levels.forEach(function (level) {
+          html +=
+            '<li class="level-chip is-' +
+            escapeHtml(level.status || "upcoming") +
+            '"><span class="lc-code">' +
+            escapeHtml(level.code || "") +
+            '</span><span class="lc-name">' +
+            escapeHtml(shortLevelName(level)) +
+            "</span>" +
+            audienceTag(level) +
+            '<div class="lc-foot"><span class="lc-count">' +
+            escapeHtml(levelScopeLabel(byLevel[level.code])) +
+            '</span><span class="lc-weeks">' +
+            escapeHtml(level.duration || "") +
+            "</span></div></li>";
+        });
+        html += "</ol></section>";
+        return html;
+      }
+
+      function renderView(data) {
+        var timeline = data.timeline || {};
+        var milestones = timelineLevels(timeline);
+        var pct = Math.max(0, Math.min(100, Number(timeline.overallPercent) || 0));
+        var health = timeline.health || "on_track";
+        var pages = derivePageKpis(scopeData);
+        var buckets = taskBuckets(data.tasks);
+        var milesDone = milestones.filter(function (m) { return m.status === "done"; }).length;
+        var blockCount = countOpenDeps(data.dependencies);
+        var delays = data.delays || [];
+        var deps = data.dependencies || [];
+
+        var html = "";
+
+        /* 1 How the programme is structured */
+        html += renderLevelMap(milestones);
+
+        /* 2 Overall completion */
+        html += '<section class="panel status-panel" aria-label="Overall progress">';
+        html += "<h2>Overall project completion</h2>";
+        html += '<div class="status-strip">';
+        html += renderProgressGauge(pct);
+        html += '<div class="status-main">';
+        html += '<p class="pct-label">' + highlightLevelCode(timeline.overallLabel || "") + "</p>";
+        html += "</div>";
+        html += '<div class="dates">';
+        html +=
+          '<div class="date-item"><span class="k">Project start</span><span class="v accent">' +
+          escapeHtml(data.startDate || "—") +
+          "</span></div>";
+        html +=
+          '<div class="date-item"><span class="k">Target go-live</span><span class="v golive">' +
+          escapeHtml(data.goLiveDate || "—") +
+          "</span></div>";
+        html += "</div>";
+        html +=
+          '<div class="health ' +
+          escapeHtml(health) +
+          '" title="Programme health"><span class="health-dot" aria-hidden="true"></span>' +
+          escapeHtml(healthLabel(health)) +
+          "</div>";
+        html += '<div class="status-actions">';
+        html += '<span class="as-of">As of ' + escapeHtml(data.updatedAt || "—") + "</span>";
+        html += "</div>";
+        html += "</div></section>";
+
+        /* 3 KPIs */
+        html += '<section class="kpi-row" aria-label="Key metrics">';
+        html +=
+          '<div class="kpi kpi-levels"><div class="k">Levels</div><div class="n">' +
+          '<span class="done">' +
+          milesDone +
+          '</span><span class="sep"> / </span><span class="rest">' +
+          milestones.length +
+          '</span></div><div class="s">completed</div></div>';
+        html +=
+          '<div class="kpi kpi-pages"><div class="k">Pages</div><div class="n">' +
+          '<span class="done">' +
+          pages.done +
+          '</span><span class="sep"> / </span><span class="wip">' +
+          pages.wip +
+          '</span><span class="sep"> / </span><span class="rest">' +
+          pages.pending +
+          '</span></div><div class="s"><span class="done">done</span> · <span class="wip">in progress</span> · pending' +
+          (pages.total ? " · " + pages.total + " pages in scope" : "") +
+          "</div></div>";
+        html +=
+          '<div class="kpi kpi-blockers' +
+          (blockCount ? " bad" : "") +
+          '"><div class="k">Blockers</div><div class="n">' +
+          blockCount +
+          '</div><div class="s">open dependencies</div></div>';
+        html += "</section>";
+
+        /* 4 Schedule Gantt */
+        html += '<section class="panel"><h2>Schedule (Gantt)</h2>';
+        html += '<p class="chart-sub">Planned build level windows across the programme, with each reporting week and its dates</p>';
+        html +=
+          '<div class="rag-legend"><span><span class="rag green">G</span> Green — on track</span><span><span class="rag amber">A</span> Amber — watch</span><span><span class="rag red">R</span> Red — at risk / delayed</span></div>';
+        html += renderGantt(data, milestones);
+        html += "</section>";
+
+        /* 5 Weekly delivery */
+        html += '<section class="panel"><h2>Weekly delivery</h2>';
+        html += '<p class="chart-sub">How far the level being built that week moved during the week</p>';
+        html += renderWeeklyDelivery(milestones);
+        html += "</section>";
+
+        /* 6 Task mix */
+        html += '<section class="panel chart-panel"><h2>Task mix</h2>';
+        html += '<p class="chart-sub">Share of work by status</p>';
+        html += renderDonut(taskStatusCounts(data.tasks));
+        html += "</section>";
+
+        /* 7 Work */
+        html += '<section class="panel"><h2>Work progress</h2><div class="work-grid">';
+        html +=
+          '<div class="work-col"><h3>Completed <em>' +
+          buckets.done.length +
+          "</em></h3>" +
+          renderTaskList(buckets.done) +
+          "</div>";
+        html +=
+          '<div class="work-col"><h3>In progress <em>' +
+          buckets.prog.length +
+          "</em></h3>" +
+          renderTaskList(buckets.prog) +
+          "</div>";
+        html +=
+          '<div class="work-col"><h3>Pending <em>' +
+          buckets.pending.length +
+          "</em></h3>" +
+          renderTaskList(buckets.pending) +
+          "</div>";
+        html += "</div></section>";
+
+        /* 5+6 Delays & deps */
+        html += '<div class="two-col">';
+        html += '<section class="panel"><h2>Delays</h2>';
+        if (!delays.length) {
+          html += '<p class="empty-mini">No active delays recorded.</p>';
+        } else {
+          html += "<table class=\"data\"><thead><tr><th>Item</th><th>Planned</th><th>Revised</th><th>Reason</th></tr></thead><tbody>";
+          delays.forEach(function (d) {
+            html += "<tr>";
+            html += "<td>" + escapeHtml(d.item || "") + "</td>";
+            html += "<td>" + escapeHtml(d.plannedDate || "") + "</td>";
+            html += "<td>" + escapeHtml(d.revisedDate || "") + "</td>";
+            html += "<td>" + escapeHtml(d.reason || "") + "</td>";
+            html += "</tr>";
+          });
+          html += "</tbody></table>";
+        }
+        html += "</section>";
+
+        html += '<section class="panel"><h2>Dependencies &amp; blockers</h2>';
+        if (!deps.length) {
+          html += '<p class="empty-mini">No dependencies recorded.</p>';
+        } else {
+          html += "<table class=\"data\"><thead><tr><th>Item</th><th>Waiting on</th><th>Impact</th><th>Status</th></tr></thead><tbody>";
+          deps.forEach(function (d) {
+            html += "<tr>";
+            html += "<td>" + escapeHtml(d.item || "") + "</td>";
+            html += "<td>" + escapeHtml(d.dependsOn || "") + "</td>";
+            html += "<td>" + escapeHtml(d.impact || "") + "</td>";
+            html +=
+              '<td><span class="status-pill ' +
+              ((d.status || "open") === "resolved" ? "done" : "blocked") +
+              '">' +
+              escapeHtml(statusLabel(d.status || "open")) +
+              "</span></td>";
+            html += "</tr>";
+          });
+          html += "</tbody></table>";
+        }
+        html += "</section></div>";
+
+        app.innerHTML = html;
+      }
+
+      function field(label, name, value, type) {
+        type = type || "text";
+        if (type === "textarea") {
+          return (
+            '<label class="field">' +
+            escapeHtml(label) +
+            '<textarea name="' +
+            escapeHtml(name) +
+            '">' +
+            escapeHtml(value || "") +
+            "</textarea></label>"
+          );
+        }
+        if (type === "select-health") {
+          var opts = ["on_track", "at_risk", "delayed"];
+          var html =
+            '<label class="field">' +
+            escapeHtml(label) +
+            '<select name="' +
+            escapeHtml(name) +
+            '">';
+          opts.forEach(function (o) {
+            html +=
+              '<option value="' +
+              o +
+              '"' +
+              (value === o ? " selected" : "") +
+              ">" +
+              escapeHtml(healthLabel(o)) +
+              "</option>";
+          });
+          html += "</select></label>";
+          return html;
+        }
+        if (type === "select-mstatus") {
+          var mopts = ["done", "in_progress", "upcoming"];
+          var mh =
+            '<label class="field">' +
+            escapeHtml(label) +
+            '<select name="' +
+            escapeHtml(name) +
+            '">';
+          mopts.forEach(function (o) {
+            mh +=
+              '<option value="' +
+              o +
+              '"' +
+              (value === o ? " selected" : "") +
+              ">" +
+              escapeHtml(statusLabel(o)) +
+              "</option>";
+          });
+          mh += "</select></label>";
+          return mh;
+        }
+        if (type === "select-rag") {
+          var ropts = [
+            { v: "green", l: "Green — on track" },
+            { v: "amber", l: "Amber — watch" },
+            { v: "red", l: "Red — at risk" }
+          ];
+          var rh =
+            '<label class="field">' +
+            escapeHtml(label) +
+            '<select name="' +
+            escapeHtml(name) +
+            '">';
+          ropts.forEach(function (o) {
+            rh +=
+              '<option value="' +
+              o.v +
+              '"' +
+              (value === o.v ? " selected" : "") +
+              ">" +
+              escapeHtml(o.l) +
+              "</option>";
+          });
+          rh += "</select></label>";
+          return rh;
+        }
+        if (type === "select-tstatus") {
+          var topts = ["done", "in_progress", "pending", "blocked"];
+          var th =
+            '<label class="field">' +
+            escapeHtml(label) +
+            '<select name="' +
+            escapeHtml(name) +
+            '">';
+          topts.forEach(function (o) {
+            th +=
+              '<option value="' +
+              o +
+              '"' +
+              (value === o ? " selected" : "") +
+              ">" +
+              escapeHtml(statusLabel(o)) +
+              "</option>";
+          });
+          th += "</select></label>";
+          return th;
+        }
+        if (type === "select-dstatus") {
+          var dopts = ["open", "resolved"];
+          var dh =
+            '<label class="field">' +
+            escapeHtml(label) +
+            '<select name="' +
+            escapeHtml(name) +
+            '">';
+          dopts.forEach(function (o) {
+            dh +=
+              '<option value="' +
+              o +
+              '"' +
+              (value === o ? " selected" : "") +
+              ">" +
+              escapeHtml(statusLabel(o)) +
+              "</option>";
+          });
+          dh += "</select></label>";
+          return dh;
+        }
+        return (
+          '<label class="field">' +
+          escapeHtml(label) +
+          '<input type="' +
+          type +
+          '" name="' +
+          escapeHtml(name) +
+          '" value="' +
+          escapeHtml(value || "") +
+          '" /></label>'
+        );
+      }
+
+      function readOnlyField(label, name, value, note) {
+        return (
+          '<label class="field">' +
+          escapeHtml(label) +
+          '<input type="text" name="' +
+          escapeHtml(name) +
+          '" value="' +
+          escapeHtml(value || "") +
+          '" readonly title="' +
+          escapeHtml(note || "") +
+          '" style="background:#f1f5f9;color:#64748b" />' +
+          "</label>"
+        );
+      }
+
+      function renderEdit(data) {
+        var timeline = data.timeline || {};
+        var milestones = timelineLevels(timeline);
+        var tasks = data.tasks || [];
+        var delays = data.delays || [];
+        var deps = data.dependencies || [];
+        var product = data.productOverview || {};
+        var pillars = product.pillars || [];
+        var artifacts = data.artifacts || [];
+
+        var html = '<section class="panel">';
+        html += '<div class="status-actions" style="margin-bottom:12px;justify-content:flex-start">';
+        html += '<span class="as-of">Editing · as of ' + escapeHtml(data.updatedAt || "—") + "</span>";
+        html += '<button type="button" class="btn sm primary" data-action="save">Save</button>';
+        html += '<button type="button" class="btn sm ghost" data-action="cancel">Exit edit</button>';
+        html += '<button type="button" class="btn sm ghost" data-action="download">Download JSON</button>';
+        html += "</div>";
+        html += '<p class="edit-hint">Edit programme status for Merrakii management. Save writes to overview.json when running via serve.py; otherwise downloads / stores in this browser.</p>';
+        html += '<div class="form-grid">';
+        html += field("Updated at", "updatedAt", data.updatedAt || "");
+        html += field("Health", "health", timeline.health || "on_track", "select-health");
+        html += hasDerivedLevels()
+          ? readOnlyField(
+              "Overall % (from scope)",
+              "overallPercent",
+              String(timeline.overallPercent != null ? timeline.overallPercent : 0),
+              "Duration-weighted average of the level percentages"
+            )
+          : field("Overall %", "overallPercent", timeline.overallPercent != null ? String(timeline.overallPercent) : "0", "number");
+        html += field("Overall label", "overallLabel", timeline.overallLabel || "");
+        html += field("Start date", "startDate", data.startDate || "");
+        html += field("Go-live date", "goLiveDate", data.goLiveDate || "");
+        html += "</div>";
+        html += '<div class="form-grid full">';
+        html += field("Summary", "summary", data.summary || "", "textarea");
+        html += field("Product title", "productTitle", product.title || "");
+        html += field("Product body", "productBody", product.body || "", "textarea");
+        html += "</div>";
+
+        html += '<div class="edit-section"><h3>Build levels</h3><div id="edit-levels">';
+        milestones.forEach(function (m, i) {
+          html += '<div class="row-editor" data-kind="level" data-i="' + i + '">';
+          html += '<div class="form-grid">';
+          html += field("Code", "m_code_" + i, m.code || "");
+          html += field("Name", "m_name_" + i, m.name || "");
+          html += field("Status", "m_status_" + i, m.status || "upcoming", "select-mstatus");
+          html += field("RAG", "m_rag_" + i, m.rag || deriveRag(m), "select-rag");
+          html += field("Planned start", "m_start_" + i, m.plannedStart || "");
+          html += field("Planned due", "m_due_" + i, m.plannedDue || m.due || "");
+          html += derivedLevelCodes[m.code]
+            ? readOnlyField(
+                "Percent (from scope)",
+                "m_pct_" + i,
+                String(m.percent != null ? m.percent : 0),
+                "Calculated from the Functionality In Scope development progress columns"
+              )
+            : field("Percent", "m_pct_" + i, m.percent != null ? String(m.percent) : "0", "number");
+          html += field("Duration", "m_dur_" + i, m.duration || "");
+          html += field("Actual due", "m_act_" + i, m.actualDue || "");
+          html += "</div>";
+          html += '<div class="form-grid full">' + field("Detail", "m_detail_" + i, m.detail || "", "textarea") + "</div>";
+          html += "</div>";
+        });
+        html += "</div></div>";
+
+        html += '<div class="edit-section"><h3>Reporting weeks</h3>';
+        html +=
+          '<p class="chart-sub">Week 1 ends ' +
+          escapeHtml((data.weekCalendar && data.weekCalendar.firstWeekEnd) || "—") +
+          "; every week after that is one calendar week. Weekly delivery is recorded automatically from the Functionality In Scope percentages, so there is nothing to type here.</p>";
+        html += "</div>";
+
+        html += '<div class="edit-section"><h3>Tasks</h3><div id="edit-tasks">';
+        tasks.forEach(function (t, i) {
+          html += '<div class="row-editor" data-kind="task" data-i="' + i + '">';
+          html += '<div class="form-grid">';
+          html += field("Title", "t_title_" + i, t.title || "");
+          html += field("Status", "t_status_" + i, t.status || "pending", "select-tstatus");
+          html += field("Level", "t_mile_" + i, t.level || t.milestone || "");
+          html += field("Owner", "t_owner_" + i, t.owner || "");
+          html += field("Due", "t_due_" + i, t.due || "");
+          html += field("Notes", "t_notes_" + i, t.notes || "");
+          html += "</div>";
+          html +=
+            '<div class="row-actions"><button type="button" class="btn" data-remove-task="' +
+            i +
+            '">Remove task</button></div>';
+          html += "</div>";
+        });
+        html += '</div><button type="button" class="btn" id="add-task">Add task</button></div>';
+
+        html += '<div class="edit-section"><h3>Delays</h3><div id="edit-delays">';
+        delays.forEach(function (d, i) {
+          html += '<div class="row-editor" data-kind="delay" data-i="' + i + '">';
+          html += '<div class="form-grid">';
+          html += field("Item", "dl_item_" + i, d.item || "");
+          html += field("Planned", "dl_plan_" + i, d.plannedDate || "");
+          html += field("Revised", "dl_rev_" + i, d.revisedDate || "");
+          html += field("Status", "dl_status_" + i, d.status || "open", "select-dstatus");
+          html += "</div>";
+          html += '<div class="form-grid full">' + field("Reason", "dl_reason_" + i, d.reason || "", "textarea") + "</div>";
+          html +=
+            '<div class="row-actions"><button type="button" class="btn" data-remove-delay="' +
+            i +
+            '">Remove delay</button></div>';
+          html += "</div>";
+        });
+        html += '</div><button type="button" class="btn" id="add-delay">Add delay</button></div>';
+
+        html += '<div class="edit-section"><h3>Dependencies</h3><div id="edit-deps">';
+        deps.forEach(function (d, i) {
+          html += '<div class="row-editor" data-kind="dep" data-i="' + i + '">';
+          html += '<div class="form-grid">';
+          html += field("Item", "dp_item_" + i, d.item || "");
+          html += field("Depends on", "dp_on_" + i, d.dependsOn || "");
+          html += field("Impact", "dp_impact_" + i, d.impact || "");
+          html += field("Status", "dp_status_" + i, d.status || "open", "select-dstatus");
+          html += "</div>";
+          html +=
+            '<div class="row-actions"><button type="button" class="btn" data-remove-dep="' +
+            i +
+            '">Remove dependency</button></div>';
+          html += "</div>";
+        });
+        html += '</div><button type="button" class="btn" id="add-dep">Add dependency</button></div>';
+
+        html += '<div class="edit-section"><h3>Pillars (JSON-like rows kept simple)</h3>';
+        pillars.forEach(function (p, i) {
+          html += '<div class="row-editor"><div class="form-grid">';
+          html += field("Pillar name", "p_name_" + i, p.name || "");
+          html += field("Pillar detail", "p_detail_" + i, p.detail || "", "textarea");
+          html += "</div></div>";
+        });
+        html += "</div>";
+
+        html += '<div class="edit-section"><h3>Artifacts</h3><div id="edit-artifacts">';
+        artifacts.forEach(function (a, i) {
+          html += '<div class="row-editor"><div class="form-grid">';
+          html += field("Name", "a_name_" + i, a.name || "");
+          html += field("URL", "a_url_" + i, a.url || "");
+          html += field("Owner", "a_owner_" + i, a.owner || "");
+          html += field("Date shared", "a_date_" + i, a.dateShared || "");
+          html += field("Status", "a_status_" + i, a.status || "Active");
+          html += "</div></div>";
+        });
+        html += "</div></div>";
+
+        html += "</section>";
+        app.innerHTML = html;
+        wireEditActions();
+      }
+
+      function val(name) {
+        var el = app.querySelector('[name="' + name + '"]');
+        return el ? el.value : "";
+      }
+
+      function collectFromForm() {
+        var data = JSON.parse(JSON.stringify(overviewData || {}));
+        data.updatedAt = val("updatedAt") || data.updatedAt;
+        data.startDate = val("startDate");
+        data.goLiveDate = val("goLiveDate");
+        data.summary = val("summary");
+        data.timeline = data.timeline || {};
+        data.timeline.health = val("health") || "on_track";
+        data.timeline.overallPercent = Number(val("overallPercent")) || 0;
+        data.timeline.overallLabel = val("overallLabel");
+        data.productOverview = data.productOverview || {};
+        data.productOverview.title = val("productTitle");
+        data.productOverview.body = val("productBody");
+
+        timelineLevels(data.timeline).forEach(function (m, i) {
+          m.code = val("m_code_" + i);
+          m.name = val("m_name_" + i);
+          m.status = val("m_status_" + i);
+          m.rag = val("m_rag_" + i) || "green";
+          m.plannedStart = val("m_start_" + i);
+          m.plannedDue = val("m_due_" + i);
+          m.due = m.plannedDue;
+          m.percent = Number(val("m_pct_" + i)) || 0;
+          m.duration = val("m_dur_" + i);
+          m.actualDue = val("m_act_" + i);
+          m.detail = val("m_detail_" + i);
+        });
+
+        (data.tasks || []).forEach(function (t, i) {
+          t.title = val("t_title_" + i);
+          t.status = val("t_status_" + i);
+          t.level = val("t_mile_" + i);
+          delete t.milestone;
+          t.owner = val("t_owner_" + i);
+          t.due = val("t_due_" + i);
+          t.notes = val("t_notes_" + i);
+        });
+
+        (data.delays || []).forEach(function (d, i) {
+          d.item = val("dl_item_" + i);
+          d.plannedDate = val("dl_plan_" + i);
+          d.revisedDate = val("dl_rev_" + i);
+          d.status = val("dl_status_" + i);
+          d.reason = val("dl_reason_" + i);
+        });
+
+        (data.dependencies || []).forEach(function (d, i) {
+          d.item = val("dp_item_" + i);
+          d.dependsOn = val("dp_on_" + i);
+          d.impact = val("dp_impact_" + i);
+          d.status = val("dp_status_" + i);
+        });
+
+        (data.productOverview.pillars || []).forEach(function (p, i) {
+          p.name = val("p_name_" + i);
+          p.detail = val("p_detail_" + i);
+        });
+
+        (data.artifacts || []).forEach(function (a, i) {
+          a.name = val("a_name_" + i);
+          a.url = val("a_url_" + i);
+          a.owner = val("a_owner_" + i);
+          a.dateShared = val("a_date_" + i);
+          a.status = val("a_status_" + i);
+        });
+
+        return data;
+      }
+
+      function wireEditActions() {
+        var addTask = document.getElementById("add-task");
+        if (addTask) {
+          addTask.addEventListener("click", function () {
+            overviewData = collectFromForm();
+            overviewData.tasks = overviewData.tasks || [];
+            overviewData.tasks.push({
+              id: "t" + Date.now(),
+              title: "New task",
+              level: "",
+              status: "pending",
+              owner: "Maple AI",
+              due: "",
+              notes: ""
+            });
+            renderEdit(overviewData);
+          });
+        }
+        var addDelay = document.getElementById("add-delay");
+        if (addDelay) {
+          addDelay.addEventListener("click", function () {
+            overviewData = collectFromForm();
+            overviewData.delays = overviewData.delays || [];
+            overviewData.delays.push({
+              id: "dl" + Date.now(),
+              item: "",
+              plannedDate: "",
+              revisedDate: "",
+              reason: "",
+              status: "open"
+            });
+            renderEdit(overviewData);
+          });
+        }
+        var addDep = document.getElementById("add-dep");
+        if (addDep) {
+          addDep.addEventListener("click", function () {
+            overviewData = collectFromForm();
+            overviewData.dependencies = overviewData.dependencies || [];
+            overviewData.dependencies.push({
+              id: "d" + Date.now(),
+              item: "",
+              dependsOn: "",
+              impact: "",
+              status: "open"
+            });
+            renderEdit(overviewData);
+          });
+        }
+        app.querySelectorAll("[data-remove-task]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var i = Number(btn.getAttribute("data-remove-task"));
+            overviewData = collectFromForm();
+            overviewData.tasks.splice(i, 1);
+            renderEdit(overviewData);
+          });
+        });
+        app.querySelectorAll("[data-remove-delay]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var i = Number(btn.getAttribute("data-remove-delay"));
+            overviewData = collectFromForm();
+            overviewData.delays.splice(i, 1);
+            renderEdit(overviewData);
+          });
+        });
+        app.querySelectorAll("[data-remove-dep]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var i = Number(btn.getAttribute("data-remove-dep"));
+            overviewData = collectFromForm();
+            overviewData.dependencies.splice(i, 1);
+            renderEdit(overviewData);
+          });
+        });
+      }
+
+      function setEditChrome(on) {
+        editMode = on;
+      }
+
+      function render() {
+        if (!overviewData) return;
+        applyDerivedLevelProgress(overviewData);
+        if (editMode) renderEdit(overviewData);
+        else renderView(overviewData);
+      }
+
+      function save() {
+        if (!editMode) return;
+        overviewData = collectFromForm();
+        overviewData.savedAt = new Date().toISOString();
+        try {
+          localStorage.setItem(LS_KEY, JSON.stringify(overviewData));
+        } catch (e) {}
+        fetch("api/data/overview", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(overviewData)
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error("save failed");
+            statusEl.textContent = "Saved to overview.json";
+            setEditChrome(false);
+            render();
+          })
+          .catch(function () {
+            statusEl.textContent = "Server save unavailable — kept in this browser. Use Download JSON to commit.";
+            setEditChrome(false);
+            render();
+          });
+      }
+
+      function download() {
+        if (editMode) overviewData = collectFromForm();
+        var blob = new Blob([JSON.stringify(overviewData, null, 2)], { type: "application/json" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "overview.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        statusEl.textContent = "Downloaded overview.json";
+      }
+
+      app.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-action]");
+        if (!btn || !app.contains(btn)) return;
+        var action = btn.getAttribute("data-action");
+        if (action === "edit") {
+          setEditChrome(true);
+          statusEl.textContent = "";
+          render();
+        } else if (action === "cancel") {
+          setEditChrome(false);
+          statusEl.textContent = "";
+          load(true);
+        } else if (action === "save") {
+          save();
+        } else if (action === "download") {
+          download();
+        }
+      });
+
+      // The Client Dashboard's copy is the live one — page percentages are typed
+      // there. The local copy is only a fallback for running this page alone.
+      var SCOPE_SOURCES = ["../client-dashboard/data/scope.json", "data/scope.json"];
+
+      function fetchScopeData(index) {
+        var i = index || 0;
+        if (i >= SCOPE_SOURCES.length) return Promise.resolve(null);
+        return fetch(SCOPE_SOURCES[i] + "?t=" + Date.now())
+          .then(function (r) {
+            if (!r.ok) throw new Error("scope");
+            return r.json();
+          })
+          .catch(function () {
+            return fetchScopeData(i + 1);
+          });
+      }
+
+      var lastCompletionKey = null;
+      var SCOPE_POLL_MS = 5000;
+
+      function completionKey(values, pages) {
+        return JSON.stringify([values || {}, pages || {}]);
+      }
+
+      // Repainting mid-edit would throw away whatever is in the form, so a live
+      // update is held back until the user leaves edit mode.
+      function applyLevelCompletion(values, pages, sourceData) {
+        var key = completionKey(values, pages);
+        if (key === lastCompletionKey) return false;
+        lastCompletionKey = key;
+        scopeData = sourceData || scopeData || {};
+        scopeData._levelCompletion = values || {};
+        if (pages) scopeData._pageStatus = pages;
+        if (editMode) return false;
+        render();
+        return true;
+      }
+
+      function refreshScopeCompletion() {
+        return fetchScopeData().then(function (data) {
+          if (!data) return false;
+          return applyLevelCompletion(data._levelCompletion, data._pageStatus, data);
+        });
+      }
+
+      // Same-origin tabs (including this page embedded in the Client Dashboard)
+      // get the new numbers as they are typed; the poll covers the standalone
+      // port and any hosted copy where the channel cannot reach.
+      var syncChannel = null;
+      try {
+        syncChannel = new BroadcastChannel("merrakii-dashboard-data");
+      } catch (e) {
+        syncChannel = null;
+      }
+      if (syncChannel) {
+        syncChannel.onmessage = function (event) {
+          var msg = event && event.data;
+          if (!msg) return;
+          if (msg.kind === "levelCompletion") {
+            applyLevelCompletion(msg.values, msg.pages, scopeData);
+          } else if (msg.kind === "scope") {
+            refreshScopeCompletion();
+          }
+        };
+      }
+
+      setInterval(function () {
+        if (document.hidden) return;
+        refreshScopeCompletion().catch(function (err) {
+          console.error("Could not refresh level completion", err);
+        });
+      }, SCOPE_POLL_MS);
+
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) refreshScopeCompletion();
+      });
+
+      function load(force) {
+        var ls = null;
+        try {
+          ls = localStorage.getItem(LS_KEY);
+        } catch (e) {}
+        Promise.all([
+          fetch("data/overview.json?t=" + Date.now()).then(function (r) {
+            if (!r.ok) throw new Error("overview");
+            return r.json();
+          }),
+          fetchScopeData()
+        ])
+          .then(function (pair) {
+            scopeData = pair[1];
+            lastCompletionKey = completionKey(
+              scopeData && scopeData._levelCompletion,
+              scopeData && scopeData._pageStatus
+            );
+            var fileData = pair[0];
+            if (!force && ls) {
+              try {
+                var parsed = JSON.parse(ls);
+                if (parsed && parsed.timeline) {
+                  var lsTime = Date.parse(parsed.savedAt || "") || 0;
+                  var fileTime = Date.parse(fileData.savedAt || fileData.updatedAt || "") || 0;
+                  // Prefer file when it is newer or browser copy predates the
+                  // reporting calendar and level model.
+                  var lsHasLevels = !!(parsed.timeline && parsed.timeline.levels);
+                  if (fileTime >= lsTime || !parsed.weekCalendar || !lsHasLevels) {
+                    overviewData = fileData;
+                    try {
+                      localStorage.removeItem(LS_KEY);
+                    } catch (e2) {}
+                  } else {
+                    overviewData = parsed;
+                    statusEl.textContent = "Loaded local edits from this browser (file also available).";
+                  }
+                } else {
+                  overviewData = fileData;
+                }
+              } catch (e) {
+                overviewData = fileData;
+              }
+            } else {
+              overviewData = fileData;
+            }
+            render();
+          })
+          .catch(function () {
+            if (ls) {
+              try {
+                overviewData = JSON.parse(ls);
+                render();
+                statusEl.textContent = "Loaded from browser storage (file fetch failed).";
+                return;
+              } catch (e) {}
+            }
+            app.innerHTML = '<p class="loading">Could not load overview.json. Start with python3 serve.py</p>';
+          });
+      }
+
+      load(false);
+    })();
+  </script>
+</body>
+</html>

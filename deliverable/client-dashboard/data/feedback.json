@@ -1,0 +1,542 @@
+{
+  "sheets": {
+    "Feedback": [
+      [
+        "Category",
+        "Topic",
+        "Teammate 1"
+      ],
+      [
+        "Student Facing",
+        "Home Page- Search Bar",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Career Journey Map",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Deep Profiling",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Journey Payment Page",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - Overview",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - My Journey",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - Career Journey Report",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - Course List Page",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - Resources Overview",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - Resources Details",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Student Dashboard - Notifications Page",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Course Detail Page",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Course Entollment Page",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Course Payment Page",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Payment Integration",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Caontact Us",
+        ""
+      ],
+      [
+        "Student Facing",
+        "About Merrakii",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Terms & Conditions",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Privacy Policy",
+        ""
+      ],
+      [
+        "Student Facing",
+        "Refund Policy",
+        ""
+      ],
+      [
+        "Student Facing",
+        "FAQs",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Career Library CMS Overview (Career= Profession + Course + College + Exam)",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Add Career Page per category per stream",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "User Management - Overview",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "User Management - Add Student",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Service Knowledge Page Overview",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Add Service Knowledge",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Courses Overview page",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Add Courses per career per service",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Resources Overview",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Add Resources",
+        ""
+      ],
+      [
+        "Admin Panel",
+        "Financials overview",
+        ""
+      ],
+      [
+        "Backend",
+        "Access & security",
+        ""
+      ],
+      [
+        "Backend",
+        "Search & personalisation",
+        ""
+      ],
+      [
+        "Backend",
+        "Integrations",
+        ""
+      ],
+      [
+        "Backend",
+        "Responsiveness",
+        ""
+      ],
+      [
+        "Backend",
+        "Data & architecture",
+        ""
+      ],
+      [
+        "Backend",
+        "Business logic / workflows",
+        ""
+      ],
+      [
+        "Backend",
+        "DevOps & reliability",
+        ""
+      ],
+      [
+        "Backend",
+        "Compliance & quality (non-UI)",
+        ""
+      ]
+    ]
+  },
+  "merges": {
+    "Feedback": []
+  },
+  "columns": [
+    "Teammate 1"
+  ],
+  "cells": {
+    "Student Facing||Home Page- Search Bar": {
+      "0": ""
+    },
+    "Student Facing||Career Journey Map": {
+      "0": ""
+    },
+    "Student Facing||Deep Profiling": {
+      "0": ""
+    },
+    "Student Facing||Journey Payment Page": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - Overview": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - My Journey": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - Career Journey Report": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - Course List Page": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - Resources Overview": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - Resources Details": {
+      "0": ""
+    },
+    "Student Facing||Student Dashboard - Notifications Page": {
+      "0": ""
+    },
+    "Student Facing||Course Detail Page": {
+      "0": ""
+    },
+    "Student Facing||Course Entollment Page": {
+      "0": ""
+    },
+    "Student Facing||Course Payment Page": {
+      "0": ""
+    },
+    "Student Facing||Payment Integration": {
+      "0": ""
+    },
+    "Student Facing||Caontact Us": {
+      "0": ""
+    },
+    "Student Facing||About Merrakii": {
+      "0": ""
+    },
+    "Student Facing||Terms & Conditions": {
+      "0": ""
+    },
+    "Student Facing||Privacy Policy": {
+      "0": ""
+    },
+    "Student Facing||Refund Policy": {
+      "0": ""
+    },
+    "Student Facing||FAQs": {
+      "0": ""
+    },
+    "Admin Panel||Career Library CMS Overview (Career= Profession + Course + College + Exam)": {
+      "0": ""
+    },
+    "Admin Panel||Add Career Page per category per stream": {
+      "0": ""
+    },
+    "Admin Panel||User Management - Overview": {
+      "0": ""
+    },
+    "Admin Panel||User Management - Add Student": {
+      "0": ""
+    },
+    "Admin Panel||Service Knowledge Page Overview": {
+      "0": ""
+    },
+    "Admin Panel||Add Service Knowledge": {
+      "0": ""
+    },
+    "Admin Panel||Courses Overview page": {
+      "0": ""
+    },
+    "Admin Panel||Add Courses per career per service": {
+      "0": ""
+    },
+    "Admin Panel||Resources Overview": {
+      "0": ""
+    },
+    "Admin Panel||Add Resources": {
+      "0": ""
+    },
+    "Admin Panel||Financials overview": {
+      "0": ""
+    },
+    "Backend||Access & security": {
+      "0": ""
+    },
+    "Backend||Search & personalisation": {
+      "0": ""
+    },
+    "Backend||Integrations": {
+      "0": ""
+    },
+    "Backend||Responsiveness": {
+      "0": ""
+    },
+    "Backend||Data & architecture": {
+      "0": ""
+    },
+    "Backend||Business logic / workflows": {
+      "0": ""
+    },
+    "Backend||DevOps & reliability": {
+      "0": ""
+    },
+    "Backend||Compliance & quality (non-UI)": {
+      "0": ""
+    }
+  },
+  "pages": [
+    {
+      "id": "Student Facing||Home Page- Search Bar",
+      "category": "Student Facing",
+      "topic": "Home Page- Search Bar"
+    },
+    {
+      "id": "Student Facing||Career Journey Map",
+      "category": "Student Facing",
+      "topic": "Career Journey Map"
+    },
+    {
+      "id": "Student Facing||Deep Profiling",
+      "category": "Student Facing",
+      "topic": "Deep Profiling"
+    },
+    {
+      "id": "Student Facing||Journey Payment Page",
+      "category": "Student Facing",
+      "topic": "Journey Payment Page"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - Overview",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - Overview"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - My Journey",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - My Journey"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - Career Journey Report",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - Career Journey Report"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - Course List Page",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - Course List Page"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - Resources Overview",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - Resources Overview"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - Resources Details",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - Resources Details"
+    },
+    {
+      "id": "Student Facing||Student Dashboard - Notifications Page",
+      "category": "Student Facing",
+      "topic": "Student Dashboard - Notifications Page"
+    },
+    {
+      "id": "Student Facing||Course Detail Page",
+      "category": "Student Facing",
+      "topic": "Course Detail Page"
+    },
+    {
+      "id": "Student Facing||Course Entollment Page",
+      "category": "Student Facing",
+      "topic": "Course Entollment Page"
+    },
+    {
+      "id": "Student Facing||Course Payment Page",
+      "category": "Student Facing",
+      "topic": "Course Payment Page"
+    },
+    {
+      "id": "Student Facing||Payment Integration",
+      "category": "Student Facing",
+      "topic": "Payment Integration"
+    },
+    {
+      "id": "Student Facing||Caontact Us",
+      "category": "Student Facing",
+      "topic": "Caontact Us"
+    },
+    {
+      "id": "Student Facing||About Merrakii",
+      "category": "Student Facing",
+      "topic": "About Merrakii"
+    },
+    {
+      "id": "Student Facing||Terms & Conditions",
+      "category": "Student Facing",
+      "topic": "Terms & Conditions"
+    },
+    {
+      "id": "Student Facing||Privacy Policy",
+      "category": "Student Facing",
+      "topic": "Privacy Policy"
+    },
+    {
+      "id": "Student Facing||Refund Policy",
+      "category": "Student Facing",
+      "topic": "Refund Policy"
+    },
+    {
+      "id": "Student Facing||FAQs",
+      "category": "Student Facing",
+      "topic": "FAQs"
+    },
+    {
+      "id": "Admin Panel||Career Library CMS Overview (Career= Profession + Course + College + Exam)",
+      "category": "Admin Panel",
+      "topic": "Career Library CMS Overview (Career= Profession + Course + College + Exam)"
+    },
+    {
+      "id": "Admin Panel||Add Career Page per category per stream",
+      "category": "Admin Panel",
+      "topic": "Add Career Page per category per stream"
+    },
+    {
+      "id": "Admin Panel||User Management - Overview",
+      "category": "Admin Panel",
+      "topic": "User Management - Overview"
+    },
+    {
+      "id": "Admin Panel||User Management - Add Student",
+      "category": "Admin Panel",
+      "topic": "User Management - Add Student"
+    },
+    {
+      "id": "Admin Panel||Service Knowledge Page Overview",
+      "category": "Admin Panel",
+      "topic": "Service Knowledge Page Overview"
+    },
+    {
+      "id": "Admin Panel||Add Service Knowledge",
+      "category": "Admin Panel",
+      "topic": "Add Service Knowledge"
+    },
+    {
+      "id": "Admin Panel||Courses Overview page",
+      "category": "Admin Panel",
+      "topic": "Courses Overview page"
+    },
+    {
+      "id": "Admin Panel||Add Courses per career per service",
+      "category": "Admin Panel",
+      "topic": "Add Courses per career per service"
+    },
+    {
+      "id": "Admin Panel||Resources Overview",
+      "category": "Admin Panel",
+      "topic": "Resources Overview"
+    },
+    {
+      "id": "Admin Panel||Add Resources",
+      "category": "Admin Panel",
+      "topic": "Add Resources"
+    },
+    {
+      "id": "Admin Panel||Financials overview",
+      "category": "Admin Panel",
+      "topic": "Financials overview"
+    },
+    {
+      "id": "Backend||Access & security",
+      "category": "Backend",
+      "topic": "Access & security"
+    },
+    {
+      "id": "Backend||Search & personalisation",
+      "category": "Backend",
+      "topic": "Search & personalisation"
+    },
+    {
+      "id": "Backend||Integrations",
+      "category": "Backend",
+      "topic": "Integrations"
+    },
+    {
+      "id": "Backend||Responsiveness",
+      "category": "Backend",
+      "topic": "Responsiveness"
+    },
+    {
+      "id": "Backend||Data & architecture",
+      "category": "Backend",
+      "topic": "Data & architecture"
+    },
+    {
+      "id": "Backend||Business logic / workflows",
+      "category": "Backend",
+      "topic": "Business logic / workflows"
+    },
+    {
+      "id": "Backend||DevOps & reliability",
+      "category": "Backend",
+      "topic": "DevOps & reliability"
+    },
+    {
+      "id": "Backend||Compliance & quality (non-UI)",
+      "category": "Backend",
+      "topic": "Compliance & quality (non-UI)"
+    }
+  ],
+  "savedAt": "2026-08-07T11:07:38.604Z"
+}

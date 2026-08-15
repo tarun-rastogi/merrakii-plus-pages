@@ -1,0 +1,191 @@
+{
+  "updatedAt": "2026-08-13",
+  "startDate": "30 Jul 2026",
+  "goLiveDate": "25 Oct 2026",
+  "summary": "Phase 1 delivery for Merrakii+ DESSS — eight build levels over twelve weeks.",
+  "productOverview": {
+    "title": "Summary",
+    "body": "Maple AI is building Merrakii+ as one responsive web application (mobile through desktop) that helps students explore careers, understand their journey, and take the next step — while giving Merrakii an admin console to manage content, users, courses, resources, and financials. Phase 1 covers the scoped pages and backend in Statement of Work V2 (aligned to Merrakii_pages_inscope.xlsx): about 40 in-scope items across student-facing pages, admin panel, and platform/backend — including search and career journey, deep profiling, payments (Razorpay), student dashboard, and AWS deployment through go-live.",
+    "pillars": [
+      {
+        "name": "Student-facing experience",
+        "detail": "Home search, career journey map, deep profiling, journey payment, student dashboard (overview, my journey, journey report, courses, resources, notifications), course detail/enrolment/payment, and support pages (About, Contact, FAQs, policies)."
+      },
+      {
+        "name": "Admin portal",
+        "detail": "Career library CMS, user management, service knowledge, courses, resources, and financials overview — so Merrakii can operate the product without engineering for every content change."
+      },
+      {
+        "name": "Backend & go-live",
+        "detail": "Platform APIs, access and security, search and personalisation foundations, Razorpay integration, AWS staging and production, testing/UAT, and handover runbooks."
+      }
+    ]
+  },
+  "timeline": {
+    "label": "Build levels (L1–L8)",
+    "overallPercent": 12,
+    "overallLabel": "L1 Core student journey in progress · week 2 of 2",
+    "levels": [
+      {
+        "code": "L1",
+        "name": "Core student journey",
+        "detail": "Website architecture, home search, career library, career journey map, deep profiling, journey payment, student dashboard overview and my journey.",
+        "duration": "2 weeks",
+        "plannedStart": "30 Jul 2026",
+        "due": "16 Aug 2026",
+        "status": "in_progress"
+      },
+      {
+        "code": "L2",
+        "name": "Report, courses & enrolment",
+        "detail": "Career journey report, course list, course detail, course enrolment and course payment.",
+        "duration": "2 weeks",
+        "plannedStart": "17 Aug 2026",
+        "due": "30 Aug 2026",
+        "status": "upcoming"
+      },
+      {
+        "code": "L3",
+        "name": "Career library, users & knowledge CMS",
+        "detail": "Admin career library CMS, user management, and service knowledge base.",
+        "duration": "2 weeks",
+        "plannedStart": "31 Aug 2026",
+        "due": "13 Sep 2026",
+        "status": "upcoming"
+      },
+      {
+        "code": "L4",
+        "name": "Courses, counsellors, resources & financials",
+        "detail": "Admin operations: course management, counsellor management, resources library, and financials overview.",
+        "duration": "2 weeks",
+        "plannedStart": "14 Sep 2026",
+        "due": "27 Sep 2026",
+        "status": "upcoming"
+      },
+      {
+        "code": "L5",
+        "name": "Additional functionality on L1–L2",
+        "detail": "Enrichment, payment and trust pages layered onto the student journey: notifications, resources, support pages and policies.",
+        "duration": "1 week",
+        "plannedStart": "28 Sep 2026",
+        "due": "4 Oct 2026",
+        "status": "upcoming"
+      },
+      {
+        "code": "L6",
+        "name": "Platform foundations (non-UI) — includes AWS staging/production",
+        "detail": "Platform APIs, access and security, search and personalisation foundations, Razorpay integration, AWS staging and production, CI/CD, backups and monitoring.",
+        "duration": "1 week",
+        "plannedStart": "5 Oct 2026",
+        "due": "11 Oct 2026",
+        "status": "upcoming"
+      },
+      {
+        "code": "L7",
+        "name": "Testing",
+        "detail": "End-to-end tests on staging, defect fixes, performance and security checks, UAT support and written approval.",
+        "duration": "1 week",
+        "plannedStart": "12 Oct 2026",
+        "due": "18 Oct 2026",
+        "status": "upcoming"
+      },
+      {
+        "code": "L8",
+        "name": "Go Live",
+        "detail": "Production cutover on AWS, hypercare, handover runbooks and environment guides.",
+        "duration": "1 week",
+        "plannedStart": "19 Oct 2026",
+        "due": "25 Oct 2026",
+        "status": "upcoming"
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "name": "Merrakii updated scope workbook",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/Scope/Merrakii%20updated%20scope%20(1).xlsx",
+      "urlNote": "",
+      "owner": "Merrakii",
+      "dateShared": "22 Jul 2026",
+      "status": "Archived"
+    },
+    {
+      "name": "Statement of Work V1 (archived baseline)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/statement-of-work/Merrakii_plus_statement_of_work_v1.html",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "8 Jul 2026",
+      "status": "Archived"
+    },
+    {
+      "name": "Statement of Work V2 (active — scoped pages)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/statement-of-work/Merrakii_plus_statement_of_work_v2.html",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Scoped pages inventory (Merrakii_pages_inscope.xlsx)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/client-dashboard/data/Merrakii_pages_inscope.xlsx",
+      "urlNote": "",
+      "owner": "Merrakii",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Merrakii+ Build Blueprint (Levels 1–8)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/blueprint/Merrakii_plus_build_blueprint.html",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "7 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "HTML sample pages pack (01–23)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/client-dashboard/#samples",
+      "urlNote": "",
+      "owner": "Merrakii",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Merrakii+ application preview (GitHub Pages)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/",
+      "urlNote": "",
+      "owner": "Maple AI",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    }
+  ],
+  "savedAt": "2026-08-06T18:11:27.630Z",
+  "weekCalendar": {
+    "start": "30 Jul 2026",
+    "firstWeekEnd": "9 Aug 2026",
+    "weekDays": 7
+  },
+  "requirements": [
+    {
+      "date": "Thursday, 13 August 2026",
+      "title": "Careers and Colleges as blocks",
+      "detail": "Please clarify whether Careers and Colleges should be treated as blocks. Should they behave like blocks such as Academics and Skills, including being divided and mapped across milestones, or should they be modelled separately?"
+    }
+  ],
+  "blockers": [
+    {
+      "date": "Thursday, 13 August 2026",
+      "title": "Business rule for blocks and requirements across milestones",
+      "detail": "We need to finalize how blocks and their requirements should be selected and displayed across milestones, especially for milestones the user has already crossed. For example, if a student is currently in Class 12 and searches for a Lawyer journey, how should we determine which blocks and requirements from Class 9, Class 10, and Class 11 are shown? Please confirm the business rule or criteria for filtering these past-milestone blocks and requirements."
+    },
+    {
+      "date": "Thursday, 13 August 2026",
+      "title": "Entities metadata",
+      "detail": "We need to define the metadata and associated information for Libraries, Goals, Milestones, Blocks, Requirements, Services, and Programs that will be used by the application and displayed on the UI."
+    },
+    {
+      "date": "Thursday, 13 August 2026",
+      "title": "Additional career journeys",
+      "detail": "We need to define the two additional journey types: Degree Journey and Skill Journey."
+    }
+  ]
+}

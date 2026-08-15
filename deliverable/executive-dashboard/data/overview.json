@@ -1,0 +1,281 @@
+{
+  "updatedAt": "2026-08-12",
+  "startDate": "30 Jul 2026",
+  "goLiveDate": "25 Oct 2026",
+  "summary": "Phase 1 delivery for Merrakii+ DESSS — eight build levels over twelve weeks.",
+  "productOverview": {
+    "title": "What we are building",
+    "body": "Maple AI is building Merrakii+ as one responsive web application that helps students explore careers, understand their journey, and take the next step — while giving Merrakii an admin console to manage content, users, courses, resources, and financials. Phase 1 covers the scoped pages and backend in Statement of Work V2, delivered across eight build levels (L1–L8).",
+    "pillars": [
+      {
+        "name": "Student-facing experience",
+        "detail": "Home search, career journey map, deep profiling, journey payment, student dashboard, courses, and support pages (L1, L2, L5)."
+      },
+      {
+        "name": "Admin portal",
+        "detail": "Career library CMS, users, services, courses, counsellors, resources, and financials overview (L3, L4)."
+      },
+      {
+        "name": "Platform, testing & go-live",
+        "detail": "Platform APIs, Razorpay, AWS staging and production, testing/UAT, and go-live handover (L6, L7, L8)."
+      }
+    ]
+  },
+  "timeline": {
+    "label": "Build levels (L1–L8)",
+    "overallPercent": 12,
+    "overallLabel": "L1 Core student journey in progress · week 2 of 2",
+    "health": "on_track",
+    "levels": [
+      {
+        "code": "L1",
+        "name": "Core student journey",
+        "detail": "Website architecture, home search, career library, career journey map, deep profiling, journey payment, student dashboard overview and my journey.",
+        "duration": "2 weeks",
+        "plannedStart": "30 Jul 2026",
+        "due": "16 Aug 2026",
+        "plannedDue": "16 Aug 2026",
+        "actualDue": "",
+        "percent": 40,
+        "status": "in_progress",
+        "rag": "amber",
+        "audience": "Student facing"
+      },
+      {
+        "code": "L2",
+        "name": "Report, courses & enrolment",
+        "detail": "Career journey report, course list, course detail, course enrolment and course payment.",
+        "duration": "2 weeks",
+        "plannedStart": "17 Aug 2026",
+        "due": "30 Aug 2026",
+        "plannedDue": "30 Aug 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "green",
+        "audience": "Student facing"
+      },
+      {
+        "code": "L3",
+        "name": "Career library, users & knowledge CMS",
+        "detail": "Admin career library CMS, user management, and service knowledge base so Merrakii can manage content without engineering.",
+        "duration": "2 weeks",
+        "plannedStart": "31 Aug 2026",
+        "due": "13 Sep 2026",
+        "plannedDue": "13 Sep 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "green",
+        "audience": "Admin facing"
+      },
+      {
+        "code": "L4",
+        "name": "Courses, counsellors, resources & financials",
+        "detail": "Admin operations: course management, counsellor management, resources library, and financials overview.",
+        "duration": "2 weeks",
+        "plannedStart": "14 Sep 2026",
+        "due": "27 Sep 2026",
+        "plannedDue": "27 Sep 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "green",
+        "audience": "Admin facing"
+      },
+      {
+        "code": "L5",
+        "name": "Additional functionality on L1–L2",
+        "detail": "Enrichment, payment and trust pages layered onto the student journey: notifications, resources, support pages and policies.",
+        "duration": "1 week",
+        "plannedStart": "28 Sep 2026",
+        "due": "4 Oct 2026",
+        "plannedDue": "4 Oct 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "green",
+        "audience": "Student facing"
+      },
+      {
+        "code": "L6",
+        "name": "Platform foundations (non-UI) — includes AWS staging/production",
+        "detail": "Platform APIs, access and security, search and personalisation foundations, Razorpay integration, AWS staging and production, CI/CD, backups and monitoring.",
+        "duration": "1 week",
+        "plannedStart": "5 Oct 2026",
+        "due": "11 Oct 2026",
+        "plannedDue": "11 Oct 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "amber"
+      },
+      {
+        "code": "L7",
+        "name": "Testing",
+        "detail": "End-to-end tests on staging, defect fixes, performance and security checks, UAT support and written approval.",
+        "duration": "1 week",
+        "plannedStart": "12 Oct 2026",
+        "due": "18 Oct 2026",
+        "plannedDue": "18 Oct 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "green"
+      },
+      {
+        "code": "L8",
+        "name": "Go Live",
+        "detail": "Production cutover on AWS, hypercare, handover runbooks and environment guides.",
+        "duration": "1 week",
+        "plannedStart": "19 Oct 2026",
+        "due": "25 Oct 2026",
+        "plannedDue": "25 Oct 2026",
+        "actualDue": "",
+        "percent": 0,
+        "status": "upcoming",
+        "rag": "green"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "t1",
+      "title": "Home search bar & career library shell",
+      "level": "L1 — Core student journey",
+      "status": "done",
+      "owner": "Maple AI",
+      "due": "5 Aug 2026",
+      "notes": ""
+    },
+    {
+      "id": "t2",
+      "title": "Career journey map (clickable flow)",
+      "level": "L1 — Core student journey",
+      "status": "done",
+      "owner": "Maple AI",
+      "due": "7 Aug 2026",
+      "notes": ""
+    },
+    {
+      "id": "t3",
+      "title": "Deep profiling screens",
+      "level": "L1 — Core student journey",
+      "status": "in_progress",
+      "owner": "Maple AI",
+      "due": "12 Aug 2026",
+      "notes": ""
+    },
+    {
+      "id": "t4",
+      "title": "Student dashboard — overview & my journey",
+      "level": "L1 — Core student journey",
+      "status": "in_progress",
+      "owner": "Maple AI",
+      "due": "12 Aug 2026",
+      "notes": ""
+    },
+    {
+      "id": "t5",
+      "title": "Journey payment & signup path",
+      "level": "L1 — Core student journey",
+      "status": "pending",
+      "owner": "Maple AI",
+      "due": "12 Aug 2026",
+      "notes": ""
+    },
+    {
+      "id": "t6",
+      "title": "Career journey report page",
+      "level": "L2 — Report, courses & enrolment",
+      "status": "pending",
+      "owner": "Maple AI",
+      "due": "19 Aug 2026",
+      "notes": ""
+    },
+    {
+      "id": "t7",
+      "title": "Admin CMS — career library",
+      "level": "L3 — Career library, users & knowledge CMS",
+      "status": "pending",
+      "owner": "Maple AI",
+      "due": "2 Sep 2026",
+      "notes": ""
+    },
+    {
+      "id": "t8",
+      "title": "Razorpay sandbox credentials from Merrakii",
+      "level": "L6 — Platform foundations (non-UI)",
+      "status": "blocked",
+      "owner": "Merrakii",
+      "due": "1 Oct 2026",
+      "notes": "Needed before payment integration hardening"
+    }
+  ],
+  "delays": [],
+  "dependencies": [
+    {
+      "id": "d1",
+      "item": "Journey payment end-to-end",
+      "dependsOn": "Razorpay sandbox credentials (Merrakii)",
+      "impact": "Blocks payment hardening in L6 Platform foundations",
+      "status": "open"
+    },
+    {
+      "id": "d2",
+      "item": "Admin content population",
+      "dependsOn": "L1–L2 student pages stable enough for CMS mapping",
+      "impact": "L3 Career library, users & knowledge CMS start readiness",
+      "status": "open"
+    },
+    {
+      "id": "d3",
+      "item": "UAT written approval",
+      "dependsOn": "Staging deploy + test pack (L7 Testing)",
+      "impact": "L8 Go Live gate",
+      "status": "open"
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "Statement of Work V2 (active)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/statement-of-work/Merrakii_plus_statement_of_work_v2.html",
+      "owner": "Maple AI",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Build Blueprint (Levels 1–8)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/blueprint/Merrakii_plus_build_blueprint.html",
+      "owner": "Maple AI",
+      "dateShared": "7 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Client Dashboard (programme hub)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/client-dashboard/",
+      "owner": "Maple AI",
+      "dateShared": "6 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Merrakii+ application preview",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/",
+      "owner": "Maple AI",
+      "dateShared": "5 Aug 2026",
+      "status": "Active"
+    },
+    {
+      "name": "Maple AI Updates (daily build matrix)",
+      "url": "https://tarun-rastogi.github.io/merrakii-plus-pages/deliverable/maple-ai-updates/Maple_AI_Updates_2026-08-07.html",
+      "owner": "Maple AI",
+      "dateShared": "7 Aug 2026",
+      "status": "Active"
+    }
+  ],
+  "weekCalendar": {
+    "start": "30 Jul 2026",
+    "firstWeekEnd": "9 Aug 2026",
+    "weekDays": 7
+  }
+}

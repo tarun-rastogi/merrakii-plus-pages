@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statement of Work V1 — Merrakii+ DESSS Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00b4d8;
+      --blue: #4361ee;
+      --purple: #7c3aed;
+      --navy: #1c2340;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --cream: #ffffee;
+      --ok: #16a34a;
+      --page-width: 1064px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { font-size: 16px; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background: linear-gradient(165deg, #f0f9fc 0%, #f1f5f9 45%, #eef2ff 100%);
+      line-height: 1.45;
+    }
+
+    .wrap-screen { padding: 32px 20px 48px; }
+
+    .toolbar {
+      width: 100%;
+      max-width: var(--page-width);
+      margin: 0 auto 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-print {
+      font: 600 15px inherit;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(67, 97, 238, 0.35);
+    }
+
+    .btn-print:hover { filter: brightness(1.06); }
+
+    .btn-print:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .toolbar-note { font-size: 14px; color: var(--muted); max-width: 420px; }
+
+    .sheet {
+      width: 100%;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid rgba(67, 97, 238, 0.08);
+      box-shadow: 0 4px 32px rgba(28, 35, 64, 0.1);
+      overflow: hidden;
+    }
+
+    .accent-bar {
+      height: 6px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue) 50%, var(--purple) 100%);
+    }
+
+    .sheet-inner { padding: 28px 36px 32px; }
+
+    .letterhead {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 20px;
+      row-gap: 14px;
+      align-items: start;
+      margin-bottom: 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .letterhead-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .letterhead-col--left {
+      grid-column: 1;
+      grid-row: 1;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .letterhead-col--right {
+      grid-column: 2;
+      grid-row: 1;
+      align-items: flex-end;
+      text-align: right;
+      margin-top: 50px;
+    }
+
+    .letterhead-doc-row {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      text-align: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .letterhead-logo {
+      display: block;
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      object-fit: contain;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .letterhead-col--left .letterhead-logo { object-position: left center; }
+    .letterhead-col--right .letterhead-logo { object-position: right center; }
+
+    .letterhead-logo.letterhead-logo--maple {
+      width: 150px;
+      height: 150px;
+    }
+
+    .letterhead-text {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .letterhead-text strong {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .letterhead-text a {
+      color: var(--blue);
+      word-break: break-word;
+    }
+
+    .letterhead-text a.letterhead-email {
+      word-break: normal;
+      white-space: nowrap;
+    }
+
+    .letterhead-col--left .letterhead-text { margin-top: -50px; }
+
+    .letterhead-doc-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #000;
+    }
+
+    .letterhead-doc-subtitle {
+      margin: 6px 0 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .meta-strip dt {
+      margin: 0;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .meta-strip dd {
+      margin: 2px 0 0;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    h2 {
+      margin: 16px 0 6px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--blue);
+      border-left: 3px solid var(--cyan);
+      padding-left: 8px;
+    }
+
+    p {
+      margin: 0 0 8px;
+      font-size: 14.5px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 4px 0 8px;
+      padding-left: 1.1rem;
+      font-size: 14.5px;
+    }
+
+    li { margin-bottom: 3px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin: 6px 0 10px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 5px 7px;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--cream);
+      font-weight: 600;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) { background: #fafafa; }
+
+    .callout {
+      padding: 8px 10px;
+      background: var(--cream);
+      border-left: 3px solid var(--blue);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .callout-warn {
+      border-left-color: #d97706;
+      background: #fffbeb;
+    }
+
+    .muted { color: var(--muted); font-size: 13px; }
+
+    footer.doc-foot {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @page { size: A4; margin: 12mm; }
+
+    @media (max-width: 640px) {
+      .sheet-inner { padding: 20px 18px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .letterhead { grid-template-columns: 1fr; }
+      .letterhead-col--left,
+      .letterhead-col--right {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .letterhead-col--right {
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 16px;
+      }
+      .letterhead-col--right .letterhead-logo { object-position: left center; }
+    }
+
+    .page-break-before {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    @media print {
+      html { font-size: 14px; }
+      .no-print { display: none !important; }
+      body { background: #fff; }
+      .wrap-screen { padding: 0; }
+      .sheet {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        max-width: none;
+      }
+      .sheet-inner { padding: 0; }
+      .letterhead { break-inside: avoid; }
+      h2 { break-after: avoid; }
+      table { break-inside: auto; }
+      tr { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap-screen">
+    <div class="toolbar no-print">
+      <button type="button" class="btn-print" id="exportPdfBtn">Export PDF</button>
+      <span class="toolbar-note">Use <strong>Save as PDF</strong> in the print dialog for a searchable text-based PDF.</span>
+    </div>
+
+    <article class="sheet" id="sow-document">
+      <div class="accent-bar"></div>
+      <div class="sheet-inner">
+
+        <header class="doc-header">
+          <div class="letterhead">
+            <div class="letterhead-col letterhead-col--left">
+              <img class="letterhead-logo letterhead-logo--maple" src="images/maple-ai-logo.jpg" alt="Maple AI Technologies" width="150" height="150" decoding="async" />
+              <div class="letterhead-text">
+                <strong>Maple AI Technologies</strong><br />
+                Tarun Rastogi<br />
+                <a class="letterhead-email" href="mailto:tarunrastogi@mapleaitechnologies.com">tarunrastogi@mapleaitechnologies.com</a><br />
+                <a href="https://mapleaitechnologies.com">mapleaitechnologies.com</a><br />
+                <a href="tel:+919619060302">+91 9619060302</a>
+              </div>
+            </div>
+            <div class="letterhead-col letterhead-col--right">
+              <img class="letterhead-logo" src="images/merrakii-logo.png" alt="Merrakii" width="50" height="50" decoding="async" />
+              <div class="letterhead-text">
+                <strong>Merrakii+</strong><br />
+                Munjal Universal Consultancy Pvt. Ltd.<br />
+                T-14, 3rd Floor, Rasvilas Salcon, Saket,<br />
+                South Delhi, New Delhi 110017<br />
+                <a href="https://merrakii.co.in">merrakii.co.in</a>
+              </div>
+            </div>
+            <div class="letterhead-doc-row">
+              <p class="letterhead-doc-title">Statement of Work — V1</p>
+              <p class="letterhead-doc-subtitle">Merrakii+ Decision Enabling Student Success System (DESSS) · Phase 1 · Horizon 1 MVP · Archived baseline</p>
+            </div>
+          </div>
+        </header>
+
+        <dl class="meta-strip">
+          <div><dt>Project</dt><dd>MAT_PRJ_2026_002</dd></div>
+          <div><dt>Version</dt><dd>V1 (1.8)</dd></div>
+          <div><dt>Date</dt><dd>8 July 2026</dd></div>
+          <div><dt>Delivery partner</dt><dd>Maple AI Technologies</dd></div>
+        </dl>
+
+        <div class="callout callout-warn">
+          <strong>Document status:</strong> This is <strong>Statement of Work V1</strong> (archived baseline dated 8 July 2026).
+          Active Phase 1 scope is defined in <strong>Statement of Work V2</strong>, aligned to the Scoped pages inventory
+          (<em>Merrakii_pages_inscope.xlsx</em>).
+        </div>
+
+        <h2>1. Parties &amp; purpose</h2>
+        <p>
+          This Statement of Work (“SOW”) is between <strong>Maple AI Technologies</strong> (“Maple AI”) and
+          <strong>Munjal Universal Consultancy Private Limited</strong>, operating as <strong>Merrakii+</strong> (“Merrakii”).
+          It references Merrakii+ Product Requirement Document v1.0, July 2026 (“PRD”). Commercial fees are in the companion Quotation
+          <strong>(MAT_QTN_2026_002)</strong>.
+        </p>
+        <div class="callout">
+          <strong>Phase 1</strong> delivers one <strong>responsive web application</strong> (320px through desktop; browser-based — not native mobile apps) for the Horizon 1 MVP.
+          PRD metrics M1–M10 are <strong>Merrakii’s post-launch business KPIs</strong>, not Maple AI development acceptance criteria.
+        </div>
+        <p>Merrakii+ is a <strong>Decision Enabling Student Success System (DESSS)</strong> — a five-stage career guidance platform for Class 9–12 students and families, delivered through counsellors, career professionals, and partner counsellors, with the Career Journey Map as the flagship experience.</p>
+
+        <h2>2. Scope comparison — marketplace requirements vs Merrakii+ Phase 1</h2>
+        <p>The table below contrasts Merrakii’s earlier <strong>Digital Academic Marketplace</strong> requirement set with this SOW’s scope. It compares requirement breadth only — not delivery history or pricing.</p>
+        <table aria-label="Feature comparison between marketplace requirements and Merrakii+ DESSS Phase 1">
+          <thead>
+            <tr>
+              <th scope="col">Dimension</th>
+              <th scope="col">Digital Academic Marketplace</th>
+              <th scope="col">Merrakii+ DESSS — Phase 1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Product</strong></td>
+              <td>Programme marketplace: browse, apply, pay, track enrolments.</td>
+              <td>Career guidance platform: Journey Map, 32 embedded services, decision log, family and counsellor workflows.</td>
+            </tr>
+            <tr>
+              <td><strong>Users</strong></td>
+              <td>2 personas (learner/applicant, staff).</td>
+              <td>9 personas with role-based access — student, parent, counsellor, partner counsellor, professional, operations, admin, visitor.</td>
+            </tr>
+            <tr>
+              <td><strong>Delivery surfaces</strong></td>
+              <td>~12 catalogue pages; learner account; staff dashboard.</td>
+              <td>25+ screens: public site, library, student/parent views, counsellor dashboard (mobile-first), professional portal, admin tooling.</td>
+            </tr>
+            <tr>
+              <td><strong>Integrations</strong></td>
+              <td>OTP auth, email, Razorpay.</td>
+              <td>Email, Google Meet, calendar scheduling, Razorpay checkout, session workflows (Section 4). SMS, WhatsApp, CRM, analytics — Phase 2 or change order.</td>
+            </tr>
+            <tr>
+              <td><strong>Vendor responsibility</strong></td>
+              <td>Merrakii vendor accounts assumed.</td>
+              <td><strong>Maple AI integrates</strong> agreed APIs/SDKs. <strong>Merrakii procures</strong> contracts, accounts, and all usage fees.</td>
+            </tr>
+            <tr>
+              <td><strong>Hosting</strong></td>
+              <td>Not specified in requirement set.</td>
+              <td><strong>AWS</strong> staging and production; Maple AI supports setup and deployment; Merrakii owns account and pays usage (Section 4).</td>
+            </tr>
+            <tr>
+              <td><strong>Security</strong></td>
+              <td>Basic sign-in; learner vs staff.</td>
+              <td>Server-side RBAC; three-tier student gating; minors’ data protection; security review before go-live.</td>
+            </tr>
+            <tr>
+              <td><strong>Engineering</strong></td>
+              <td>Catalogue, checkout, account.</td>
+              <td>Full platform build — personalisation, journey–service coupling, WCAG 2.1 AA, sub-3s load on 4G, Lighthouse ≥ 85.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>3. Phase 1 deliverables (in scope)</h2>
+        <ul>
+          <li><strong>Stack:</strong> Next.js web front end; Fastify API; PostgreSQL/Prisma; authenticated REST API; RBAC; seed/demo content structure; UAT support; handover documentation.</li>
+          <li><strong>Out of Phase 1 product scope:</strong> native iOS/Android apps; F07 School &amp; Partner Portal; F08 CRM; F09 Analytics/CEO dashboard (Section 5).</li>
+        </ul>
+        <table>
+          <thead>
+            <tr><th>Feature</th><th>Deliverable summary</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>F01 — Journey Map</strong></td><td>Personalised interactive roadmap; milestones; service stops; routes B/C; late-joiner placement; progress tracker</td></tr>
+            <tr><td><strong>F02 — Registration</strong></td><td>Three-tier access (public / free / enrolled); parent linked account</td></tr>
+            <tr><td><strong>F03 — Journey Library</strong></td><td>Filtered library and journey detail pages per PRD; import-ready for 25–30 journeys</td></tr>
+            <tr><td><strong>F04 — Service Catalogue</strong></td><td>32 services; per-student status pipeline; unified with journey map</td></tr>
+            <tr><td><strong>F05 — Counsellor Dashboard</strong></td><td>Mobile-first caseload, sessions (calendar + Meet), notes, score sliders, decision log</td></tr>
+            <tr><td><strong>F06 — Professional Portal</strong></td><td>Profile, journey validation, session booking, feedback, Verified Professional badge</td></tr>
+            <tr><td><strong>F10 — Public Website</strong></td><td>Home, library, audience pages, recruitment pages, About, Contact</td></tr>
+          </tbody>
+        </table>
+
+        <h2>4. Integrations &amp; hosting</h2>
+        <div class="callout">
+          <strong>Boundary.</strong> Maple AI <strong>integrates and deploys</strong> using credentials Merrakii supplies.
+          Merrakii <strong>owns all vendor contracts, merchant onboarding/KYC, AWS account billing, and usage fees</strong>.
+        </div>
+        <p><strong>Phase 1 — Maple AI engineering (finalized at Design sign-off):</strong></p>
+        <ul>
+          <li>Transactional email; Google Meet; calendar scheduling (default Google Calendar); Razorpay checkout and webhooks for enrolled tier; session workflows in counsellor and professional portals.</li>
+          <li>AWS architecture, staging/production setup, deployment pipeline, monitoring baseline, and AWS runbook — on Merrakii’s AWS account from Development through go-live.</li>
+        </ul>
+        <p><strong>Phase 2 or change order:</strong> WhatsApp Business API, SMS, CRM sync (F08), analytics dashboards (F09).</p>
+
+        <h2>5. Out of scope</h2>
+        <p>Unless added by written change order:</p>
+        <ul>
+          <li>P1 features F07, F08, F09; native mobile apps.</li>
+          <li>Vendor procurement, payment gateway KYC, AWS usage charges, domain/DNS/SSL fees.</li>
+          <li>Full journey library content authorship, legal drafting, and formal penetration-test certification (Merrakii).</li>
+        </ul>
+
+        <h2>6. Roles, responsibilities &amp; standards</h2>
+        <table>
+          <thead>
+            <tr><th>Role</th><th>Access</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Public visitor</td><td>Library preview, locked pathway, registration CTAs</td></tr>
+            <tr><td>Student / Parent</td><td>Profile, journey map, services, sessions and vault (enrolled); parent progress and decision alignment</td></tr>
+            <tr><td>Counsellor / Partner</td><td>Caseload, sessions, notes, scores, decision log</td></tr>
+            <tr><td>Career Professional</td><td>Profile, validation workflow, sessions, feedback</td></tr>
+            <tr><td>Admin / Operations</td><td>Platform administration and content import tooling</td></tr>
+          </tbody>
+        </table>
+        <table>
+          <thead>
+            <tr><th>Owner</th><th>Responsibility</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Maple AI</strong></td>
+              <td>Architecture, UX/UI, API, database, auth, workflows, Phase 1 integrations and AWS deployment support, documentation, UAT support</td>
+            </tr>
+            <tr>
+              <td><strong>Merrakii</strong></td>
+              <td>Journey and service content; professionals and counsellor onboarding; AWS account and usage; all other vendor accounts, API keys, and fees; milestone sign-off within two business days</td>
+            </tr>
+          </tbody>
+        </table>
+        <p><strong>Non-functional targets:</strong> adaptive UI 320px–desktop; WCAG 2.1 AA on public pages; RBAC on every API route; AWS environments live at UAT and go-live; 99.5% availability during business hours post go-live (operational handover).</p>
+
+        <h2>7. Milestones &amp; delivery schedule</h2>
+        <p>
+          <strong>8 weeks</strong> from <strong>6 July 2026</strong> (PRD handover) to projected go-live <strong>30 August 2026</strong>.
+          If Merrakii's side causes a delay — such as late content, slow feedback, vendor setup, or approval — the project timeline moves out by the same number of days.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Phase</th><th>Duration</th><th>Completion</th><th>Key deliverables</th><th>Checkpoint</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Discovery</strong></td>
+              <td>1 wk</td>
+              <td>12 Jul 2026</td>
+              <td>Scope baseline; governance; environment setup</td>
+              <td>Written scope approval</td>
+            </tr>
+            <tr>
+              <td><strong>Design</strong></td>
+              <td>2 wks</td>
+              <td>26 Jul 2026</td>
+              <td>UX/UI; data model; integration architecture; build-ready specs</td>
+              <td>Design sign-off</td>
+            </tr>
+            <tr>
+              <td><strong>Development</strong></td>
+              <td>3 wks</td>
+              <td>16 Aug 2026</td>
+              <td>P0 features; AWS staging; Phase 1 integrations; release candidate</td>
+              <td>Build complete</td>
+            </tr>
+            <tr>
+              <td><strong>UAT</strong></td>
+              <td>1 wk</td>
+              <td>23 Aug 2026</td>
+              <td>AWS staging testing; defect fixes; UAT support</td>
+              <td>Written UAT approval (Section 8)</td>
+            </tr>
+            <tr>
+              <td><strong>Go-live</strong></td>
+              <td>1 wk</td>
+              <td>30 Aug 2026</td>
+              <td>AWS production deployment; hypercare; handover runbooks</td>
+              <td>Go-live sign-off</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>8. Acceptance criteria</h2>
+        <div class="callout callout-warn">
+          PRD M1–M10 are Merrakii business targets after launch — not payment or sign-off conditions for Maple AI.
+        </div>
+        <ol>
+          <li>All <strong>Section 3 features</strong>, <strong>Section 4 integrations and AWS hosting</strong>, demonstrable on AWS staging/production.</li>
+          <li><strong>Section 6</strong> standards met; no open Severity-1 defects at UAT; Severity-2 items documented with fix or workaround.</li>
+          <li>End-to-end journey passes: browse → register → journey map → enrolled payment → counsellor session (calendar + Meet) → decision log → parent visibility.</li>
+          <li>Handover pack: AWS runbook, environment and integration setup guides, content import guidance.</li>
+        </ol>
+
+        <h2>9. Assumptions, change control &amp; terms</h2>
+        <ul>
+          <li>Merrakii provides structured content during Design; AWS account with IAM access and Phase 1 vendor credentials before Development.</li>
+          <li>Integration providers signed off at Design; changes require change order. Horizon 1 personalisation may be rules-based unless agreed otherwise.</li>
+          <li>Work outside this SOW — P1 features, extra integrations, native apps, or P0 scope changes — requires written change request and commercial adjustment via Quotation or change order.</li>
+        </ul>
+        <p>
+          Fees and payment schedule are exclusively in <strong>Quotation MAT_QTN_2026_002</strong>, tied to Section 7 milestones.
+          This SOW with the Quotation and any change orders constitutes the Horizon 1 agreement.
+          Either party may terminate for material breach with 15 days’ written notice and cure period. Both parties maintain confidentiality of the PRD and this SOW.
+        </p>
+
+        <footer class="doc-foot">
+          Maple AI Technologies · Merrakii+ · MAT_PRJ_2026_002 · Statement of Work V1 (v1.8) · 8 July 2026 · Archived · Confidential
+        </footer>
+
+      </div>
+    </article>
+  </div>
+
+  <script>
+    document.getElementById('exportPdfBtn').addEventListener('click', function () {
+      document.title = 'Merrakii+ SOW V1 — MAT_PRJ_2026_002';
+      window.print();
+    });
+  </script>
+</body>
+</html>

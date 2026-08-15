@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merrakii+ | For Business &amp; Programme Partners</title>
+<meta name="description" content="Your programmes, delivered to students who are genuinely ready for them. Partner with Merrakii+.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0F6E56; --teal-deep:#0A4E3E; --teal-light:#E1F5EE;
+    --coral:#FF6B4A; --coral-light:#FFE7DF;
+    --gold:#C89B3C; --gold-light:#FBF1DC; --gold-deep:#9C7622;
+    --ink:#142420; --muted:#5C6B66;
+    --paper:#FBFAF6; --paper-line:#E8E4D9; --white:#fff;
+    --font-display:'Baloo 2', system-ui, sans-serif;
+    --font-body:'Inter', system-ui, sans-serif;
+    --font-mono:'DM Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:var(--font-body); background:var(--paper); color:var(--ink); overflow-x:hidden; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  /* ============ NAV ============ */
+  #sitenav{
+    position:sticky; top:0; z-index:40; display:flex; align-items:center; justify-content:space-between;
+    padding:15px 30px; background:rgba(251,250,246,.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--paper-line);
+  }
+  .brand{ font-family:var(--font-display); font-weight:800; font-size:18px; display:flex; align-items:center; gap:9px; color:var(--teal-deep); }
+  .brand .dot{ width:8px;height:8px;border-radius:50%; background:var(--coral); }
+  .nav-links{ display:flex; align-items:center; gap:28px; }
+  .nav-links a{ font-size:12px; font-weight:600; color:var(--muted); cursor:pointer; }
+  .nav-links a:hover{ color:var(--teal-deep); }
+  .nav-cta{ background:var(--teal-deep); color:#fff; padding:10px 20px; border-radius:9px; font-size:12px; font-weight:700; border:none; cursor:pointer; }
+  @media (max-width:760px){ .nav-links{ display:none; } }
+
+  /* ============ HERO ============ */
+  #hero{ text-align:center; padding:74px 24px 56px; max-width:860px; margin:0 auto; }
+  .eyebrow{ font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--coral); }
+  #hero h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(28px,4.6vw,46px); line-height:1.22; margin-top:16px; }
+  #hero h1 span{ color:var(--teal); }
+  .hero-lede{ font-size:15px; color:var(--muted); line-height:1.7; margin-top:22px; max-width:660px; margin-left:auto; margin-right:auto; }
+  .hero-actions{ display:flex; gap:12px; justify-content:center; margin-top:30px; flex-wrap:wrap; }
+  .btn-primary{ background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; padding:14px 26px; border-radius:12px; font-weight:700; font-size:13.5px; border:none; cursor:pointer; box-shadow:0 10px 26px rgba(10,78,62,.22); }
+  .btn-ghost{ background:none; color:var(--ink); padding:14px 22px; border-radius:12px; font-weight:700; font-size:13.5px; border:1.5px solid var(--paper-line); cursor:pointer; }
+  .btn-ghost:hover{ border-color:var(--teal); }
+
+  /* ============ PULL STATEMENT ============ */
+  #pull{ background:var(--white); border-top:1px solid var(--paper-line); border-bottom:1px solid var(--paper-line); padding:60px 24px; }
+  .pull-inner{ max-width:740px; margin:0 auto; text-align:center; }
+  .pull-lead{ font-size:14px; color:var(--muted); line-height:1.75; }
+  .pull-lead b{ color:var(--ink); }
+  .pull-statement{ font-family:var(--font-display); font-weight:800; font-size:clamp(22px,3.6vw,34px); color:var(--teal-deep); margin-top:22px; line-height:1.3; }
+
+  /* ============ SECTION SHELL ============ */
+  .section{ max-width:1080px; margin:0 auto; padding:74px 24px; }
+  .section-eyebrow{ font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--coral); text-align:center; }
+  .section-title{ font-family:var(--font-display); font-weight:700; font-size:clamp(24px,3.4vw,32px); text-align:center; margin-top:8px; }
+  .section-sub{ font-size:13.5px; color:var(--muted); text-align:center; max-width:620px; margin:12px auto 0; line-height:1.65; }
+
+  /* ============ CHANNEL COMPARISON ============ */
+  .mode-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:46px; }
+  @media (max-width:760px){ .mode-grid{ grid-template-columns:1fr; } }
+  .mode-card{ border-radius:20px; padding:28px 26px; }
+  .mode-card.memory{ background:#FDF4F1; border:1px solid #F5DCD2; }
+  .mode-card.intel{ background:var(--teal-light); border:1px solid #CFEAE0; }
+  .mode-label{ font-family:var(--font-display); font-weight:700; font-size:16px; }
+  .mode-card.memory .mode-label{ color:#B5502E; }
+  .mode-card.intel .mode-label{ color:var(--teal-deep); }
+  .mode-list{ margin-top:16px; display:flex; flex-direction:column; gap:13px; }
+  .mode-list li{ list-style:none; font-size:12.5px; line-height:1.6; display:flex; gap:9px; }
+  .mode-card.memory .mode-list li::before{ content:"—"; color:#C97355; flex-shrink:0; }
+  .mode-card.intel .mode-list li::before{ content:"✓"; color:var(--teal); flex-shrink:0; font-weight:700; }
+
+  /* ============ CATEGORIES ============ */
+  .cat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:46px; }
+  @media (max-width:860px){ .cat-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .cat-grid{ grid-template-columns:1fr; } }
+  .cat-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; padding:22px; display:flex; gap:14px; }
+  .cat-num{ font-family:var(--font-display); font-weight:800; font-size:20px; color:var(--paper-line); flex-shrink:0; }
+  .cat-title{ font-family:var(--font-display); font-weight:700; font-size:14.5px; }
+  .cat-desc{ font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.55; }
+
+  /* ============ PARTNERSHIP STEPS ============ */
+  #partnership{ background:linear-gradient(120deg,var(--teal-deep),var(--teal)); color:#fff; }
+  #partnership .section-eyebrow{ color:var(--gold-light); opacity:.9; }
+  #partnership .section-title{ color:#fff; }
+  #partnership .section-sub{ color:rgba(255,255,255,.78); }
+  .step-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:46px; }
+  @media (max-width:860px){ .step-grid{ grid-template-columns:repeat(2,1fr); } }
+  .step-card{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:22px 18px; position:relative; }
+  .step-order{ font-family:var(--font-mono); font-size:10px; opacity:.6; }
+  .step-label{ font-family:var(--font-display); font-weight:700; font-size:14px; margin-top:6px; }
+  .step-desc{ font-size:11.5px; opacity:.85; margin-top:9px; line-height:1.6; }
+
+  /* ============ COMMERCIAL MODEL ============ */
+  .model-box{ background:var(--white); border:1px solid var(--paper-line); border-radius:20px; padding:32px; margin-top:46px; text-align:center; }
+  .model-box p{ font-size:14px; color:var(--ink); line-height:1.75; max-width:680px; margin:0 auto; }
+  .model-highlight{ font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--teal-deep); margin-top:18px; }
+  .model-terms{ display:flex; justify-content:center; gap:0; margin-top:26px; flex-wrap:wrap; }
+  .term-col{ flex:1; min-width:150px; padding:16px 14px; border-right:1px solid var(--paper-line); }
+  .term-col:last-child{ border-right:none; }
+  .term-col b{ display:block; font-family:var(--font-mono); font-size:15px; color:var(--gold-deep); }
+  .term-col span{ font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; font-weight:700; }
+
+  /* ============ MEET PARTNERS ============ */
+  #meet{ background:var(--white); border-top:1px solid var(--paper-line); border-bottom:1px solid var(--paper-line); }
+  .partner-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:46px; }
+  @media (max-width:860px){ .partner-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:520px){ .partner-grid{ grid-template-columns:1fr; } }
+  .partner-card{ background:var(--paper); border:1px solid var(--paper-line); border-radius:16px; padding:20px; text-align:center; }
+  .partner-mark{ width:48px; height:48px; border-radius:12px; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:16px; margin:0 auto; }
+  .partner-name{ font-family:var(--font-display); font-weight:700; font-size:13px; margin-top:10px; }
+  .partner-cat{ font-size:10px; color:var(--muted); margin-top:3px; line-height:1.4; }
+
+  /* ============ VIDEO ============ */
+  .video-wrap{ max-width:600px; margin:36px auto 0; }
+  .yt-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:16px; overflow:hidden; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease; }
+  .yt-card:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(10,26,20,.1); }
+  .yt-thumb{ height:220px; background:linear-gradient(135deg,var(--teal-deep),var(--teal)); position:relative; display:flex; align-items:center; justify-content:center; }
+  .yt-thumb::before{ content:""; position:absolute; inset:0; background:repeating-linear-gradient(115deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 2px, transparent 2px, transparent 40px); }
+  .yt-play{ width:56px; height:56px; border-radius:50%; background:rgba(255,255,255,.94); display:flex; align-items:center; justify-content:center; font-size:19px; color:var(--teal-deep); z-index:1; box-shadow:0 8px 20px rgba(0,0,0,.2); }
+  .yt-badge{ position:absolute; top:13px; right:13px; background:rgba(0,0,0,.5); color:#fff; font-size:10px; font-weight:700; padding:4px 9px; border-radius:6px; }
+  .yt-body{ padding:15px 17px; }
+  .yt-title{ font-family:var(--font-display); font-weight:700; font-size:13.5px; }
+  .yt-sub{ font-size:10.5px; color:var(--muted); margin-top:4px; }
+
+  /* ============ TESTIMONIAL ============ */
+  .testi-card{ max-width:640px; margin:32px auto 0; background:var(--paper); border:1px solid var(--paper-line); border-radius:16px; padding:24px 26px; display:flex; gap:16px; align-items:flex-start; }
+  .testi-avatar{ width:48px; height:48px; border-radius:12px; background:var(--teal-light); color:var(--teal-deep); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:15px; flex-shrink:0; }
+  .testi-quote{ font-size:13px; line-height:1.7; color:var(--ink); font-style:italic; }
+  .testi-who{ margin-top:10px; font-size:12px; font-weight:700; color:var(--teal-deep); }
+  .testi-role{ font-size:10.5px; color:var(--muted); }
+  .testi-stats{ display:flex; gap:14px; margin-top:12px; padding-top:12px; border-top:1px dashed var(--paper-line); }
+  .testi-stats div{ text-align:left; }
+  .testi-stats b{ display:block; font-family:var(--font-mono); font-size:15px; color:var(--teal-deep); }
+  .testi-stats span{ font-size:9px; color:var(--muted); text-transform:uppercase; }
+
+  /* ============ APPLICATION FORM ============ */
+  #apply{ max-width:680px; }
+  .apply-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:20px; padding:32px; margin-top:36px; box-shadow:0 16px 40px rgba(10,26,20,.06); }
+  .af-row{ display:flex; gap:12px; }
+  .af-field{ flex:1; margin-bottom:16px; }
+  .af-field label{ font-size:11.5px; font-weight:700; display:block; margin-bottom:6px; }
+  .af-field input, .af-field select, .af-field textarea{
+    width:100%; padding:11px 13px; border:1px solid var(--paper-line); border-radius:9px; font-family:inherit; font-size:13px; outline:none;
+  }
+  .af-field input:focus, .af-field select:focus, .af-field textarea:focus{ border-color:var(--teal); }
+  .af-field textarea{ resize:vertical; min-height:80px; }
+  .apply-submit{ width:100%; background:linear-gradient(120deg,var(--coral),#ff8464); color:#fff; border:none; border-radius:12px; padding:15px; font-weight:800; font-size:14px; cursor:pointer; margin-top:6px; box-shadow:0 10px 24px rgba(255,107,74,.3); }
+  .apply-note{ text-align:center; font-size:11px; color:var(--muted); margin-top:14px; }
+
+  /* ============ FOOTER ============ */
+  #sitefoot{ background:var(--teal-deep); color:#fff; padding:46px 24px 26px; }
+  .foot-inner{ max-width:1080px; margin:0 auto; }
+  .foot-cols{ display:flex; gap:50px; flex-wrap:wrap; }
+  .foot-col h4{ font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; opacity:.6; margin-bottom:12px; }
+  .foot-col a{ display:block; font-size:12.5px; opacity:.85; margin-bottom:9px; cursor:pointer; }
+  .foot-col a:hover{ opacity:1; }
+  .foot-brand .brand{ color:#fff; }
+  .foot-tag{ font-size:11.5px; opacity:.7; margin-top:10px; max-width:320px; line-height:1.65; }
+  .foot-contact{ font-size:12px; opacity:.85; margin-top:14px; line-height:1.8; }
+  .foot-bottom{ max-width:1080px; margin:36px auto 0; padding-top:18px; border-top:1px solid rgba(255,255,255,.12); font-size:11px; opacity:.55; text-align:center; }
+</style>
+</head>
+<body>
+
+  <nav id="sitenav">
+    <a href="01_home.html" class="brand"><span class="dot"></span>Merrakii+</a>
+    <div class="nav-links"><a href="02_career_library.html">Library</a>
+      <a href="04_students_parents_info.html">Students &amp; Parents</a>
+      <a href="05_schools_info.html">Schools</a>
+      <a href="06_career_professionals_info.html">Professionals</a>
+      <a href="07_program_partners_info.html">Programs</a>
+      <a href="08_partner_counsellor_info.html">Counsellors</a>
+      <a href="10_contact.html">Contact</a>
+      <a href="11_login.html">Login</a></div>
+    <button class="nav-cta" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">Partner With Us</button>
+  </nav>
+
+  <section id="hero">
+    <div class="eyebrow">Merrakii+ · For Business &amp; Programme Partners</div>
+    <h1>Your programmes, delivered to students who are <span>genuinely ready</span> for them.</h1>
+    <p class="hero-lede">Most education marketing reaches students who are browsing — not deciding. Merrakii+ reaches students at the exact moment they are ready to act. When a student in the Develop stage of a Finance career journey is shown a relevant CA coaching programme, they are not being sold to. They are being guided.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">Partner With Merrakii+</button>
+      <button class="btn-ghost" onclick="document.getElementById('why-different').scrollIntoView({behavior:'smooth'})">See Why It's Different</button>
+    </div>
+  </section>
+
+  <div id="pull">
+    <div class="pull-inner">
+      <p class="pull-lead">That distinction — guided, not sold to — is why Merrakii+ partner programme enrollments convert at a fundamentally different rate from any other channel.</p>
+      <div class="pull-statement">You earn from genuine demand. We earn from genuine delivery.</div>
+    </div>
+  </div>
+
+  <!-- ============ WHY DIFFERENT ============ -->
+  <section class="section" id="why-different">
+    <div class="section-eyebrow">Why the Merrakii+ Channel Is Different</div>
+    <h2 class="section-title">Not another lead-gen funnel</h2>
+    <p class="section-sub">The difference isn't traffic volume. It's what's already true about the student before your programme ever appears.</p>
+
+    <div class="mode-grid">
+      <div class="mode-card memory">
+        <div class="mode-label">Every Other Channel</div>
+        <ul class="mode-list">
+          <li>Students who see your programme are browsing — at best interested, at worst distracted</li>
+          <li>No relationship between student need and programme offering — the match is based on demographics, not decision stage</li>
+          <li>Parents are not in the room. The student enquires. The parent vetoes. The sale fails.</li>
+          <li>No counsellor context. No validated career direction. No accountability for outcome.</li>
+        </ul>
+      </div>
+      <div class="mode-card intel">
+        <div class="mode-label">The Merrakii+ Channel</div>
+        <ul class="mode-list">
+          <li>Students see your programme at Stage 3 — Develop — when they have a confirmed direction and a counsellor has told them this is the next step</li>
+          <li>The match is precise. A NEET-track student in Class 11 sees Biology and Chemistry preparation. A Finance-track student sees CA Foundation coaching.</li>
+          <li>The parent has already attended an alignment session. The family has seen the financial map. The enrolment decision is pre-validated.</li>
+          <li>The counsellor recommends. The student trusts the recommendation. Conversion is a natural next step — not a sales event.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="section" id="categories">
+    <div class="section-eyebrow">Partner Categories We're Building</div>
+    <h2 class="section-title">Where your programme appears in the journey</h2>
+    <p class="section-sub">Five categories, each mapped to a specific stage of a student's route from Class 9 to Career Entry.</p>
+
+    <div class="cat-grid">
+      <div class="cat-card"><div class="cat-num">01</div><div><div class="cat-title">Entrance Examination Coaching</div><div class="cat-desc">NEET, JEE, CLAT, NIFT, UPSC, CA Foundation — domain-specific coaching institutes and platforms.</div></div></div>
+      <div class="cat-card"><div class="cat-num">02</div><div><div class="cat-title">Skill Development &amp; Certification</div><div class="cat-desc">Communication, coding, design, leadership, financial literacy — any skill relevant to Class 9 to 12 students building toward a career goal.</div></div></div>
+      <div class="cat-card"><div class="cat-num">03</div><div><div class="cat-title">EdTech &amp; Online Course Platforms</div><div class="cat-desc">Digital learning platforms offering career-relevant content — subject mastery, entrance preparation, professional skills, and domain knowledge.</div></div></div>
+      <div class="cat-card"><div class="cat-num">04</div><div><div class="cat-title">Universities &amp; Colleges</div><div class="cat-desc">Institutions that want early access to motivated, career-directed students with documented direction and counsellor recommendation.</div></div></div>
+      <div class="cat-card"><div class="cat-num">05</div><div><div class="cat-title">Financial Services &amp; Scholarships</div><div class="cat-desc">Education loan providers, scholarship funds, and financial planning services for families navigating the investment in higher education.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ============ PARTNERSHIP STEPS ============ -->
+  <section class="section" id="partnership">
+    <div class="section-eyebrow">What a Partnership Looks Like</div>
+    <h2 class="section-title">Four steps, no lengthy negotiation</h2>
+    <p class="section-sub">Built to get a genuinely good programme in front of students fast — not to make you sit through a procurement cycle.</p>
+
+    <div class="step-grid">
+      <div class="step-card">
+        <div class="step-order">01</div>
+        <div class="step-label">Simple Agreement</div>
+        <div class="step-desc">Programme standards agreed. Commission structure confirmed. One-page agreement — no lengthy commercial negotiation.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-order">02</div>
+        <div class="step-label">Platform Integration</div>
+        <div class="step-desc">Your programme appears within the relevant career journey at the right stage — not as advertising, but as a natural next step in the student's roadmap.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-order">03</div>
+        <div class="step-label">Counsellor Recommendation</div>
+        <div class="step-desc">The counsellor introduces your programme directly to the student and parent in a session — the highest-trust channel available.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-order">04</div>
+        <div class="step-label">Performance Tracked</div>
+        <div class="step-desc">Enrollment rates, satisfaction scores, and outcome data tracked per partner. Strong partners grow. Performance issues addressed before they affect students.</div>
+      </div>
+    </div>
+
+    <div class="video-wrap">
+      <div class="yt-card" onclick="alert('This would open the video in a new tab.')">
+        <div class="yt-thumb"><span class="yt-badge">▶ 1:48</span><div class="yt-play">▶</div></div>
+        <div class="yt-body">
+          <div class="yt-title">How a Listing Actually Appears in a Student's Journey</div>
+          <div class="yt-sub">A 90-second walkthrough of Step 2 — Platform Integration</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-avatar">DF</div>
+      <div>
+        <div class="testi-quote">"We stopped thinking of Merrakii+ as a lead source and started thinking of it as pre-qualification. By the time a family talks to us, the counsellor has already done the hard part."</div>
+        <div class="testi-who">Design Foundry Academy</div>
+        <div class="testi-role">Preferred Partner · Entrance Examination Coaching</div>
+        <div class="testi-stats">
+          <div><b>27%</b><span>Match → Enrol Rate</span></div>
+          <div><b>19%</b><span>Network Average</span></div>
+          <div><b>38</b><span>Enrolments to Date</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMMERCIAL MODEL ============ -->
+  <section class="section" id="model">
+    <div class="section-eyebrow">The Commercial Model</div>
+    <h2 class="section-title">Aligned incentives, not a listing fee</h2>
+
+    <div class="model-box">
+      <p>Merrakii+ operates on a commission model. You pay nothing to be listed. You pay a percentage of each enrolment that comes through the Merrakii+ channel — confirmed only after the student has actually enrolled in your programme.</p>
+      <div class="model-highlight">When your programme is right for the student, the counsellor recommends it. When it is not, they do not.</div>
+      <div class="model-terms">
+        <div class="term-col"><b>₹0</b><span>Cost to List</span></div>
+        <div class="term-col"><b>Pay on Enrolment</b><span>Not on Impressions</span></div>
+        <div class="term-col"><b>Per-Partner Tracking</b><span>Outcome-Based</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEET PARTNERS ============ -->
+  <section id="meet">
+    <div class="section">
+      <div class="section-eyebrow">Already in the Network</div>
+      <h2 class="section-title">A glimpse of who's already delivering</h2>
+      <p class="section-sub">Programme partners already appearing inside real student journeys.</p>
+
+      <div class="partner-grid">
+        <div class="partner-card"><div class="partner-mark">DF</div><div class="partner-name">Design Foundry Academy</div><div class="partner-cat">Entrance Exam Coaching</div></div>
+        <div class="partner-card"><div class="partner-mark">CL</div><div class="partner-name">ChromaLab Design School</div><div class="partner-cat">Entrance Exam Coaching</div></div>
+        <div class="partner-card"><div class="partner-mark">CN</div><div class="partner-name">CareerNaksha</div><div class="partner-cat">EdTech &amp; Assessment</div></div>
+        <div class="partner-card"><div class="partner-mark">EF</div><div class="partner-name">EduFin Advisors</div><div class="partner-cat">Financial Services</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APPLY ============ -->
+  <section class="section" id="apply">
+    <div class="section-eyebrow">Partner With Merrakii+</div>
+    <h2 class="section-title">Tell Us About Your Programme</h2>
+    <p class="section-sub">If your programme genuinely serves students building toward a career, Merrakii+ gives you access to the most motivated, most prepared, most counsellor-guided student segment in India.</p>
+
+    <div class="apply-card">
+      <form id="applyForm">
+        <div class="af-row">
+          <div class="af-field"><label>Organisation Name</label><input type="text" required></div>
+          <div class="af-field"><label>Contact Person</label><input type="text" required></div>
+        </div>
+        <div class="af-row">
+          <div class="af-field">
+            <label>Partner Category</label>
+            <select>
+              <option>Entrance Examination Coaching</option>
+              <option>Skill Development &amp; Certification</option>
+              <option>EdTech &amp; Online Course Platforms</option>
+              <option>Universities &amp; Colleges</option>
+              <option>Financial Services &amp; Scholarships</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="af-field"><label>Website</label><input type="url" placeholder="https://"></div>
+        </div>
+        <div class="af-row">
+          <div class="af-field"><label>Email</label><input type="email" required></div>
+          <div class="af-field"><label>Phone</label><input type="tel"></div>
+        </div>
+        <div class="af-field"><label>Which career journeys does your programme fit into?</label><input type="text" placeholder="e.g. NEET-track students, Class 11–12"></div>
+        <div class="af-field"><label>Briefly describe your programme <span style="font-weight:400;color:var(--muted);">(optional)</span></label><textarea placeholder="Format, duration, what makes it genuinely good for students."></textarea></div>
+        <button type="submit" class="apply-submit">Submit Partnership Enquiry</button>
+        <p class="apply-note">A Merrakii+ partnerships team member will reach out within 5 working days.</p>
+      </form>
+    </div>
+  </section>
+
+  <footer id="sitefoot">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <div class="brand"><span class="dot"></span>Merrakii+</div>
+        <p class="foot-tag">Decision Enabling Student Success System — helping students move from Class 9 to Career Entry with real decisions, not just information.</p>
+        <div class="foot-contact">info@merrakii.co.in<br>merrakii.co.in<br>Gurugram, Haryana, India</div>
+      </div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Platform</h4>
+          <a href="02_career_library.html">Career Library</a>
+          <a href="01_home.html#how-it-works">How it Works</a>
+          <a href="01_home.html#philosophy">Our Philosophy</a>
+        </div>
+        <div class="foot-col">
+          <h4>For You</h4>
+          <a href="04_students_parents_info.html">Students &amp; Parents</a>
+          <a href="05_schools_info.html">Schools</a>
+        </div>
+        <div class="foot-col">
+          <h4>Partners</h4>
+          <a href="06_career_professionals_info.html">Career Professionals</a>
+          <a href="07_program_partners_info.html">Program Partners</a>
+          <a href="08_partner_counsellor_info.html">Partner Counsellors</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="09_about.html">About Us</a>
+          <a href="10_contact.html">Contact</a>
+          <a href="11_login.html">Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 Munjal Universal Consultancy Private Limited · Merrakii+</div>
+  </footer>
+
+<script>
+  document.getElementById('applyForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    // NOTE: mock submission — wire this to the real partnerships CRM / backend.
+    alert('Thank you — your partnership enquiry has been received. This form is a front-end mock; connect it to your real submission endpoint before going live.');
+    this.reset();
+  });
+</script>
+</body>
+</html>

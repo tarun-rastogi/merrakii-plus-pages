@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statement of Work V2 — Merrakii+ DESSS Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00b4d8;
+      --blue: #4361ee;
+      --purple: #7c3aed;
+      --navy: #1c2340;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --cream: #ffffee;
+      --ok: #16a34a;
+      --page-width: 1064px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { font-size: 16px; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--navy);
+      background: linear-gradient(165deg, #f0f9fc 0%, #f1f5f9 45%, #eef2ff 100%);
+      line-height: 1.45;
+    }
+
+    .wrap-screen { padding: 32px 20px 48px; }
+
+    .toolbar {
+      width: 100%;
+      max-width: var(--page-width);
+      margin: 0 auto 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-print {
+      font: 600 15px inherit;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(67, 97, 238, 0.35);
+    }
+
+    .btn-print:hover { filter: brightness(1.06); }
+
+    .btn-print:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .toolbar-note { font-size: 14px; color: var(--muted); max-width: 420px; }
+
+    .sheet {
+      width: 100%;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid rgba(67, 97, 238, 0.08);
+      box-shadow: 0 4px 32px rgba(28, 35, 64, 0.1);
+      overflow: hidden;
+    }
+
+    .accent-bar {
+      height: 6px;
+      background: linear-gradient(90deg, var(--cyan) 0%, var(--blue) 50%, var(--purple) 100%);
+    }
+
+    .sheet-inner { padding: 28px 36px 32px; }
+
+    .letterhead {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 20px;
+      row-gap: 14px;
+      align-items: start;
+      margin-bottom: 14px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .letterhead-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .letterhead-col--left {
+      grid-column: 1;
+      grid-row: 1;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .letterhead-col--right {
+      grid-column: 2;
+      grid-row: 1;
+      align-items: flex-end;
+      text-align: right;
+      margin-top: 50px;
+    }
+
+    .letterhead-doc-row {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      text-align: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .letterhead-logo {
+      display: block;
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      object-fit: contain;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .letterhead-col--left .letterhead-logo { object-position: left center; }
+    .letterhead-col--right .letterhead-logo { object-position: right center; }
+
+    .letterhead-logo.letterhead-logo--maple {
+      width: 150px;
+      height: 150px;
+    }
+
+    .letterhead-text {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .letterhead-text strong {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .letterhead-text a {
+      color: var(--blue);
+      word-break: break-word;
+    }
+
+    .letterhead-text a.letterhead-email {
+      word-break: normal;
+      white-space: nowrap;
+    }
+
+    .letterhead-col--left .letterhead-text { margin-top: -50px; }
+
+    .letterhead-doc-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #000;
+    }
+
+    .letterhead-doc-subtitle {
+      margin: 6px 0 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .meta-strip dt {
+      margin: 0;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .meta-strip dd {
+      margin: 2px 0 0;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    h2 {
+      margin: 16px 0 6px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--blue);
+      border-left: 3px solid var(--cyan);
+      padding-left: 8px;
+    }
+
+    p {
+      margin: 0 0 8px;
+      font-size: 14.5px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 4px 0 8px;
+      padding-left: 1.1rem;
+      font-size: 14.5px;
+    }
+
+    li { margin-bottom: 3px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      margin: 6px 0 10px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 5px 7px;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--cream);
+      font-weight: 600;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) { background: #fafafa; }
+
+    .callout {
+      padding: 8px 10px;
+      background: var(--cream);
+      border-left: 3px solid var(--blue);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .callout-warn {
+      border-left-color: #d97706;
+      background: #fffbeb;
+    }
+
+    .muted { color: var(--muted); font-size: 13px; }
+
+    footer.doc-foot {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @page { size: A4; margin: 12mm; }
+
+    @media (max-width: 640px) {
+      .sheet-inner { padding: 20px 18px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .letterhead { grid-template-columns: 1fr; }
+      .letterhead-col--left,
+      .letterhead-col--right {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .letterhead-col--right {
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 16px;
+      }
+      .letterhead-col--right .letterhead-logo { object-position: left center; }
+    }
+
+    .page-break-before {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    @media print {
+      html { font-size: 14px; }
+      .no-print { display: none !important; }
+      body { background: #fff; }
+      .wrap-screen { padding: 0; }
+      .sheet {
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        max-width: none;
+      }
+      .sheet-inner { padding: 0; }
+      .letterhead { break-inside: avoid; }
+      h2 { break-after: avoid; }
+      table { break-inside: auto; }
+      tr { break-inside: avoid; }
+    }
+  
+    h3 { font-weight: 700; }
+    code { font-size: 12px; background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="wrap-screen">
+    <div class="toolbar no-print">
+      <button type="button" class="btn-print" id="exportPdfBtn">Export PDF</button>
+      <span class="toolbar-note">Use <strong>Save as PDF</strong> in the print dialog for a searchable text-based PDF. Active scope document: <strong>V2</strong>.</span>
+    </div>
+
+    <article class="sheet" id="sow-document">
+      <div class="accent-bar"></div>
+      <div class="sheet-inner">
+
+        <header class="doc-header">
+          <div class="letterhead">
+            <div class="letterhead-col letterhead-col--left">
+              <img class="letterhead-logo letterhead-logo--maple" src="images/maple-ai-logo.jpg" alt="Maple AI Technologies" width="150" height="150" decoding="async" />
+              <div class="letterhead-text">
+                <strong>Maple AI Technologies</strong><br />
+                Tarun Rastogi<br />
+                <a class="letterhead-email" href="mailto:tarunrastogi@mapleaitechnologies.com">tarunrastogi@mapleaitechnologies.com</a><br />
+                <a href="https://mapleaitechnologies.com">mapleaitechnologies.com</a><br />
+                <a href="tel:+919619060302">+91 9619060302</a>
+              </div>
+            </div>
+            <div class="letterhead-col letterhead-col--right">
+              <img class="letterhead-logo" src="images/merrakii-logo.png" alt="Merrakii" width="50" height="50" decoding="async" />
+              <div class="letterhead-text">
+                <strong>Merrakii+</strong><br />
+                Munjal Universal Consultancy Pvt. Ltd.<br />
+                T-14, 3rd Floor, Rasvilas Salcon, Saket,<br />
+                South Delhi, New Delhi 110017<br />
+                <a href="https://merrakii.co.in">merrakii.co.in</a>
+              </div>
+            </div>
+            <div class="letterhead-doc-row">
+              <p class="letterhead-doc-title">Statement of Work — V2</p>
+              <p class="letterhead-doc-subtitle">Merrakii+ Decision Enabling Student Success System (DESSS) · Phase 1 scope aligned to Scoped pages</p>
+            </div>
+          </div>
+        </header>
+
+        <dl class="meta-strip">
+          <div><dt>Project</dt><dd>MAT_PRJ_2026_002</dd></div>
+          <div><dt>Version</dt><dd>V2</dd></div>
+          <div><dt>Date</dt><dd>5 August 2026</dd></div>
+          <div><dt>Delivery partner</dt><dd>Maple AI Technologies</dd></div>
+        </dl>
+
+        <div class="callout">
+          <strong>What changed in V2.</strong> This SOW replaces the V1 feature list (F01–F10 narrative) with the
+          <strong>Phase 1 page and capability inventory</strong> from Merrakii’s scoped pages workbook
+          (<em>Merrakii_pages_inscope.xlsx</em> (mirrored in the client dashboard Scoped pages tab).
+          Commercial terms remain governed by Quotation <strong>MAT_QTN_2026_002</strong> unless amended by change order.
+          SOW V1 remains on file as the archived baseline.
+        </div>
+
+        <h2>1. Parties &amp; purpose</h2>
+        <p>
+          This Statement of Work V2 (“SOW”) is between <strong>Maple AI Technologies</strong> (“Maple AI”) and
+          <strong>Munjal Universal Consultancy Private Limited</strong>, operating as <strong>Merrakii+</strong> (“Merrakii”).
+          It defines Phase 1 delivery for the Merrakii+ DESSS web application as a product engineering engagement:
+          build and ship the scoped student-facing pages, admin capabilities, and supporting backend listed below.
+        </p>
+        <p>
+          Phase 1 is one <strong>responsive web application</strong> (mobile through desktop; browser-based, not native apps).
+          Merrakii owns content, vendor accounts, and AWS usage. Maple AI owns architecture, implementation, integrations agreed herein, UAT support, and handover.
+        </p>
+
+        <h2>2. Scope source of truth</h2>
+        <ul>
+          <li><strong>In scope:</strong> every row in <em>New Website Pages</em> where <strong>Phase 1 = Yes</strong> (40 items across Student Facing, Admin Panel, and Backend).</li>
+          <li><strong>Out of Phase 1:</strong> rows not marked Phase 1 = Yes (listed in Section 5), plus native mobile apps and any work not named in this SOW.</li>
+          <li><strong>Prior product surface:</strong> earlier Merrakii marketplace routes are reference only (Section 6); Phase 1 rebuilds the DESSS experience, not a like-for-like catalogue clone.</li>
+        </ul>
+
+        <h2>3. Phase 1 deliverables (from Scoped pages)</h2>
+        <p>
+          Maple AI will design, build, and deliver the following Phase 1 topics. Effort ratings are from the scope workbook
+          (Small / Medium / High) and inform sequencing, not separate line-item pricing.
+        </p>
+
+        <h3 style="margin:12px 0 4px;font-size:0.95rem;color:var(--navy);">Student Facing <span class="muted">(21 items)</span></h3>
+        <table aria-label="Student Facing Phase 1 scope">
+          <thead>
+            <tr>
+              <th>Topic / page</th>
+              <th>Type</th>
+              <th>Effort</th>
+              <th>Maps from (old)</th>
+              <th>Client requirement / input</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr><td>Home Page- Search Bar</td><td>Page</td><td>Medium</td><td>Homepage</td><td>—</td></tr>
+<tr><td>Career Journey Map</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
+<tr><td>Deep Profiling</td><td>Page</td><td>Small</td><td>Student Profile</td><td>Provide profile details</td></tr>
+<tr><td>Journey Payment Page</td><td>Page</td><td>Small</td><td>Signup</td><td>—</td></tr>
+<tr><td>Student Dashboard - Overview</td><td>Page</td><td>Medium</td><td>Overview</td><td>—</td></tr>
+<tr><td>Student Dashboard - My Journey</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
+<tr><td>Student Dashboard - Career Journey Report</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
+<tr><td>Student Dashboard - Course List Page</td><td>Page</td><td>Medium</td><td>NA</td><td>Provide 2 Courses per Service</td></tr>
+<tr><td>Student Dashboard - Resources Overview</td><td>Page</td><td>Medium</td><td>NA</td><td>Provide 2 Resources</td></tr>
+<tr><td>Student Dashboard - Resources Details</td><td>Page</td><td>Medium</td><td>NA</td><td>Provide Resource Detail template</td></tr>
+<tr><td>Student Dashboard - Notifications Page</td><td>Page</td><td>High</td><td>Notifications</td><td>—</td></tr>
+<tr><td>Course Detail Page</td><td>Page</td><td>Medium</td><td>Course Detail</td><td>Provide Course Details template</td></tr>
+<tr><td>Course Entollment Page</td><td>Page</td><td>Medium</td><td>Cart</td><td>—</td></tr>
+<tr><td>Course Payment Page</td><td>Page</td><td>Small</td><td>Payment</td><td>—</td></tr>
+<tr><td>Payment Integration</td><td>Integration</td><td>High</td><td>Payment Integration</td><td>Provide payment integration details</td></tr>
+<tr><td>Caontact Us</td><td>Page</td><td>Small</td><td>Caontact Us</td><td>—</td></tr>
+<tr><td>About Merrakii</td><td>Page</td><td>Small</td><td>About Merrakii</td><td>Provide About Content</td></tr>
+<tr><td>Terms &amp; Conditions</td><td>Page</td><td>Small</td><td>Terms &amp; Conditions</td><td>Provide page content</td></tr>
+<tr><td>Privacy Policy</td><td>Page</td><td>Small</td><td>Privacy Policy</td><td>Provide page content</td></tr>
+<tr><td>Refund Policy</td><td>Page</td><td>Small</td><td>Refund Policy</td><td>Provide page content</td></tr>
+<tr><td>FAQs</td><td>Page</td><td>Small</td><td>FAQs</td><td>Provide page content</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin:12px 0 4px;font-size:0.95rem;color:var(--navy);">Admin Panel <span class="muted">(11 items)</span></h3>
+        <table aria-label="Admin Panel Phase 1 scope">
+          <thead>
+            <tr>
+              <th>Topic / page</th>
+              <th>Type</th>
+              <th>Effort</th>
+              <th>Maps from (old)</th>
+              <th>Client requirement / input</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr><td>Career Library CMS Overview (Career= Profession + Course + College + Exam)</td><td>Page</td><td>Medium</td><td>Course Library Overview</td><td>—</td></tr>
+<tr><td>Add Career Page per category per stream</td><td>Page</td><td>High</td><td>Add Course</td><td>—</td></tr>
+<tr><td>User Management - Overview</td><td>Page</td><td>Medium</td><td>NA</td><td>—</td></tr>
+<tr><td>User Management - Add Student</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
+<tr><td>Service Knowledge Page Overview</td><td>Page</td><td>Small</td><td>NA</td><td>—</td></tr>
+<tr><td>Add Service Knowledge</td><td>Page</td><td>Medium</td><td>Na</td><td>—</td></tr>
+<tr><td>Courses Overview page</td><td>Page</td><td>Medium</td><td>Course Library Overview</td><td>—</td></tr>
+<tr><td>Add Courses per career per service</td><td>Page</td><td>High</td><td>Add Course</td><td>—</td></tr>
+<tr><td>Resources Overview</td><td>Page</td><td>Medium</td><td>NA</td><td>—</td></tr>
+<tr><td>Add Resources</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
+<tr><td>Financials overview</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
+          </tbody>
+        </table>
+
+        <h3 style="margin:12px 0 4px;font-size:0.95rem;color:var(--navy);">Backend <span class="muted">(8 items)</span></h3>
+        <table aria-label="Backend Phase 1 scope">
+          <thead>
+            <tr>
+              <th>Topic / page</th>
+              <th>Type</th>
+              <th>Effort</th>
+              <th>Maps from (old)</th>
+              <th>Client requirement / input</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr><td>Access &amp; security</td><td>Backend</td><td>High</td><td>Access &amp; security</td><td>—</td></tr>
+<tr><td>Search &amp; personalisation</td><td>Backend</td><td>High</td><td>Search &amp; personalisation</td><td>—</td></tr>
+<tr><td>Integrations</td><td>Backend</td><td>High</td><td>Integrations</td><td>—</td></tr>
+<tr><td>Responsiveness</td><td>Backend</td><td>High</td><td>Responsiveness</td><td>—</td></tr>
+<tr><td>Data &amp; architecture</td><td>Backend</td><td>High</td><td>Data &amp; architecture</td><td>—</td></tr>
+<tr><td>Business logic / workflows</td><td>Backend</td><td>High</td><td>Business logic / workflows</td><td>—</td></tr>
+<tr><td>DevOps &amp; reliability</td><td>Backend</td><td>High</td><td>DevOps &amp; reliability</td><td>—</td></tr>
+<tr><td>Compliance &amp; quality (non-UI)</td><td>Backend</td><td>High</td><td>Compliance &amp; quality (non-UI)</td><td>—</td></tr>
+          </tbody>
+        </table>
+
+
+        <h2>4. Integrations, hosting &amp; non-functionals</h2>
+        <div class="callout">
+          <strong>Boundary.</strong> Maple AI integrates and deploys using credentials Merrakii supplies.
+          Merrakii owns vendor contracts, payment KYC, AWS account billing, and usage fees.
+        </div>
+        <ul>
+          <li><strong>Payment:</strong> Journey and course payment pages plus payment integration as listed under Student Facing (UPI and agreed gateways per Design sign-off).</li>
+          <li><strong>Access &amp; security, search &amp; personalisation, integrations, responsiveness, data &amp; architecture, workflows, DevOps, compliance:</strong> as listed under Backend Phase 1 rows.</li>
+          <li><strong>Hosting:</strong> AWS staging and production on Merrakii’s account; Maple AI supports setup, deploy pipeline, monitoring baseline, and runbook.</li>
+          <li><strong>Targets:</strong> usable on modern mobile and desktop browsers; RBAC on authenticated APIs; WCAG 2.1 AA on public marketing/legal pages where applicable.</li>
+        </ul>
+
+        <h2>5. Out of Phase 1 (from Scoped pages)</h2>
+        <p>The following workbook topics are <strong>not</strong> Phase 1 = Yes and are excluded unless added by written change order:</p>
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Topic</th><th>Phase 1 flag</th><th>Type</th></tr>
+          </thead>
+          <tbody>
+<tr><td>Student Facing</td><td>Student Dashboard - Career Asset</td><td>Yes / No</td><td>Page</td></tr>
+<tr><td>Student Facing</td><td>Service Status Page</td><td>No</td><td>Page</td></tr>
+<tr><td>Admin Panel</td><td>Exam Overview</td><td>Not marked Yes</td><td>—</td></tr>
+<tr><td>Admin Panel</td><td>Exam Add</td><td>Not marked Yes</td><td>—</td></tr>
+<tr><td>Admin Panel</td><td>College Overview</td><td>Not marked Yes</td><td>—</td></tr>
+<tr><td>Admin Panel</td><td>College Add</td><td>Not marked Yes</td><td>—</td></tr>
+<tr><td>Admin Panel</td><td>Counsellor Overview</td><td>No</td><td>Page</td></tr>
+<tr><td>Admin Panel</td><td>Add Counsellor</td><td>No</td><td>Page</td></tr>
+<tr><td>Admin Panel</td><td>Add Financials</td><td>No</td><td>Page</td></tr>
+          </tbody>
+        </table>
+
+        <h2>6. Reference — previous website pages</h2>
+        <p class="muted">For orientation only. These routes describe the earlier marketplace product; Phase 1 DESSS pages above are the contracted build.</p>
+        <table>
+          <thead>
+            <tr><th>Page category</th><th>Route</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+<tr><td>Marketing / entry</td><td><code>/homepage</code></td><td>Main landing page for Study Abroad and Study in India.</td></tr>
+<tr><td>Discovery / catalogue</td><td><code>/catalog</code></td><td>Browse the full catalogue of programmes from contracted institutes.</td></tr>
+<tr><td>Discovery / catalogue</td><td><code>/institutes/[id]</code></td><td>Institute profile with programmes, details, and enrolment options.</td></tr>
+<tr><td>Discovery / catalogue</td><td><code>/course</code></td><td>Course/programme detail page for enrolment decisions.</td></tr>
+<tr><td>Application / payment</td><td><code>/apply/[programId]</code></td><td>Structured application form for a selected programme.</td></tr>
+<tr><td>Application / payment</td><td><code>/cart</code></td><td>Hold selected courses before checkout/enrolment.</td></tr>
+<tr><td>Application / payment</td><td><code>/payment/[applicationId]</code></td><td>Pay for a specific application (including UPI/payment options).</td></tr>
+<tr><td>Application / payment</td><td><code>/payment/checkout</code></td><td>Final checkout step to complete fee payment.</td></tr>
+<tr><td>Application / payment</td><td><code>/payment/success</code></td><td>Confirmation screen after successful payment/enrolment.</td></tr>
+<tr><td>Student account / auth</td><td><code>/login</code></td><td>Student/guardian sign-in (phone OTP).</td></tr>
+<tr><td>Student account / auth</td><td><code>/account</code></td><td>Personal account to view applications and enrolment status.</td></tr>
+<tr><td>Contact Us</td><td><code>/contactus</code></td><td>Contact Us</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard</code></td><td>Staff console home for catalogue and operations.</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard/login</code></td><td>Admin sign-in to manage institutes, courses, and catalogue.</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard/homepage</code></td><td>Admin control for homepage/content configuration.</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard/addvendor</code></td><td>Add a new contracted vendor/institute to the catalogue.</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard/editvendor</code></td><td>Edit an existing vendor/institute record.</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard/courses</code></td><td>Manage the list of programmes/courses in the catalogue.</td></tr>
+<tr><td>Staff admin</td><td><code>/dashboard/course-detail</code></td><td>Create or edit a single course’s catalogue details.</td></tr>
+          </tbody>
+        </table>
+
+        <h2>7. Roles &amp; responsibilities</h2>
+        <table>
+          <thead>
+            <tr><th>Owner</th><th>Responsibility</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Maple AI</strong></td>
+              <td>UX/UI and engineering for Section 3 items; Phase 1 integrations and AWS deployment support; documentation; UAT support; defect fixes for in-scope Severity-1/2 items through go-live hypercare.</td>
+            </tr>
+            <tr>
+              <td><strong>Merrakii</strong></td>
+              <td>Copy, career/course/resource/content templates called out in Requirements; counsellor and professional onboarding; AWS account and usage; payment vendor onboarding; milestone sign-off within two business days.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>8. Acceptance criteria</h2>
+        <ol>
+          <li>Each <strong>Section 3</strong> Phase 1 = Yes topic is demonstrable on staging (and production at go-live) at the agreed fidelity for its type (Page / Integration / Backend).</li>
+          <li>Client-provided templates and content called out under Requirement are incorporated when supplied on time; placeholders are acceptable where Merrakii input is late, with documented follow-up.</li>
+          <li>No open Severity-1 defects for in-scope items at UAT sign-off; Severity-2 items listed with fix or workaround.</li>
+          <li>Handover pack: AWS runbook, environment notes, content/admin guidance for Career Library, Courses, Resources, and User Management surfaces in scope.</li>
+        </ol>
+
+        <h2>9. Assumptions, change control &amp; terms</h2>
+        <ul>
+          <li>Scope rows and Phase 1 flags in <em>Merrakii_pages_inscope.xlsx</em> (as of this SOW date) are the page inventory source of truth for V2.</li>
+          <li>Work outside Section 3, including Section 5 topics, extra integrations, or native apps, requires a written change request and commercial adjustment.</li>
+          <li>Fees and payment schedule remain in <strong>Quotation MAT_QTN_2026_002</strong> unless a revised quotation or change order is executed.</li>
+          <li>This SOW V2, together with the Quotation and any change orders, governs Horizon 1 / Phase 1 delivery. SOW V1 is retained for historical reference only.</li>
+        </ul>
+
+        <footer class="doc-foot">
+          Maple AI Technologies · Merrakii+ · MAT_PRJ_2026_002 · Statement of Work V2 · 5 August 2026 · Confidential
+        </footer>
+
+      </div>
+    </article>
+  </div>
+
+  <script>
+    document.getElementById('exportPdfBtn').addEventListener('click', function () {
+      document.title = 'Merrakii+ SOW V2 — MAT_PRJ_2026_002';
+      window.print();
+    });
+  </script>
+</body>
+</html>
