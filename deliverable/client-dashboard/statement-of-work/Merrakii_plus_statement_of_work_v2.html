@@ -17,7 +17,7 @@
       --line: #e2e8f0;
       --cream: #ffffee;
       --ok: #16a34a;
-      --page-width: 1064px;
+      --page-width: 1440px;
     }
 
     * { box-sizing: border-box; }
@@ -35,8 +35,8 @@
     .wrap-screen { padding: 32px 20px 48px; }
 
     .toolbar {
-      width: 100%;
-      max-width: var(--page-width);
+      width: 1440px;
+      max-width: 1440px;
       margin: 0 auto 12px;
       display: flex;
       flex-wrap: wrap;
@@ -62,12 +62,13 @@
       outline-offset: 3px;
     }
 
-    .toolbar-note { font-size: 14px; color: var(--muted); max-width: 420px; }
+    .toolbar-note { font-size: 14px; color: var(--muted); max-width: 520px; }
 
     .sheet {
-      width: 100%;
-      max-width: var(--page-width);
-      margin: 0 auto;
+      width: 1440px;
+      max-width: 1440px;
+      margin-left: auto;
+      margin-right: auto;
       background: #fff;
       border-radius: 10px;
       border: 1px solid rgba(67, 97, 238, 0.08);
@@ -211,6 +212,13 @@
       padding-left: 8px;
     }
 
+    h3 {
+      margin: 12px 0 4px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
     p {
       margin: 0 0 8px;
       font-size: 14.5px;
@@ -224,6 +232,13 @@
     }
 
     li { margin-bottom: 3px; }
+
+    .page-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 40px;
+      margin: 4px 0 10px;
+    }
 
     table {
       width: 100%;
@@ -254,11 +269,6 @@
       margin-bottom: 10px;
     }
 
-    .callout-warn {
-      border-left-color: #d97706;
-      background: #fffbeb;
-    }
-
     .muted { color: var(--muted); font-size: 13px; }
 
     footer.doc-foot {
@@ -276,6 +286,7 @@
       .sheet-inner { padding: 20px 18px; }
       .meta-strip { grid-template-columns: 1fr 1fr; }
       .letterhead { grid-template-columns: 1fr; }
+      .page-cols { grid-template-columns: 1fr; }
       .letterhead-col--left,
       .letterhead-col--right {
         grid-column: 1;
@@ -287,11 +298,6 @@
         margin-top: 16px;
       }
       .letterhead-col--right .letterhead-logo { object-position: left center; }
-    }
-
-    .page-break-before {
-      break-before: page;
-      page-break-before: always;
     }
 
     @media print {
@@ -311,9 +317,6 @@
       table { break-inside: auto; }
       tr { break-inside: avoid; }
     }
-  
-    h3 { font-weight: 700; }
-    code { font-size: 12px; background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -351,7 +354,7 @@
             </div>
             <div class="letterhead-doc-row">
               <p class="letterhead-doc-title">Statement of Work — V2</p>
-              <p class="letterhead-doc-subtitle">Merrakii+ Decision Enabling Student Success System (DESSS) · Phase 1 scope aligned to Scoped pages</p>
+              <p class="letterhead-doc-subtitle">Merrakii+ Decision Enabling Student Success System (DESSS) · Phase 1 development scope</p>
             </div>
           </div>
         </header>
@@ -364,216 +367,145 @@
         </dl>
 
         <div class="callout">
-          <strong>What changed in V2.</strong> This SOW replaces the V1 feature list (F01–F10 narrative) with the
-          <strong>Phase 1 page and capability inventory</strong> from Merrakii’s scoped pages workbook
-          (<em>Merrakii_pages_inscope.xlsx</em> (mirrored in the client dashboard Scoped pages tab).
-          Commercial terms remain governed by Quotation <strong>MAT_QTN_2026_002</strong> unless amended by change order.
-          SOW V1 remains on file as the archived baseline.
+          This Statement of Work V2 (“SOW”) sets out the Phase 1 development scope for Merrakii+: the crux of the application, the agreed pages, and what is out of scope. SOW V1 remains on file as an archived baseline.
         </div>
 
-        <h2>1. Parties &amp; purpose</h2>
+        <h2>1. Parties and purpose</h2>
         <p>
-          This Statement of Work V2 (“SOW”) is between <strong>Maple AI Technologies</strong> (“Maple AI”) and
+          This SOW is between <strong>Maple AI Technologies</strong> (“Maple AI”) and
           <strong>Munjal Universal Consultancy Private Limited</strong>, operating as <strong>Merrakii+</strong> (“Merrakii”).
-          It defines Phase 1 delivery for the Merrakii+ DESSS web application as a product engineering engagement:
-          build and ship the scoped student-facing pages, admin capabilities, and supporting backend listed below.
         </p>
         <p>
-          Phase 1 is one <strong>responsive web application</strong> (mobile through desktop; browser-based, not native apps).
-          Merrakii owns content, vendor accounts, and AWS usage. Maple AI owns architecture, implementation, integrations agreed herein, UAT support, and handover.
+          Maple AI will design, build, and ship Phase 1 of Merrakii+ as <strong>one responsive web application</strong> (usable in a browser on mobile, tablet, and desktop). This engagement is product engineering: Maple AI ships the agreed application. It is not staff augmentation, an embedded engineering pod, or standalone IT consultation.
+        </p>
+        <p>
+          Merrakii owns product content, page copy, business requirements for each page, vendor accounts, payment KYC, and AWS usage. Maple AI owns architecture, implementation of the agreed pages and supporting platform, UAT support, and handover.
         </p>
 
-        <h2>2. Scope source of truth</h2>
+        <h2>2. Scope of development</h2>
+        <p>This section is the contracted development scope for Phase 1.</p>
+
+        <h3>2.1 Crux of the application</h3>
+        <p>
+          Maple AI will develop Merrakii+ as a <strong>student-goal</strong> web product. A student goal may be a <strong>career</strong>, a <strong>degree</strong>, a <strong>skill</strong>, a <strong>college</strong>, or an <strong>exam</strong>. A student can <strong>search for a goal</strong>, <strong>get a path</strong> to achieve it, <strong>pay to personalize that path</strong> and start moving on it, and then be <strong>guided throughout the journey</strong> to services that help them move forward and achieve the goal. The student can <strong>pay for those services</strong> to avail them and keep moving on the path. Merrakii staff will operate the product from an admin console. The crux of what will be built is:
+        </p>
         <ul>
-          <li><strong>In scope:</strong> every row in <em>New Website Pages</em> where <strong>Phase 1 = Yes</strong> (40 items across Student Facing, Admin Panel, and Backend).</li>
-          <li><strong>Out of Phase 1:</strong> rows not marked Phase 1 = Yes (listed in Section 5), plus native mobile apps and any work not named in this SOW.</li>
-          <li><strong>Prior product surface:</strong> earlier Merrakii marketplace routes are reference only (Section 6); Phase 1 rebuilds the DESSS experience, not a like-for-like catalogue clone.</li>
+          <li>A public website where a student can search and enter a journey toward a chosen goal (career, degree, skill, college, or exam).</li>
+          <li>A journey map that gives the student a <strong>path to achieve the selected goal</strong>.</li>
+          <li>Deep profiling and journey payment so the student can <strong>pay to personalize that path</strong> and start moving on it.</li>
+          <li>A student dashboard where, <strong>throughout the journey</strong>, the application <strong>guides</strong> the student: overview, current path, journey report, notifications, and the services and resources that help them move forward and achieve the goal.</li>
+          <li>Service and course pages so the student can see a recommended service, enrol or avail it, and <strong>pay for that service</strong> to move forward on the path.</li>
+          <li>Public trust and information pages: About Merrakii, Contact Us, FAQs, Terms and Conditions, Privacy Policy, and Refund Policy.</li>
+          <li>An admin console so Merrakii can manage the goal library (career, degree, skill, college, and exam), students, <strong>service knowledge</strong>, courses, resources, and a financials overview.</li>
+          <li>Payment integration for <strong>path personalization</strong> and for <strong>services</strong> the student avails along the journey.</li>
+          <li>The website architecture, access and security, search, data, workflows, testing, AWS production deployment, and handover needed to run the pages above.</li>
         </ul>
+        <p>This Phase 1 product is a <strong>browser-based web application only</strong>.</p>
 
-        <h2>3. Phase 1 deliverables (from Scoped pages)</h2>
-        <p>
-          Maple AI will design, build, and deliver the following Phase 1 topics. Effort ratings are from the scope workbook
-          (Small / Medium / High) and inform sequencing, not separate line-item pricing.
-        </p>
+        <h3>2.2 Agreed pages to be developed</h3>
+        <p>The pages below are the agreed Phase 1 pages.</p>
 
-        <h3 style="margin:12px 0 4px;font-size:0.95rem;color:var(--navy);">Student Facing <span class="muted">(21 items)</span></h3>
-        <table aria-label="Student Facing Phase 1 scope">
-          <thead>
-            <tr>
-              <th>Topic / page</th>
-              <th>Type</th>
-              <th>Effort</th>
-              <th>Maps from (old)</th>
-              <th>Client requirement / input</th>
-            </tr>
-          </thead>
-          <tbody>
-<tr><td>Home Page- Search Bar</td><td>Page</td><td>Medium</td><td>Homepage</td><td>—</td></tr>
-<tr><td>Career Journey Map</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
-<tr><td>Deep Profiling</td><td>Page</td><td>Small</td><td>Student Profile</td><td>Provide profile details</td></tr>
-<tr><td>Journey Payment Page</td><td>Page</td><td>Small</td><td>Signup</td><td>—</td></tr>
-<tr><td>Student Dashboard - Overview</td><td>Page</td><td>Medium</td><td>Overview</td><td>—</td></tr>
-<tr><td>Student Dashboard - My Journey</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
-<tr><td>Student Dashboard - Career Journey Report</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
-<tr><td>Student Dashboard - Course List Page</td><td>Page</td><td>Medium</td><td>NA</td><td>Provide 2 Courses per Service</td></tr>
-<tr><td>Student Dashboard - Resources Overview</td><td>Page</td><td>Medium</td><td>NA</td><td>Provide 2 Resources</td></tr>
-<tr><td>Student Dashboard - Resources Details</td><td>Page</td><td>Medium</td><td>NA</td><td>Provide Resource Detail template</td></tr>
-<tr><td>Student Dashboard - Notifications Page</td><td>Page</td><td>High</td><td>Notifications</td><td>—</td></tr>
-<tr><td>Course Detail Page</td><td>Page</td><td>Medium</td><td>Course Detail</td><td>Provide Course Details template</td></tr>
-<tr><td>Course Entollment Page</td><td>Page</td><td>Medium</td><td>Cart</td><td>—</td></tr>
-<tr><td>Course Payment Page</td><td>Page</td><td>Small</td><td>Payment</td><td>—</td></tr>
-<tr><td>Payment Integration</td><td>Integration</td><td>High</td><td>Payment Integration</td><td>Provide payment integration details</td></tr>
-<tr><td>Caontact Us</td><td>Page</td><td>Small</td><td>Caontact Us</td><td>—</td></tr>
-<tr><td>About Merrakii</td><td>Page</td><td>Small</td><td>About Merrakii</td><td>Provide About Content</td></tr>
-<tr><td>Terms &amp; Conditions</td><td>Page</td><td>Small</td><td>Terms &amp; Conditions</td><td>Provide page content</td></tr>
-<tr><td>Privacy Policy</td><td>Page</td><td>Small</td><td>Privacy Policy</td><td>Provide page content</td></tr>
-<tr><td>Refund Policy</td><td>Page</td><td>Small</td><td>Refund Policy</td><td>Provide page content</td></tr>
-<tr><td>FAQs</td><td>Page</td><td>Small</td><td>FAQs</td><td>Provide page content</td></tr>
-          </tbody>
-        </table>
-
-        <h3 style="margin:12px 0 4px;font-size:0.95rem;color:var(--navy);">Admin Panel <span class="muted">(11 items)</span></h3>
-        <table aria-label="Admin Panel Phase 1 scope">
-          <thead>
-            <tr>
-              <th>Topic / page</th>
-              <th>Type</th>
-              <th>Effort</th>
-              <th>Maps from (old)</th>
-              <th>Client requirement / input</th>
-            </tr>
-          </thead>
-          <tbody>
-<tr><td>Career Library CMS Overview (Career= Profession + Course + College + Exam)</td><td>Page</td><td>Medium</td><td>Course Library Overview</td><td>—</td></tr>
-<tr><td>Add Career Page per category per stream</td><td>Page</td><td>High</td><td>Add Course</td><td>—</td></tr>
-<tr><td>User Management - Overview</td><td>Page</td><td>Medium</td><td>NA</td><td>—</td></tr>
-<tr><td>User Management - Add Student</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
-<tr><td>Service Knowledge Page Overview</td><td>Page</td><td>Small</td><td>NA</td><td>—</td></tr>
-<tr><td>Add Service Knowledge</td><td>Page</td><td>Medium</td><td>Na</td><td>—</td></tr>
-<tr><td>Courses Overview page</td><td>Page</td><td>Medium</td><td>Course Library Overview</td><td>—</td></tr>
-<tr><td>Add Courses per career per service</td><td>Page</td><td>High</td><td>Add Course</td><td>—</td></tr>
-<tr><td>Resources Overview</td><td>Page</td><td>Medium</td><td>NA</td><td>—</td></tr>
-<tr><td>Add Resources</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
-<tr><td>Financials overview</td><td>Page</td><td>High</td><td>NA</td><td>—</td></tr>
-          </tbody>
-        </table>
-
-        <h3 style="margin:12px 0 4px;font-size:0.95rem;color:var(--navy);">Backend <span class="muted">(8 items)</span></h3>
-        <table aria-label="Backend Phase 1 scope">
-          <thead>
-            <tr>
-              <th>Topic / page</th>
-              <th>Type</th>
-              <th>Effort</th>
-              <th>Maps from (old)</th>
-              <th>Client requirement / input</th>
-            </tr>
-          </thead>
-          <tbody>
-<tr><td>Access &amp; security</td><td>Backend</td><td>High</td><td>Access &amp; security</td><td>—</td></tr>
-<tr><td>Search &amp; personalisation</td><td>Backend</td><td>High</td><td>Search &amp; personalisation</td><td>—</td></tr>
-<tr><td>Integrations</td><td>Backend</td><td>High</td><td>Integrations</td><td>—</td></tr>
-<tr><td>Responsiveness</td><td>Backend</td><td>High</td><td>Responsiveness</td><td>—</td></tr>
-<tr><td>Data &amp; architecture</td><td>Backend</td><td>High</td><td>Data &amp; architecture</td><td>—</td></tr>
-<tr><td>Business logic / workflows</td><td>Backend</td><td>High</td><td>Business logic / workflows</td><td>—</td></tr>
-<tr><td>DevOps &amp; reliability</td><td>Backend</td><td>High</td><td>DevOps &amp; reliability</td><td>—</td></tr>
-<tr><td>Compliance &amp; quality (non-UI)</td><td>Backend</td><td>High</td><td>Compliance &amp; quality (non-UI)</td><td>—</td></tr>
-          </tbody>
-        </table>
-
-
-        <h2>4. Integrations, hosting &amp; non-functionals</h2>
-        <div class="callout">
-          <strong>Boundary.</strong> Maple AI integrates and deploys using credentials Merrakii supplies.
-          Merrakii owns vendor contracts, payment KYC, AWS account billing, and usage fees.
+        <div class="page-cols">
+          <div>
+            <h3>Student-facing pages</h3>
+            <ul>
+              <li>Home Page — Search Bar</li>
+              <li>Career Journey Map</li>
+              <li>Deep Profiling</li>
+              <li>Journey Payment Page</li>
+              <li>Student Dashboard — Overview</li>
+              <li>Student Dashboard — My Journey</li>
+              <li>Student Dashboard — Career Journey Report</li>
+              <li>Student Dashboard — Course List Page</li>
+              <li>Student Dashboard — Resources Overview</li>
+              <li>Student Dashboard — Resources Details</li>
+              <li>Student Dashboard — Notifications Page</li>
+              <li>Course Detail Page</li>
+              <li>Course Enrolment Page</li>
+              <li>Course Payment Page</li>
+              <li>Contact Us</li>
+              <li>About Merrakii</li>
+              <li>Terms and Conditions</li>
+              <li>Privacy Policy</li>
+              <li>Refund Policy</li>
+              <li>FAQs</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Admin pages</h3>
+            <ul>
+              <li>Career Library CMS Overview (covers student goals: career, degree, skill, college, and exam)</li>
+              <li>Add Career Page per category per stream</li>
+              <li>User Management — Overview</li>
+              <li>User Management — Add Student</li>
+              <li>Service Knowledge Page Overview</li>
+              <li>Add Service Knowledge</li>
+              <li>Courses Overview Page</li>
+              <li>Add Courses per career per service</li>
+              <li>Resources Overview</li>
+              <li>Add Resources</li>
+              <li>Financials Overview</li>
+            </ul>
+          </div>
         </div>
+        <p class="muted">Login, session, and role-based access for these pages are included as supporting platform work under Section 2.1. They are not a separate product surface beyond what is required to use the agreed pages.</p>
+
+        <h3>2.3 Functionalities on the agreed pages</h3>
+        <p>The contracted commitment is to <strong>build the agreed pages listed in Section 2.2</strong>.</p>
+        <p>The functionalities placed on those pages must <strong>fulfil the business requirements for each page</strong>. Merrakii will give those business requirements, page by page.</p>
+        <p>Maple AI will implement each agreed page so that it meets the business requirements given for that page, within the Phase 1 product described in Section 2.1. Requirements that add a new page, a new user role, a new dashboard, scheduling, a native app, or AI are outside this SOW and need a written change order.</p>
+
+        <h2>3. Out of scope</h2>
+        <p>The following are <strong>not</strong> part of this development, unless added later by a written change order:</p>
         <ul>
-          <li><strong>Payment:</strong> Journey and course payment pages plus payment integration as listed under Student Facing (UPI and agreed gateways per Design sign-off).</li>
-          <li><strong>Access &amp; security, search &amp; personalisation, integrations, responsiveness, data &amp; architecture, workflows, DevOps, compliance:</strong> as listed under Backend Phase 1 rows.</li>
-          <li><strong>Hosting:</strong> AWS staging and production on Merrakii’s account; Maple AI supports setup, deploy pipeline, monitoring baseline, and runbook.</li>
-          <li><strong>Targets:</strong> usable on modern mobile and desktop browsers; RBAC on authenticated APIs; WCAG 2.1 AA on public marketing/legal pages where applicable.</li>
+          <li>Counsellor meeting scheduling</li>
+          <li>Professional expert meeting scheduling</li>
+          <li>Counsellor dashboard</li>
+          <li>Professional expert dashboard</li>
+          <li>Parent dashboard</li>
+          <li>Vendor dashboard</li>
+          <li>School dashboard</li>
+          <li>Mobile applications (native iOS or Android apps)</li>
+          <li>AI features</li>
         </ul>
 
-        <h2>5. Out of Phase 1 (from Scoped pages)</h2>
-        <p>The following workbook topics are <strong>not</strong> Phase 1 = Yes and are excluded unless added by written change order:</p>
-        <table>
-          <thead>
-            <tr><th>Category</th><th>Topic</th><th>Phase 1 flag</th><th>Type</th></tr>
-          </thead>
-          <tbody>
-<tr><td>Student Facing</td><td>Student Dashboard - Career Asset</td><td>Yes / No</td><td>Page</td></tr>
-<tr><td>Student Facing</td><td>Service Status Page</td><td>No</td><td>Page</td></tr>
-<tr><td>Admin Panel</td><td>Exam Overview</td><td>Not marked Yes</td><td>—</td></tr>
-<tr><td>Admin Panel</td><td>Exam Add</td><td>Not marked Yes</td><td>—</td></tr>
-<tr><td>Admin Panel</td><td>College Overview</td><td>Not marked Yes</td><td>—</td></tr>
-<tr><td>Admin Panel</td><td>College Add</td><td>Not marked Yes</td><td>—</td></tr>
-<tr><td>Admin Panel</td><td>Counsellor Overview</td><td>No</td><td>Page</td></tr>
-<tr><td>Admin Panel</td><td>Add Counsellor</td><td>No</td><td>Page</td></tr>
-<tr><td>Admin Panel</td><td>Add Financials</td><td>No</td><td>Page</td></tr>
-          </tbody>
-        </table>
-
-        <h2>6. Reference — previous website pages</h2>
-        <p class="muted">For orientation only. These routes describe the earlier marketplace product; Phase 1 DESSS pages above are the contracted build.</p>
-        <table>
-          <thead>
-            <tr><th>Page category</th><th>Route</th><th>Purpose</th></tr>
-          </thead>
-          <tbody>
-<tr><td>Marketing / entry</td><td><code>/homepage</code></td><td>Main landing page for Study Abroad and Study in India.</td></tr>
-<tr><td>Discovery / catalogue</td><td><code>/catalog</code></td><td>Browse the full catalogue of programmes from contracted institutes.</td></tr>
-<tr><td>Discovery / catalogue</td><td><code>/institutes/[id]</code></td><td>Institute profile with programmes, details, and enrolment options.</td></tr>
-<tr><td>Discovery / catalogue</td><td><code>/course</code></td><td>Course/programme detail page for enrolment decisions.</td></tr>
-<tr><td>Application / payment</td><td><code>/apply/[programId]</code></td><td>Structured application form for a selected programme.</td></tr>
-<tr><td>Application / payment</td><td><code>/cart</code></td><td>Hold selected courses before checkout/enrolment.</td></tr>
-<tr><td>Application / payment</td><td><code>/payment/[applicationId]</code></td><td>Pay for a specific application (including UPI/payment options).</td></tr>
-<tr><td>Application / payment</td><td><code>/payment/checkout</code></td><td>Final checkout step to complete fee payment.</td></tr>
-<tr><td>Application / payment</td><td><code>/payment/success</code></td><td>Confirmation screen after successful payment/enrolment.</td></tr>
-<tr><td>Student account / auth</td><td><code>/login</code></td><td>Student/guardian sign-in (phone OTP).</td></tr>
-<tr><td>Student account / auth</td><td><code>/account</code></td><td>Personal account to view applications and enrolment status.</td></tr>
-<tr><td>Contact Us</td><td><code>/contactus</code></td><td>Contact Us</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard</code></td><td>Staff console home for catalogue and operations.</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard/login</code></td><td>Admin sign-in to manage institutes, courses, and catalogue.</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard/homepage</code></td><td>Admin control for homepage/content configuration.</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard/addvendor</code></td><td>Add a new contracted vendor/institute to the catalogue.</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard/editvendor</code></td><td>Edit an existing vendor/institute record.</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard/courses</code></td><td>Manage the list of programmes/courses in the catalogue.</td></tr>
-<tr><td>Staff admin</td><td><code>/dashboard/course-detail</code></td><td>Create or edit a single course’s catalogue details.</td></tr>
-          </tbody>
-        </table>
-
-        <h2>7. Roles &amp; responsibilities</h2>
-        <table>
-          <thead>
-            <tr><th>Owner</th><th>Responsibility</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Maple AI</strong></td>
-              <td>UX/UI and engineering for Section 3 items; Phase 1 integrations and AWS deployment support; documentation; UAT support; defect fixes for in-scope Severity-1/2 items through go-live hypercare.</td>
-            </tr>
-            <tr>
-              <td><strong>Merrakii</strong></td>
-              <td>Copy, career/course/resource/content templates called out in Requirements; counsellor and professional onboarding; AWS account and usage; payment vendor onboarding; milestone sign-off within two business days.</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h2>8. Acceptance criteria</h2>
-        <ol>
-          <li>Each <strong>Section 3</strong> Phase 1 = Yes topic is demonstrable on staging (and production at go-live) at the agreed fidelity for its type (Page / Integration / Backend).</li>
-          <li>Client-provided templates and content called out under Requirement are incorporated when supplied on time; placeholders are acceptable where Merrakii input is late, with documented follow-up.</li>
-          <li>No open Severity-1 defects for in-scope items at UAT sign-off; Severity-2 items listed with fix or workaround.</li>
-          <li>Handover pack: AWS runbook, environment notes, content/admin guidance for Career Library, Courses, Resources, and User Management surfaces in scope.</li>
-        </ol>
-
-        <h2>9. Assumptions, change control &amp; terms</h2>
+        <h2>4. Client inputs required</h2>
+        <p>Merrakii will provide, in time for the relevant page build:</p>
         <ul>
-          <li>Scope rows and Phase 1 flags in <em>Merrakii_pages_inscope.xlsx</em> (as of this SOW date) are the page inventory source of truth for V2.</li>
-          <li>Work outside Section 3, including Section 5 topics, extra integrations, or native apps, requires a written change request and commercial adjustment.</li>
-          <li>Fees and payment schedule remain in <strong>Quotation MAT_QTN_2026_002</strong> unless a revised quotation or change order is executed.</li>
-          <li>This SOW V2, together with the Quotation and any change orders, governs Horizon 1 / Phase 1 delivery. SOW V1 is retained for historical reference only.</li>
+          <li>Business requirements for each agreed page (Section 2.3).</li>
+          <li>Page copy and legal text for About, Contact, FAQs, Terms, Privacy, and Refund.</li>
+          <li>Goal, <strong>service</strong>, course, and resource content or templates needed to populate the agreed pages (a goal may be a career, a degree, a skill, a college, or an exam).</li>
+          <li>Payment gateway account details and KYC completion for payment integration.</li>
+          <li>AWS account access for staging and production.</li>
         </ul>
+        <p>Where an input is late, Maple AI may ship the page with a documented placeholder and complete the content when the input arrives.</p>
+
+        <h2>5. Acceptance</h2>
+        <p>Phase 1 is accepted when:</p>
+        <ul>
+          <li>Each agreed page in Section 2.2 is demonstrable on staging, and on production at go-live.</li>
+          <li>Functionalities on those pages meet the business requirements that were given for that page in time for the build.</li>
+          <li>No open Severity-1 defects remain for in-scope pages at UAT sign-off. Severity-2 items are listed with a fix plan or workaround.</li>
+          <li>Maple AI has handed over the runbook, environment notes, and admin guidance needed to operate the agreed admin pages.</li>
+        </ul>
+
+        <h2>6. Change control</h2>
+        <p>Work outside Sections 2 and 3 of this SOW, including any item listed in Section 3, requires a written change request and a commercial adjustment.</p>
+        <p>This SOW V2, together with any change orders, governs Phase 1 delivery.</p>
+
+        <h2>7. Document control</h2>
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Document</td><td>Statement of Work V2</td></tr>
+            <tr><td>Project</td><td>MAT_PRJ_2026_002</td></tr>
+            <tr><td>Date</td><td>5 August 2026</td></tr>
+            <tr><td>Status</td><td>Draft for client review</td></tr>
+            <tr><td>Confidentiality</td><td>Confidential — Maple AI Technologies and Merrakii+</td></tr>
+          </tbody>
+        </table>
 
         <footer class="doc-foot">
           Maple AI Technologies · Merrakii+ · MAT_PRJ_2026_002 · Statement of Work V2 · 5 August 2026 · Confidential
